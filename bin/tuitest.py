@@ -1,9 +1,9 @@
 import curses
 import curses.ascii
 
-#import locale
-#locale.setlocale(locale.LC_ALL, '')
-#code = locale.getpreferredencoding()
+import locale
+locale.setlocale(locale.LC_ALL, '')
+code = locale.getpreferredencoding()
 
 
 
@@ -25,13 +25,24 @@ def main():
     ui = InteractiveTUI()
     ui.run()
 
+KEYS = {'RESIZE'   : (curses.KEY_RESIZE, 'KEY_RESIZE'),
+        'LEFT'     : (curses.KEY_LEFT, 'KEY_LEFT'),
+        'RIGHT'    : (curses.KEY_RIGHT, 'KEY_RIGHT'),
+        'UP'       : (curses.KEY_UP, 'KEY_UP'),
+        'DOWN'     : (curses.KEY_DOWN, 'KEY_DOWN'),
+        'ENTER'    : (curses.KEY_ENTER, 'KEY_ENTER', '\n'),
+        'BACKSPACE': (curses.KEY_BACKSPACE, curses.ascii.BS, curses.ascii.DEL, 
+                      '\b', '\x7f'),
+        'DELETE'   : (curses.KEY_DC, 'KEY_DC'),
+}
+
 class InteractiveTUI():    
     
     ENTER_KEYS = ('\n', curses.KEY_ENTER, curses.ascii.NL)
     DELETE_KEYS = ('\b', curses.KEY_BACKSPACE, curses.ascii.DEL, curses.ascii.BS)
     
     def __init__(self):
-        self.lines = ['lorem\nout\nput', 'ipsum', 'dolor sit ametttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt', 'testi']
+        self.lines = ['lorem\nout\nput', 'ipsum', 'dolor sit ametttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt', 'testi', '']
         #self.memory = []
         #self.memory_ind = -1
         #self.temp_line = None
@@ -86,42 +97,40 @@ class InteractiveTUI():
         self.window.refresh()
         
     def process_input(self):
-        char = self.window.getkey()
+        char = self.window.get_wch()
         self.process_char(char)
 
     def process_char(self, char):
-        
-        if char in (curses.KEY_RESIZE, 'KEY_RESIZE'):
+
+        if char in KEYS['RESIZE']:
             pass
         
-        elif char in (curses.KEY_LEFT, 'KEY_LEFT'):
+        elif char in KEYS['LEFT']:
             self.cursor_position -= 1
             
-        elif char in (curses.KEY_RIGHT, 'KEY_RIGHT'):
+        elif char in KEYS['RIGHT']:
             self.cursor_position += 1
             
-        elif char in (curses.KEY_UP, 'KEY_UP'):
+        elif char in KEYS['UP']:
             pass
         
-        elif char in (curses.KEY_DOWN, 'KEY_DOWN'):
+        elif char in KEYS['DOWN']:
             pass
         
-        elif char in (curses.KEY_ENTER, '\n'):
+        elif char in KEYS['ENTER']:
             self.lines[-1] = self.lines[-1] + '\nGave the command: ' + self.lines[-1]
             self.lines.append('')
             self.cursor_position = 0
             
-        elif char in (curses.KEY_BACKSPACE, 'KEY_BACKSPACE', curses.ascii.BS, curses.ascii.DEL, '^?'):
+        elif char in KEYS['BACKSPACE']:
             self.delete(self.cursor_position - 1) 
             
-        elif char in (curses.KEY_DC, 'KEY_DC'):
+        elif char in KEYS['DELETE']:
             self.delete(self.cursor_position) 
 
-
         else:
-            print(repr(char))
-            self.write(str(char))
-            
+            self.write(char)
+        
     def delete(self, position):
         start = self.lines[-1][:position]
         end = self.lines[-1][position + 1:]
