@@ -3,6 +3,7 @@ from collections import namedtuple
 from ..data import PARAMETERS, ERRORS, WARNINGS, Types
 
 from .abstractui import AbstractUI
+from .shell import Shell
 from .print_table import print_table
 from .command_parser import CommandParser
 from .output import output, help_string
@@ -205,22 +206,33 @@ class AbstractTUI(AbstractUI):
                 f'The type of parameter {number} is {type_.description}, '
                 f'not {Types.type_of(value).description}')
 
-        
+
 class InteractiveTUI(AbstractTUI):
     
     def __init__(self, port):
         super().__init__(port)
+        self.shell = Shell(super().process_input)
+        self.shell.prompt = "Type a command or 'help' for a list of commands: "
     
     def run(self):
-        prompt = "Type a command or 'help' for a list of commands: "
+        self.shell.run()
         
-        stop = False
-        while not stop:
-            stop = super().process_input(input(prompt))
+#class InteractiveTUI(AbstractTUI):
+#    
+#    def __init__(self, port):
+#        super().__init__(port)
+#    
+#    def run(self):
+#        prompt = "Type a command or 'help' for a list of commands: "
+#        
+#        stop = False
+#        while not stop:
+#            stop = super().process_input(input(prompt))
             
             
 class ScriptTUI(AbstractTUI):
     pass
+
 #    
 #    def __init__(self, *args, **kwargs):
 #        super().__init__(*args, **kwargs)

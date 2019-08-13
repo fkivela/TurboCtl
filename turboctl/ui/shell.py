@@ -1,21 +1,8 @@
 import curses
 import curses.ascii
-from .tui import AbstractTUI        
-from io import StringIO
 import sys    
-    
-# TODO: Scrolling
-    
-class InteractiveTUI(AbstractTUI):
-    
-    def __init__(self, port):
-        super().__init__(port)
-        self.shell = Shell(super().process_input)
-        #self.shell.prompt = "Type a command or 'help' for a list of commands: "
-    
-    def run(self):
-        self.shell.run()
-
+from io import StringIO
+        
 # TODO: Expand
 KEYS = {'RESIZE'   : (curses.KEY_RESIZE, 'KEY_RESIZE'),
         'LEFT'     : (curses.KEY_LEFT, 'KEY_LEFT'),
@@ -26,24 +13,27 @@ KEYS = {'RESIZE'   : (curses.KEY_RESIZE, 'KEY_RESIZE'),
         'BACKSPACE': (curses.KEY_BACKSPACE, curses.ascii.BS, curses.ascii.DEL, 
                       '\b', '\x7f'),
         'DELETE'   : (curses.KEY_DC, 'KEY_DC'),
+        'END'      : (curses.KEY_END, 'KEY_END'),
+        'HOME'     : (curses.KEY_HOME, 'KEY_HOME'),
+        'PG_DOWN'  : (curses.KEY_PPAGE, 'KEY_PPAGE'),
+        'PG_UP'    : (curses.KEY_NPAGE, 'KEY_NPAGE'),
 }
 
 class Shell():    
         
     def __init__(self, func):
         self.func = func
-        self.lines = []
-        self.cmd_history_i = -1
+        self.command_history = []
+        self.history_i = -1
         self.new_line = ''
         self.temp_cmd = None
         self.prompt = '>> '
         self.window = None
         self._cursor_position = 0
-                
-    @property
-    def cmd_history(self):
-        return [line.split('\n')[0] for line in self.lines][::-1]
-                
+        self.xloc = 0
+        self.yloc = 0
+        self.stop_flag = False
+        
     @property
     def cursor_position(self):
         return self._cursor_position
@@ -58,39 +48,123 @@ class Shell():
             self._cursor_position = value
         
     def run(self):
-        curses.wrapper(self._run)
+        stdscr = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        stdscr.keypad(True)
 
-    def _run(self, window):
+        win = stdscr
+        win.idlok(1)
+        win.scrollok(1)
+        
+        error = None        
+        try:
+            self._run(win)
+        except BaseException as e:
+            error = e
+
+        curses.nocbreak()
+        stdscr.keypad(False)
+        win.keypad(False)
+        curses.echo()
+        curses.endwin()
+
+        if error:
+            raise error
+        
+        #curses.wrapper(self._run)
+
+    def _run(self, window):        
         self.window = window
+        self.pad = curses.newpad(*window.getmaxyx())
+        self.window.refresh()
         self.draw()
 
-        while True:
+        while not self.stop_flag:
             self.process_input()
             self.draw()
             
-            
     def draw(self):
-        self.window.erase()
-        self.window.move(0,0)
+        cmds = [self.prompt + line for line in self.command_history  + [self.new_line]]
+
+        lines_2d = [cmd.split('\n') for cmd in cmds]
+        lines = []
+        for l in lines_2d:
+            lines += l
         
-        for line in self.lines:
-            self.window.addstr(self.prompt + line)
-        base_y = self.window.getyx()[0]
-        self.window.addstr(self.prompt + self.new_line)
-                
+        height = len(lines) + 1
+        width = max(len(l) for l in lines) + 1 if lines else 1
+        self.pad.resize(height, width)
+        
         max_y, max_x = self.window.getmaxyx()
-        cursor_x = len(self.prompt) + self.cursor_position
+
+        self.pad.erase()
+        self.pad.move(0,0)
+        self.pad.addstr('\n'.join(lines))
+        self.pad.refresh(self.yloc,self.xloc,0,0,max_y-1,max_x-1)
         
-        new_x = cursor_x % max_x
-        n_newlines = cursor_x // max_x
-        new_y = base_y + n_newlines
+#        self.pad.erase()
+#        self.pad.move(0,0)
+#                
+#        for line in self.command_history:
+#            self.pad.addstr(self.prompt + line)
+#        base_y = self.pad.getyx()[0]
+#        self.pad.addstr(self.prompt + self.new_line)
+#                
+#        max_y, max_x = self.pad.getmaxyx()
+#        cursor_x = len(self.prompt) + self.cursor_position
+#        
+#        new_x = cursor_x % max_x
+#        n_newlines = cursor_x // max_x
+#        new_y = base_y + n_newlines
+#        
+#        self.pad.move(new_y, new_x)
+#        self.pad.refresh(0,0,0,0,max_y,max_x)
         
-        self.window.move(new_y, new_x)
-        self.window.refresh()
+        # The arguments are pminrow, pmincol, sminrow, smincol, smaxrow, smaxcol; 
+        # the p arguments refer to the upper left corner of the pad region 
+        # to be displayed and the s arguments define a clipping box on the 
+        # screen within which the pad region is to be displayed.        
+
+        
+        
+        
+        
+        
+        
+        
+        
+#        self.window.erase()
+#        self.window.move(0,0)
+#        
+#        lines_2d = [cmd.split('\n') for cmd in self.command_history]
+#        lines = list(numpy.array(lines_2d).flatten())
+#        
+#        for line in self.command_history:
+#            self.window.addstr(self.prompt + line)
+#        base_y = self.window.getyx()[0]
+#        self.window.addstr(self.prompt + self.new_line)
+#                
+#        max_y, max_x = self.window.getmaxyx()
+#        cursor_x = len(self.prompt) + self.cursor_position
+#        
+#        new_x = cursor_x % max_x
+#        n_newlines = cursor_x // max_x
+#        new_y = base_y + n_newlines
+#        
+#        self.window.move(new_y, new_x)
+#        self.window.refresh()
+        
+        
+        
+        
+        
+        
+        
         
     def process_input(self):
         char = self.window.get_wch()
-        self.process_char(char)
+        return self.process_char(char)
 
     def process_char(self, char):
 
@@ -104,10 +178,22 @@ class Shell():
             self.cursor_position += 1
             
         elif char in KEYS['UP']:
-            self.up()
+            self.scroll_history(+1)
         
         elif char in KEYS['DOWN']:
-            self.down()
+            self.scroll_history(-1)
+            
+        elif char in KEYS['PG_UP']:
+            self.yloc -= 1
+        
+        elif char in KEYS['PG_DOWN']:
+            self.yloc += 1
+            
+        elif char in KEYS['HOME']:
+            self.xloc -= 1
+        
+        elif char in KEYS['END']:
+            self.xloc += 1
         
         elif char in KEYS['ENTER']:
             self.enter()
@@ -121,27 +207,24 @@ class Shell():
         else:
             self.write(char)
                         
-    def up(self):
-        
-        if self.cmd_history_i == -1:
+    def scroll_history(self, amount):
+        commands = [line.split('\n')[0] for line in self.command_history][::-1]
+
+        if self.history_i == -1:
             self.temp_cmd = self.new_line
             
-        self.cmd_history_i += 1
-        if self.cmd_history_i >= len(self.cmd_history):
-            self.cmd_history_i = len(self.cmd_history) - 1
-            
-        self.new_line = self.cmd_history[self.cmd_history_i]
+        self.history_i += amount
         
-        self.cursor_position = len(self.new_line)
+        if self.history_i >= len(commands):
+            self.history_i = len(commands) - 1
         
-    def down(self):
-        self.cmd_history_i -= 1
+        if self.history_i < -1:
+            self.history_i = - 1
         
-        if self.cmd_history_i < 0:
-            self.cmd_history_i = -1
+        if self.history_i == -1:
             self.new_line = self.temp_cmd
         else:
-            self.new_line = self.cmd_history[self.cmd_history_i]
+            self.new_line = commands[self.history_i]
             
         self.cursor_position = len(self.new_line)
         
@@ -156,12 +239,12 @@ class Shell():
         
         self.new_line += '\n' + output.getvalue()
 
-        self.lines.append(self.new_line)
-        self.cmd_history_i = -1
+        self.command_history.append(self.new_line)
+        self.history_i = -1
         self.new_line = ''
         self.cursor_position = 0
         
-        return stop
+        self.stop_flag = stop
         
     def delete(self, position):
         start = self.new_line[:position]
