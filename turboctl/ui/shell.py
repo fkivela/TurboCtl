@@ -4,6 +4,7 @@ import sys
 from io import StringIO
         
 # TODO: Expand
+#curses.keyname(k)
 KEYS = {'RESIZE'   : (curses.KEY_RESIZE, 'KEY_RESIZE'),
         'LEFT'     : (curses.KEY_LEFT, 'KEY_LEFT'),
         'RIGHT'    : (curses.KEY_RIGHT, 'KEY_RIGHT'),
@@ -167,7 +168,7 @@ class Shell():
         return self.process_char(char)
 
     def process_char(self, char):
-
+        
         if char in KEYS['RESIZE']:
             pass
         
@@ -205,7 +206,7 @@ class Shell():
             self.delete(self.cursor_position) 
 
         else:
-            self.write(char)
+            self.write(str(char))
                         
     def scroll_history(self, amount):
         commands = [line.split('\n')[0] for line in self.command_history][::-1]
