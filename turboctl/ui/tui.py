@@ -1,3 +1,6 @@
+import readline 
+# Importing the readline module adds better editing capabilities 
+# to the input function.
 from collections import namedtuple 
 
 from ..data import PARAMETERS, ERRORS, WARNINGS, Types
@@ -217,20 +220,7 @@ class InteractiveTUI(AbstractTUI):
         stop = False
         while not stop:
             stop = super().process_input(input(prompt))
-            
-            
-class ScriptTUI(AbstractTUI):
-    pass
-#    
-#    def __init__(self, *args, **kwargs):
-#        super().__init__(*args, **kwargs)
-#    
-#    def run(self, file):
-#        with  open(file, "r") as file:
-#            line = file.read()
-#            #TODO: while loop
-#            super().process_input(line)
-            
+
 
 class ShellTUI(AbstractTUI):
     

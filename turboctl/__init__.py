@@ -56,7 +56,6 @@ from .ui import (
     AbstractUI, 
     CommandParser,
     InteractiveTUI, 
-    ScriptTUI, 
     ShellTUI, 
     # Exceptions
     UIError, 
