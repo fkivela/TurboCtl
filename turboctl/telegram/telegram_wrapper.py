@@ -1,9 +1,3 @@
-#from turboctl.telegram.telegram import Telegram
-#from turboctl.telegram.numtypes import Types
-#from turboctl.telegram.codes import (ParameterAccess, ParameterResponse, 
-#                                     ParameterError, ControlBits, StatusBits)
-#from turboctl.data import PARAMETERS    
-
 from ..data import (Types, PARAMETERS, ParameterAccess, ParameterResponse, 
                     ParameterError, ControlBits, StatusBits)    
 
@@ -21,16 +15,14 @@ class TelegramWrapper(Telegram):
     WRITABLE_PROPERTIES = Telegram.WRITABLE_PROPERTIES + ['parameter_mode']
     
     parameters = PARAMETERS
+    enum = None
     
     def __init__(self, *args, **kwargs):
-        self._control_or_status_set = set()
-        
         self._parameter_number_is_set = False
         super().__init__(*args, **kwargs)
         self._parameter_number_is_set = True
         
     def _set_kwargs(self, **kwargs):
-        
         try:
             self.parameter_number = kwargs['parameter_number']
             kwargs.pop('parameter_number')
@@ -44,7 +36,6 @@ class TelegramWrapper(Telegram):
         if self._parameter_number_is_set:
             raise RuntimeError(
                 'parameter_number cannot be set after initialization')
-            
         Telegram.parameter_number.fset(self, value)
     
     @property
@@ -92,7 +83,6 @@ class TelegramWrapper(Telegram):
                     f"the type of the parameter "
                     f"({self.parameter_type.description})"
                     ) from e
-        
         Telegram.parameter_value.fset(self, typed_value)
         
     @property        
@@ -105,25 +95,32 @@ class TelegramWrapper(Telegram):
         raise NotImplementedError('This is an abstract function left '
                                   'to be defined in subclasses.')
     
-    def _get_control_or_status_set(self, enum):
+    def get_control_or_status_set(self):
         bits = super().control_bits
-        return {enum(i) for i, bit in enumerate(bits) if bit == '1'}
+        return {self.enum(i) for i, bit in enumerate(bits) if bit == '1'}
     
-    def _set_control_or_status_set(self, enum, set_):
+    def set_control_or_status_set(self, set_):
         indices = [i.value for i in set_]        
-        self.control_bits = ''.join(
-            ['1' if i in indices else '0' for i in range(16)])
+        bits = ''.join(['1' if i in indices else '0' for i in range(16)])
+        self.control_bits = bits
+        
+    def add_control_or_status_set(self, set_):
+        new_set = self._get_control_or_status_set | set_
+        indices = [i.value for i in new_set]        
+        bits = ''.join(['1' if i in indices else '0' for i in range(16)])
+        self.control_bits = bits
                             
+        
 class Query(TelegramWrapper):
     
     WRITABLE_PROPERTIES = (TelegramWrapper.WRITABLE_PROPERTIES 
                            + ['control_set'])
     READABLE_PROPERTIES = (TelegramWrapper.READABLE_PROPERTIES 
                            + ['control_set'])                    
+    enum = ControlBits
     
     @property
     def parameter_mode(self):
-        
         code = self.parameter_access_type
         try:
             mode_ = ParameterAccess(code)
@@ -187,20 +184,22 @@ class Query(TelegramWrapper):
         mode = mode_set.pop()
         self.parameter_access_type = mode.value
         
-    @property
-    def control_set(self):
-        return super()._get_control_or_status_set(ControlBits)
+    def get_control_set(self):
+        return super().get_control_or_status_set()
     
-    @control_set.setter    
-    def control_set(self, value):
-        super()._set_control_or_status_set(ControlBits, value)
+    def set_control_set(self, value):
+        super().set_control_or_status_set(value)
+        
+    def add_control_set(self, value):
+        super().add_control_or_status_set(value)
 
 class Reply(TelegramWrapper):
                 
     WRITABLE_PROPERTIES = (TelegramWrapper.WRITABLE_PROPERTIES 
                            + ['error_code', 'status_set'])
     READABLE_PROPERTIES = (TelegramWrapper.READABLE_PROPERTIES 
-                           + ['error_code', 'error_message', 'status_set'])            
+                           + ['error_code', 'error_message', 'status_set'])     
+    enum = StatusBits       
     
     @property
     def error_message(self):
@@ -295,10 +294,11 @@ class Reply(TelegramWrapper):
         mode = mode_set.pop()
         self.parameter_access_type = mode.value
         
-    @property
-    def status_set(self):
-        return super()._get_control_or_status_set(StatusBits)
+    def get_status_set(self):
+        return super().get_control_or_status_set()
     
-    @status_set.setter    
-    def status_set(self, value):
-        super()._set_control_or_status_set(StatusBits, value)
+    def set_status_set(self, value):
+        super().set_control_or_status_set(value)
+        
+    def add_status_set(self, value):
+        super().add_control_or_status_set(value)
