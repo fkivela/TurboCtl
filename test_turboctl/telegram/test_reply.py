@@ -53,17 +53,31 @@ class TestStatusSet(unittest.TestCase):
     
     def test_empty(self):
         r = Reply()
-        self.assertEqual(r.status_set, set())
+        self.assertEqual(r.control_or_status_set, set())
         
     def test_set(self):
-        r = Reply(status_set = {StatusBits.OPERATION, 
+        r = Reply(control_or_status_set = {StatusBits.OPERATION, 
                                 StatusBits.ACCELERATION})
-        self.assertEqual(r.control_bits, '0010100000000000')
+        self.assertEqual(r.control_or_status_bits, '0010100000000000')
         
     def test_get(self):
-        r = Reply(control_bits = '0010100000000000')
-        self.assertEqual(r.status_set, {StatusBits.OPERATION, 
-                                        StatusBits.ACCELERATION})            
+        r = Reply(control_or_status_bits = '0010100000000000')
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION, 
+                                        StatusBits.ACCELERATION})     
+            
+    def test_add(self):
+        r = Reply(control_or_status_bits = '0010000000000000')
+        r.control_or_status_set.add(StatusBits.ACCELERATION)
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION, 
+                                        StatusBits.ACCELERATION})     
+        self.assertEqual(r.control_or_status_bits, '0010100000000000')
+            
+    def test_remove(self):
+        r = Reply(control_or_status_bits = '0010100000000000')
+        r.control_or_status_set.remove(StatusBits.ACCELERATION)
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION})
+        self.assertEqual(r.control_or_status_bits, '0010000000000000')
+
             
 class TestErrorMessage(unittest.TestCase):
     
@@ -124,7 +138,7 @@ class TestUtils(unittest.TestCase):
                         "parameter_number=0, "
                         "parameter_index=0, "
                         "parameter_value=0, "
-                        "control_bits='0000000000000000', "
+                        "control_or_status_bits='0000000000000000', "
                         "frequency=0, "
                         "temperature=0, "
                         "current=0, "
@@ -135,18 +149,14 @@ class TestUtils(unittest.TestCase):
                         "parameter_unit='', "
                         "parameter_indexed=False, "
                         "parameter_mode='none', "
+                        "control_or_status_set=SynchronizedSet(), "
                         "error_code=0, "
-                        "error_message='', "
-                        "status_set=set())")
+                        "error_message='')"
+        )
         
         self.maxDiff=None #Print long strings.
         self.assertEqual(str(r), string)
-        
-    def test_repr(self):
-        r = Reply()
-        copy = eval(repr(r))
-        self.assertEqual(copy, r)
-        
+                
     def test_eq(self):
         
         self.assertEqual(Query(), Query())

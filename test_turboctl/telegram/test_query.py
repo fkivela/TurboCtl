@@ -79,17 +79,31 @@ class TestControlSet(unittest.TestCase):
     
     def test_empty(self):
         q = Query()
-        self.assertEqual(q.control_set, set())
+        self.assertEqual(q.control_or_status_set, set())
         
     def test_set(self):
-        q = Query(control_set = {ControlBits.START_STOP, 
-                                 ControlBits.COMMAND})
-        self.assertEqual(q.control_bits, '1000000000100000')
+        q = Query(control_or_status_set=({ControlBits.START_STOP, 
+                                          ControlBits.COMMAND}))
+        self.assertEqual(q.control_or_status_bits, '1000000000100000')
         
     def test_get(self):
-        q = Query(control_bits = '1000000000100000')
-        self.assertEqual(q.control_set, {ControlBits.START_STOP, 
-                                         ControlBits.COMMAND})
+        q = Query(control_or_status_bits = '1000000000100000')
+        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP, 
+                                                   ControlBits.COMMAND})
+            
+    def test_add(self):
+        q = Query(control_or_status_bits = '1000000000000000')
+        q.control_or_status_set.add(ControlBits.COMMAND)
+        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP, 
+                                                   ControlBits.COMMAND})
+        self.assertEqual(q.control_or_status_bits, '1000000000100000')
+            
+    def test_remove(self):
+        q = Query(control_or_status_bits = '1000000000100000')
+        q.control_or_status_set.remove(ControlBits.COMMAND)
+        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP})
+        self.assertEqual(q.control_or_status_bits, '1000000000000000')
+
             
 class TestUtils(unittest.TestCase):
     
@@ -99,7 +113,7 @@ class TestUtils(unittest.TestCase):
                         "parameter_number=0, "
                         "parameter_index=0, "
                         "parameter_value=0, "
-                        "control_bits='0000000000000000', "
+                        "control_or_status_bits='0000000000000000', "
                         "frequency=0, "
                         "temperature=0, "
                         "current=0, "
@@ -110,16 +124,11 @@ class TestUtils(unittest.TestCase):
                         "parameter_unit='', "
                         "parameter_indexed=False, "
                         "parameter_mode='none', "
-                        "control_set=set())")
+                        "control_or_status_set=SynchronizedSet())")
         
         self.maxDiff=None #Print long strings.
         self.assertEqual(str(q), string)
-        
-    def test_repr(self):
-        q = Query()
-        copy = eval(repr(q))
-        self.assertEqual(copy, q)
-        
+                
     def test_eq(self):
         
         self.assertEqual(Query(), Query())

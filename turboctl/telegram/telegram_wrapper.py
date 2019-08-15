@@ -2,24 +2,28 @@ from ..data import (Types, PARAMETERS, ParameterAccess, ParameterResponse,
                     ParameterError, ControlBits, StatusBits)    
 
 from .telegram import Telegram
-from .wrapper import NotifyUponAccess
+#from .wrapper import NotifyUponAccess
+
 
 class TelegramWrapper(Telegram):
         
-    READABLE_PROPERTIES = Telegram.READABLE_PROPERTIES + ['parameter_type', 
-                                                          'parameter_size', 
-                                                          'parameter_unit',
-                                                          'parameter_indexed',
-                                                          'parameter_mode',
-                                                          ]
-    WRITABLE_PROPERTIES = Telegram.WRITABLE_PROPERTIES + ['parameter_mode']
+    READABLE_PROPERTIES = Telegram.READABLE_PROPERTIES + [
+        'parameter_type', 
+        'parameter_size', 
+        'parameter_unit',
+        'parameter_indexed',
+        'parameter_mode',
+        'control_or_status_set'
+    ]
+    WRITABLE_PROPERTIES = Telegram.WRITABLE_PROPERTIES + [
+        'parameter_mode', 
+        'control_or_status_set']
     
     parameters = PARAMETERS
     enum = None
     
     def __init__(self, *args, **kwargs):
-        self.control_or_status_set = NotifyUponAccess(
-                                     set(), self._update_cs_set)
+        self._control_or_status_set = SynchronizedSet(self._update_cs_bits)
         self.cs_bit_lock = False
         
         self._parameter_number_is_set = False
@@ -99,6 +103,15 @@ class TelegramWrapper(Telegram):
                                   'to be defined in subclasses.')
     
     @property
+    def control_or_status_set(self):
+        return self._control_or_status_set
+    
+    @control_or_status_set.setter
+    def control_or_status_set(self, value):
+        self.control_or_status_set.update(value)
+        self._update_cs_bits()
+    
+    @property
     def control_or_status_bits(self):
         return super().control_or_status_bits
     
@@ -110,7 +123,7 @@ class TelegramWrapper(Telegram):
     def _update_cs_bits(self):
         if self.cs_bit_lock:
             return
-
+        
         indices = [i.value for i in self.control_or_status_set]        
         bits = ''.join(['1' if i in indices else '0' for i in range(16)])
         
@@ -128,14 +141,33 @@ class TelegramWrapper(Telegram):
         self.cs_bit_lock = True
         self.control_or_status_set.update(set_)
         self.cs_bit_lock = False    
-                            
         
+        
+class SynchronizedSet(set):
+    
+    def __init__(self, upon_update, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.upon_update = upon_update
+
+        update_methods = [
+            'add', 'clear', 'difference_update', 'discard', 
+            'intersection_update', 'pop', 'remove', 
+            'symmetric_difference_update', 'update'
+        ]
+        for name in update_methods:
+            method = getattr(self, name)
+            new_method = self.add_upon_update(method)
+            setattr(self, name, new_method)
+        
+    def add_upon_update(self, method):
+        def new_method(*args, **kwargs):
+            method(*args, **kwargs)
+            self.upon_update()
+        return new_method
+
+                                    
 class Query(TelegramWrapper):
     
-    WRITABLE_PROPERTIES = (TelegramWrapper.WRITABLE_PROPERTIES 
-                           + ['control_set'])
-    READABLE_PROPERTIES = (TelegramWrapper.READABLE_PROPERTIES 
-                           + ['control_set'])                    
     enum = ControlBits
     
     @property
@@ -203,21 +235,16 @@ class Query(TelegramWrapper):
         mode = mode_set.pop()
         self.parameter_access_type = mode.value
         
-    def get_control_set(self):
-        return super().get_control_or_status_set()
-    
-    def set_control_set(self, value):
-        super().set_control_or_status_set(value)
-        
-    def add_control_set(self, value):
-        super().add_control_or_status_set(value)
 
 class Reply(TelegramWrapper):
                 
-    WRITABLE_PROPERTIES = (TelegramWrapper.WRITABLE_PROPERTIES 
-                           + ['error_code', 'status_set'])
-    READABLE_PROPERTIES = (TelegramWrapper.READABLE_PROPERTIES 
-                           + ['error_code', 'error_message', 'status_set'])     
+    WRITABLE_PROPERTIES = TelegramWrapper.WRITABLE_PROPERTIES + [
+        'error_code'
+    ]
+    READABLE_PROPERTIES = TelegramWrapper.READABLE_PROPERTIES + [
+        'error_code', 
+        'error_message'
+    ] 
     enum = StatusBits       
     
     @property
