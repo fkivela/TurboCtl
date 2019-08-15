@@ -2,7 +2,7 @@ from ..data import (Types, PARAMETERS, ParameterAccess, ParameterResponse,
                     ParameterError, ControlBits, StatusBits)    
 
 from .telegram import Telegram
-
+from .wrapper import NotifyUponAccess
 
 class TelegramWrapper(Telegram):
         
@@ -18,6 +18,10 @@ class TelegramWrapper(Telegram):
     enum = None
     
     def __init__(self, *args, **kwargs):
+        self.control_or_status_set = NotifyUponAccess(
+                                     set(), self._update_cs_set)
+        self.cs_bit_lock = False
+        
         self._parameter_number_is_set = False
         super().__init__(*args, **kwargs)
         self._parameter_number_is_set = True
@@ -28,7 +32,6 @@ class TelegramWrapper(Telegram):
             kwargs.pop('parameter_number')
         except KeyError:
             pass
-
         super()._set_kwargs(**kwargs)
     
     @Telegram.parameter_number.setter        
@@ -95,20 +98,36 @@ class TelegramWrapper(Telegram):
         raise NotImplementedError('This is an abstract function left '
                                   'to be defined in subclasses.')
     
-    def get_control_or_status_set(self):
-        bits = super().control_bits
-        return {self.enum(i) for i, bit in enumerate(bits) if bit == '1'}
+    @property
+    def control_or_status_bits(self):
+        return super().control_or_status_bits
     
-    def set_control_or_status_set(self, set_):
-        indices = [i.value for i in set_]        
+    @control_or_status_bits.setter
+    def control_or_status_bits(self, value):
+        Telegram.control_or_status_bits.fset(self, value)
+        self._update_cs_set()
+    
+    def _update_cs_bits(self):
+        if self.cs_bit_lock:
+            return
+
+        indices = [i.value for i in self.control_or_status_set]        
         bits = ''.join(['1' if i in indices else '0' for i in range(16)])
-        self.control_bits = bits
         
-    def add_control_or_status_set(self, set_):
-        new_set = self._get_control_or_status_set | set_
-        indices = [i.value for i in new_set]        
-        bits = ''.join(['1' if i in indices else '0' for i in range(16)])
-        self.control_bits = bits
+        self.cs_bit_lock = True
+        self.control_or_status_bits = bits    
+        self.cs_bit_lock = False
+        
+    def _update_cs_set(self):
+        if self.cs_bit_lock:
+            return
+
+        bits = self.control_or_status_bits
+        set_ = {self.enum(i) for i, bit in enumerate(bits) if bit == '1'}
+        
+        self.cs_bit_lock = True
+        self.control_or_status_set.update(set_)
+        self.cs_bit_lock = False    
                             
         
 class Query(TelegramWrapper):
@@ -293,12 +312,3 @@ class Reply(TelegramWrapper):
         
         mode = mode_set.pop()
         self.parameter_access_type = mode.value
-        
-    def get_status_set(self):
-        return super().get_control_or_status_set()
-    
-    def set_status_set(self, value):
-        super().set_control_or_status_set(value)
-        
-    def add_status_set(self, value):
-        super().add_control_or_status_set(value)
