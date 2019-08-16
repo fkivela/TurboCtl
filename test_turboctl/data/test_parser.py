@@ -1,10 +1,15 @@
+"""Unit tests for the parser module."""
+
 import unittest
 
-from turboctl import Parameter, PARAMETERS, parse, Types
+from turboctl import (Parameter, ErrorOrWarning, PARAMETERS, ERRORS, WARNINGS, 
+                      parse, Types)
 
 # Attributes of the Parameter class:
 # number, name, indices, min, max, default, 
 # unit, writable, type, size, description
+# Attributes of the ErrorOrWarning class:
+# number, name, possible_cause, remedy
 
 def dummy_parameter(number=1, 
                     name='Test parameter',  
@@ -218,7 +223,7 @@ class TestActualParameters(unittest.TestCase):
                    679,682,686,690,918,923,924,1025,1035,1100,1101,1102}
         self.assertEqual(PARAMETERS.keys(), numbers)
         
-    # These two test together also assert that all parameter numbers 
+    # These two tests together also assert that all parameter numbers 
     # are ints (since all keys are ints and parameter numbers are equal 
     # to keys).
     
@@ -296,6 +301,45 @@ class TestActualParameters(unittest.TestCase):
     def test_all_descriptions_are_strings(self):
         for parameter in PARAMETERS.values():
             self.assertIsInstance(parameter.description, str)
+            
+            
+class TestErrorsAndWarnings(unittest.TestCase):
+    
+    def test_parse_warning(self):
+        line = '0 "Test warning" "Test cause" "Test remedy"'
+        warning = parse(line, 'warning')
+        self.assertEqual(warning, ErrorOrWarning(
+            0, "Test warning", "Test cause", "Test remedy"))
+        
+    def test_parse_error(self):
+        line = '0 "Test error" "Test cause" "Test remedy"'
+        error = parse(line, 'error')
+        self.assertEqual(error, ErrorOrWarning(
+            0, "Test error", "Test cause", "Test remedy"))
+        
+    def test_all_warnings_defined(self):
+        warning_numbers = {0,1,2,3,6,7,11,12,13,14}
+        self.assertEqual(set(WARNINGS.keys()), warning_numbers)
+        
+    def test_all_errors_defined(self):
+        error_numbers = {
+            1,2,3,4,5,6,7,8,61,82,83,84,*range(85,97),97,101,103,106,111,116,
+            117,126,128,143,144,225,*range(226,237),237,238,240,252,600,601,
+            602,608,609,603,610,611,612
+        }
+        self.assertEqual(set(ERRORS.keys()), error_numbers)
+        
+    def test_all_warning_fields_strings(self):
+        for w in WARNINGS.values():
+            self.assertIsInstance(w.name, str)
+            self.assertIsInstance(w.possible_cause, str)
+            self.assertIsInstance(w.remedy, str)
+            
+    def test_all_error_fields_strings(self):
+        for w in ERRORS.values():
+            self.assertIsInstance(w.name, str)
+            self.assertIsInstance(w.possible_cause, str)
+            self.assertIsInstance(w.remedy, str)
 
           
 if __name__ == '__main__':

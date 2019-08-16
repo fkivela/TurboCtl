@@ -1,5 +1,5 @@
 # This file contains a database of all the parameters recognized by the TURBOVAC pump.
-# All data is copied from the pump manual.
+# All data is copied from the pump manual, with some fixes to spelling, grammar and unclear wording.
 # Fields are separated by a single space.
 # Fields with internal spaces are enclosed in double quotes ("").
 # An empty field is written as "".
@@ -7,7 +7,7 @@
 # <-- This is a comment sign. Everything after it on a line is skipped.
 # Lines containing only whitespace are skipped.
 # The numbers of indexed parameters are written using the syntax "number[first_index:last_index]".
-# For copypasting: °C
+# The degree sign can be copy-pasted from here: °C
 
 #No. Designation Min. Max. Default Unit r/w Format Description
 1 "Device type" 0 65535 180 "" r/w u16 "180 = TURBOVAC 350/450 i\n181 = TURBOVAC 350/450 i with optional interface\n182 = TURBOVAC 350/450 iX\n190 = TURBOVAC 80/200 i\n191 = TURBOVAC 80/200 with optional interface\n192 = TURBOVAC 80/200 iX"

@@ -1,3 +1,6 @@
+# This file contains a database of all the errors raised by the TURBOVAC pump.
+# See parameters.txt for a description of the syntax used.
+
 # Error_code Designation Possible_cause Remedy
 1 "Overspeed warning. The actual frequency exceeds the setpoint by over 10 Hz." "Frequency converter defective." "Contact Leybold service."
 2 "Pass through time error. The pump has not reached the minimum speed after the maximum run-up time has elapsed." "Forevacuum pressure too high.\n\nGas flow too high.\n\nRotor blocked." "Check the ultimate pressure of the backing pump and install a bigger backing pump if required.\n\nSeal leak, check process.\n\nCheck if the rotor turns freely. Contact Leybold service if the rotor is damaged or blocked."
@@ -61,26 +64,3 @@
 610 "Inside volume temperature warning." "" "Improve cooling."
 611 "Inside volume temperature error." "" "Improve cooling."
 612 "Intermediate circuit voltage warning." "" ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
