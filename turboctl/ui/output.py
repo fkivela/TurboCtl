@@ -1,6 +1,7 @@
 import textwrap
 import tabulate
 
+from ..data import ControlBits
 from ..telegram import Query, Reply
 
 INDENT = 4 * ' '
@@ -75,7 +76,7 @@ def _parameter_output(wrapper):
     
 def _hardware_output(wrapper):
     
-    if isinstance(wrapper, Query) and 'FREQ_SETPOINT' in wrapper.control_set:
+    if ControlBits.FREQ_SETPOINT in wrapper.control_or_status_set:
         return f'Stator frequency setpoint: {wrapper.frequency} Hz' + '\n'
     
     if isinstance(wrapper, Query):
@@ -93,16 +94,15 @@ def _control_or_status_output(wrapper):
     if isinstance(wrapper, Query):
         header = 'Active control bits:'
         empty = 'No control bits active'
-        bitlist = sorted(list(wrapper.control_set))
     elif isinstance(wrapper, Reply):
         header = 'Present status conditions:'
         empty = 'No status conditions present'
-        bitlist = sorted(list(wrapper.status_set))
     else:
         raise TypeError(
             f'*wrapper* should be a Query or a Reply, not {type(wrapper)}')
     
-    descriptions = [INDENT + bit.description for bit in bitlist]
+    cslist = sorted(list(wrapper.control_or_status_set))
+    descriptions = [INDENT + cs.description for cs in cslist]
     
     if descriptions:
         return '\n'.join([header] + descriptions)

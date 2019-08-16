@@ -135,19 +135,19 @@ class HardwareComponent():
         
     def handle_control_bits(self, query):
 
-        if not ControlBits.COMMAND in query.control_set:
+        if not ControlBits.COMMAND in query.control_or_status_set:
             return
         
-        if ControlBits.START_STOP in query.control_set:
+        if ControlBits.START_STOP in query.control_or_status_set:
             if self.is_on:
                 self.off()
             else:
                 self.on()
             
-        if ControlBits.FREQ_SETPOINT in query.control_set:
+        if ControlBits.FREQ_SETPOINT in query.control_or_status_set:
             self.variables.frequency_setpoint = query.frequency
             
-        if ControlBits.RESET_ERROR in query.control_set:
+        if ControlBits.RESET_ERROR in query.control_or_status_set:
             self.set_errors([], [], [])
             
     def handle_status_bits(self, reply):
@@ -157,27 +157,26 @@ class HardwareComponent():
             return
                 
         if self.is_on:
-            reply.status_set = reply.status_set | {StatusBits.OPERATION}
+            reply.control_or_status_set.add(StatusBits.OPERATION)
         else:
-            reply.status_set = reply.status_set | {StatusBits.READY}
+            reply.control_or_status_set.add(StatusBits.READY)
             
         if self.variables.frequency:
-            reply.status_set = reply.status_set | {StatusBits.TURNING}
+            reply.control_or_status_set.add(StatusBits.TURNING)
             
         if self.acceleration > 0:
-            reply.status_set = reply.status_set | {StatusBits.ACCELERATION}
+            reply.control_or_status_set.add(StatusBits.ACCELERATION)
             
         if self.acceleration < 0:
-            reply.status_set = reply.status_set | {StatusBits.DECELERATION}
+            reply.control_or_status_set.add(StatusBits.DECELERATION)
             
         errors_present = any(self.variables.error_list)
         if errors_present:
-            reply.status_set = reply.status_set | {StatusBits.ERROR}
+            reply.control_or_status_set.add(StatusBits.ERROR)
         
         if self.variables.warnings:
-            reply.status_set = reply.status_set | {StatusBits.WARNING}
+            reply.control_or_status_set.add(StatusBits.WARNING)
         
-            
     def handle_hardware(self, query, reply):
         """Write hardware data to *reply.*"""
 
