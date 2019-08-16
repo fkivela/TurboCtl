@@ -233,27 +233,23 @@ class ControlBits(IntAndDescription):
         description: A string describing the effect of the bit.
     """
         
-    START_STOP    = ( 0, 'Start/Stop')
+    # TODO: Check these
+    START_STOP    = ( 0, 'Start/stop')
     UNUSED1       = ( 1, 'Control bit 1 (not assigned)')
     UNUSED2       = ( 2, 'Control bit 2 (not assigned)')
     UNUSED3       = ( 3, 'Control bit 3 (not assigned)')
     UNUSED4       = ( 4, 'Control bit 4 (not assigned)')
-    UNUSED5       = ( 5, 'Control bit 5 (not assigned)')
-    AIR_COOLING   = ( 5, '24 VDC output X201') 
-        # Air cooling accessory
-    FREQ_SETPOINT = ( 6, 'Enable main setpoint PZD2 (speed setpoint)')
-        # Enable frequency setpoint
+    AIR_COOLING   = ( 5, 'Output X201 (air cooling)') 
+    FREQ_SETPOINT = ( 6, 'Set frequency setpoint')
     RESET_ERROR   = ( 7, 'Reset error (all components)')
-    STANDBY       = ( 8, 'Enable standby function')
-    COMMAND       = (10, 'Enable process data (Bit 0, 5, 6, 7, 8, 13, 14, 15)')
+    STANDBY       = ( 8, 'Enable standby')
+    UNUSED9       = ( 9, 'Control bit 9 (not assigned)')
+    COMMAND       = (10, 'Enable control bits 0, 5, 6, 7, 8, 13, 14, 15')
     X1_ERROR      = (11, 'Error operation relay X1')
     X1_WARNING    = (12, 'Normal operation relay X1')
     X1_NORMAL     = (13, 'Warning relay X1')
-    
-    PP_RELAY      = (14, '24 VDC output X202') 
-        # Relay box for packing pump
-    VENTING       = (15, '24 VDC output X203') 
-        # Venting valve
+    PP_RELAY      = (14, 'Output X202 (packing pump)') 
+    VENTING       = (15, 'Output X203 (venting valve)') 
 
 
 class StatusBits(IntAndDescription):
