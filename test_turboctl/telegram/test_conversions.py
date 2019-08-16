@@ -1,4 +1,5 @@
-"""This module contains unit tests for the conversions module."""
+"""Unit tests for the conversions module."""
+
 import unittest
 import math
 

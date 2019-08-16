@@ -1,3 +1,4 @@
+"""Unit tests for the Reply class of the telegram_wrapper module."""
 import unittest
     
 from turboctl import (Telegram, Types, TelegramWrapper, Query, Reply, 

@@ -1,3 +1,4 @@
+"""Unit tests for the Query class of the telegram_wrapper module."""
 import unittest
     
 from turboctl import Telegram, TelegramWrapper, Query, Reply, ControlBits

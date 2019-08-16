@@ -1,3 +1,4 @@
+"""Unit tests for the byteholder module."""
 import unittest
 import itertools
 
@@ -139,7 +140,8 @@ class TestGetter(unittest.TestCase):
         # 123, 255 dec = 01111011 11111111 bin = 31743 dec
         self.assertEqual(bh[1:3], 31743)
         
-        # 0, 123, 255, 133 dec = 00000000 01111011 11111111 10000101 bin 
+        # 0, 123, 255, 133 dec 
+        # = 00000000 01111011 11111111 10000101 bin
         # = 8126341 dec
         self.assertEqual(bh[:], 8126341)
         

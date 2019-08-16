@@ -1,3 +1,60 @@
+State of packages/modules: (Code OK; Tests OK, Comments OK)
+- telegram package (OK, OK, OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Priority 1 (current)
+-Fix rotor not turning
+
+Priority 2 (soon)
+-Comment and test all modules
+-Test with the real pump
+
+Priority 3 (when I have time)
+-Change setup methods to setupclass methods
+-type(x) -> type(x).__name__ in error messages
+-Use the _ignore_ class property to define enum properties
+-XOR -> ^
+-Running two different test scripts with enums in them causes two identical 
+enum instances to not be equal
+-Rename ParameterError
+-License
+
+Priority 4 (maybe never)
+-Add a config file
+-Add functionality for changing the telegram address
+
+
+
+Things that have to be tested with the real pump:
+-If a parameter number is specified but there is no parameter access, will the parameter data be included in the return telegram?
+-Is it OK to define index for an unindexed telegram?
+-When is the cannot change error message used?
+-Writability of parameters where the manual doesn't specify it
+-Does the pump return a parameter error if the parameter access code is invalid
+-How does the pump behave when it is off? Is only the motor off? Does the pump read/answer commands?
+-Does the onoff command reset parameters?
+-Real parameters have a default value of 0 and a minumum value of > 0. How does this work?
+
+Parameters to be read from a file(?):
+-Description field width
+-Script to be run?
+
+
 # Important parameters:
 # 3: Frequency (u16, not writable)
 # 4: Voltage
@@ -16,48 +73,3 @@
 # 184: Converter operating hours
 # 227: Warnings (1 warning per bit)
 # 1025: Reset to factory default    
-
-Priority 1
--improve scripts:
--running from any directory
--port as command-line argument
--a single script to run as shell/interactive
--starting vpump from a different script
-
-Priority 2
--finish vpump
--control_set -> set_control_set or return an addable set
-- -> add_status/get_status/remove_status/set_status
--Rename ParameterError
--Test the UI
--Complete the tests for virtualpump
--Fix broken tests in test_virtualconnection
--Running two different test scripts with enums in them causes two identical 
-enum instances to not be equal
-
-Priority 3
--Change setup methods to setupclass methods
--Invent a common name for control_list and status_list
--Rename numtypes to types
--Make sure words in the parameter list are capitalized correctly
--Figure out a way to set run parameters (such as the script to be run)
--Add functionality for listing errors and warnings
--Add functionality for changing the telegram address
--type(x) -> type(x).__name__ in error messages
--subtests contribute multiple errors but only 1 success -> change testing script
--Use the _ignore_ class property to define enum properties
--XOR -> ^
-
-Things that have to be tested with the real pump:
--If a parameter number is specified but there is no parameter access, will the parameter data be included in the return telegram?
--Is it OK to define index for an unindexed telegram?
--When is the cannot change error message used?
--Writability of parameters where the manual doesn't specify it
--Does the pump return a parameter error if the parameter access code is invalid
--How does the pump behave when it is off? Is only the motor off? Does the pump read/answer commands?
--Does the onoff command reset parameters?
--Real parameters have a default value of 0 and a minumum value of > 0. How does this work?
-
-Parameters to be read from a file(?):
--Description field width
--Script to be run?

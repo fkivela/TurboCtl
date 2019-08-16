@@ -1,3 +1,6 @@
+"""Unit tests for the Telegram_Wrapper class of the 
+telegram_wrapper module.
+"""
 import unittest
 
 from turboctl import Types, Telegram, TelegramWrapper

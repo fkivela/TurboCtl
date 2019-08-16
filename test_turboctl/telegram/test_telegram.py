@@ -1,5 +1,4 @@
-"""This module contains unit tests for the telegram module.
-"""
+"""Unit tests for the telegram module."""
 import unittest
 
 from turboctl import Telegram, Types
@@ -79,8 +78,9 @@ class TestPropertyGetters(Base):
     def test_parameter_value(self):
         self.assertEqual(self.telegram.parameter_value, 5432)
         
-    def test_control_bits(self):
-        self.assertEqual(self.telegram.control_bits, '1111000011001100')
+    def test_control_or_status_bits(self):
+        self.assertEqual(self.telegram.control_or_status_bits, 
+                         '1111000011001100')
         
     def test_frequency(self):
         self.assertEqual(self.telegram.frequency, 1221)
@@ -145,8 +145,8 @@ class TestPropertySetters(Base):
     def test_parameter_index(self):
         self.setter_uint_test('parameter_index', 8)
                 
-    def test_control_bits(self):
-        name = 'control_bits'
+    def test_control_or_status_bits(self):
+        name = 'control_or_status_bits'
         valid = [16*'0', 16*'1', '1111000011001100']
         invalid = [15*'0', 17*'0', 15*'1'+'2']
         type_error = [1, 1.0]
@@ -176,7 +176,7 @@ class TestPropertySetters(Base):
         t.parameter_number = 1234
         t.parameter_index = 56
         t.parameter_value = 5432
-        t.control_bits = '1111000011001100'
+        t.control_or_status_bits = '1111000011001100'
         t.frequency = 1221
         t.temperature = 2332
         t.current = 3443
@@ -276,16 +276,16 @@ class TestSpecialSetters(Base):
         # The telegram should now be valid again.
         self.assertTrue(telegram.is_valid())
         
-    def test_set_control_bits(self):
+    def test_set_control_or_status_bits(self):
         
         telegram = Telegram()
-        self.assertEqual(telegram.control_bits, '0000000000000000')
+        self.assertEqual(telegram.control_or_status_bits, '0000000000000000')
         
-        telegram.set_control_bits([0, 10, 2, 15, 7, 4], '111111')
-        self.assertEqual(telegram.control_bits, '1010100100100001')
+        telegram.set_control_or_status_bits([0, 10, 2, 15, 7, 4], '111111')
+        self.assertEqual(telegram.control_or_status_bits, '1010100100100001')
         
-        telegram.set_control_bits([0, 10, 2], '100')
-        self.assertEqual(telegram.control_bits, '1000100100000001')
+        telegram.set_control_or_status_bits([0, 10, 2], '100')
+        self.assertEqual(telegram.control_or_status_bits, '1000100100000001')
 
 
 class TestInit(Base):
@@ -396,7 +396,7 @@ class TestUtils(Base):
                            "parameter_number=0, "
                            "parameter_index=0, "
                            "parameter_value=0, "
-                           "control_bits='0000000000000000', "
+                           "control_or_status_bits='0000000000000000', "
                            "frequency=0, "
                            "temperature=0, "
                            "current=0, "
