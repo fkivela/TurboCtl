@@ -117,7 +117,7 @@ class AbstractUI():
         Raises: #TODO
         """
         query = Query(parameter_number=number)
-        query.index = index
+        query.parameter_index = index
         query.parameter_mode = 'read'
         return self._send(query)
     
@@ -137,7 +137,7 @@ class AbstractUI():
         Raises: #TODO
         """
         query = Query(parameter_number=number)
-        query.index = index
+        query.parameter_index = index
         query.parameter_value = value
         query.parameter_mode = 'write'        
         return self._send(query)
