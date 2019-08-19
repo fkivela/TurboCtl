@@ -1,30 +1,22 @@
-"""This module defines the VirtualConnection class, which ca be used 
+"""This module defines the VirtualConnection class, which can be used 
 to simulate serial connections."""
 
 import os
 import threading
-import select
 import pty
 import time
         
 class VirtualConnection():
     """A virtual serial connection.
     
-    A VirtualConnection object contains two attributes which can be 
-    read from and written to.
+    Data can be sent through a VirtualConnection object by accessing 
+    the *user_end* and *virtual_end* attributes. *virtual_end* can be 
+    written to and read from with os.read and os.write. 
+    os.read doesn't seem to work with *user_end*, and the serial 
+    module should be used instead. The *port* attribute returns a 
+    device name which can be given to serial.Serial() as an argument.
     
-    I/O to and from a machine or other non-user entity can be 
-    simulated by reading from and writing to vc.virtual_end with 
-    os.read and os.write.
-    
-    The entity using the machine should have access to vc.user_end.
-    The user end can only be written to and read from with the serial 
-    module; os.write and os.read don't work.
-    
-    vc.port returns a device name that can be given to serial.Serial 
-    as an argument.
-    
-    The VirtualConnection object runs code in a parallel thread.
+    A VirtualConnection object runs code in a parallel thread.
     If a VC is not closed after the it is no longer needed, 
     it may continue using resources needlessly.
     A VC may be closed with
@@ -48,10 +40,9 @@ class VirtualConnection():
     >> VirtualConnection.close_all()
     """
     
-    # This flag can be used to stop all instances of this class at 
-    # once without needing references to them.
-    _stop_all_instances_flag = threading.Event()
-        
+    # Keep references to all running instances of this class.
+    running_instances = set()
+            
     def __init__(self, buffer_size=1024):
         """Initialize a new VirtualConnection.
         
@@ -63,16 +54,12 @@ class VirtualConnection():
         """
         
         self.buffer_size = buffer_size
-        
         master, slave = pty.openpty()
-        
         # This may be written to and read from with os.write 
         # and os.read.
         self.virtual_end = master
-        
-        # os.write and os.read don't work with this, but writing and 
-        # reading with the serial module works.
-        # TODO
+        # os.read doesn't seem to work with this, but the serial 
+        # module does.
         self.user_end = slave
         
         # A parallel thread for the function self._run().
@@ -85,9 +72,8 @@ class VirtualConnection():
                 
         # Flag for stopping the parallel thread.
         self._stop_flag = threading.Event()
-        # Unset the global stop flag.
-        self._stop_all_instances_flag.clear()
-                
+        # Add this instance to the set. 
+        self.running_instances.add(self)
         self.thread.start()
         
     def __enter__(self):
@@ -105,23 +91,35 @@ class VirtualConnection():
     def close(self):
         """Stop the parallel thread and close the connection.
         
-        This function only returns after the parallel thread has 
+        This function returns only after the parallel thread has 
         actually stopped.
         """
-        self._stop_flag.set()
-        os.write(self.user_end, bytes([0]))
+        if self.is_running():
+            self._stop_flag.set()
+            # Write an empty string to stop os.read from blocking.
+            os.write(self.user_end, bytes([0]))
+        
+        # Wait for the parallel thread to stop.
         while self.is_running():
             time.sleep(0.001)
+            
+        # Unlike set.remove(x), set.discard(x) doesn't raise an error 
+        # if there is no x in the set. 
+        self.running_instances.discard(self)
         
     @classmethod
     def close_all(cls):
         """Close all running instances of this class.
         
-        This function returns immediately after setting the stop flag, 
-        so it may take a nonzero amount of time for the parallel 
-        threads to finish executing after this function is called.
+        This function returns only after all parallel threads have 
+        actually stopped.
         """
-        cls._stop_all_instances_flag.set()
+        # Iterate over a copy, because closing a VC removes it from 
+        # cls.running_instances, and removing members from a set 
+        # during iteration raises an error.
+        copy = cls.running_instances.copy()
+        for i in copy:
+            i.close()
         
     def is_running(self):
         """Return True, IFF the parallel thread is running."""
@@ -133,32 +131,15 @@ class VirtualConnection():
         *port* argument of serial.Serial."""
         
         return os.ttyname(self.user_end)
-    
-    def _should_stop(self):
-        """Return True, IFF a stop flag is set."""
-        
-        if self._stop_flag.is_set():
-            return True
-        
-        if self._stop_all_instances_flag.is_set():
-            return True
-        
-        return False
-                
+                    
     def _run(self):
         """Run the parallel thread."""
         
-        while not self._should_stop():    
-                                       
-            #input_ = self._read_without_blocking(self.virtual_end, 
-            #                                     self.buffer_size)
+        while not self._stop_flag.is_set():    
+            # Blocks until there is input to read.                                       
             input_ = os.read(self.virtual_end, self.buffer_size)
-            
-            #time.sleep(0.1)
-            
-            if input_:
-                output = self.process(input_)
-                os.write(self.virtual_end, output)
+            output = self.process(input_)
+            os.write(self.virtual_end, output)
         
         # Close the files after the parallel thread has stopped.
         # Otherwise the system will run out of file descriptors, 
@@ -166,45 +147,9 @@ class VirtualConnection():
         # in a a row.
         os.close(self.user_end)
         os.close(self.virtual_end)
-                        
-    @staticmethod
-    def _read_without_blocking(file, buffer_size):
-        """Read *buffer_size* or less bytes from *file*.
-        
-        os.read blocks (i.e. doesn't return anything and prevents the 
-        program from proceeding) if *file* is some special kind of 
-        nonexistant/empty (this is different from a regular empty 
-        file). Using this function prevents this blocking and retuns 
-        None instead. 
-        
-        If *file* can be read from but contains less bits than 
-        *buffer_size* (including 0 bits), all the bits in *file* are 
-        returned, but no more.
-        """
-        
-        # Some of the following variables aren't actually used, 
-        # but are given a name to better illustrate what select.select 
-        # does. 
-        rlist = [file] 
-        # select.select checks whether these can be written to.
-        wlist = []
-        # select.select checks whether these can be read from.
-        xlist = []
-        # select.select checks whether these have error conditions.
-        timeout = 0
-        
-        readable, writable, errors = select.select(rlist, wlist, xlist, 
-                                                   timeout)
-        
-        # Prevent blocking by reading only if *file* can actually be 
-        # read from.
-        if file in readable:
-            return os.read(file, buffer_size)
-        else:
-            return None
-            
+                                    
     def process(self, input_):
-        """Forms output based on *input_*.
+        """Form output based on *input_*.
         
         By default, *input_* is simply mirrored back.
         This behaviour can be changed by redefining this function in 

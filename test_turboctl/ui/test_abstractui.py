@@ -3,6 +3,7 @@ import unittest
 from turboctl import AbstractUI, VirtualPump, Query, Reply
 
 class Base(unittest.TestCase):
+    pass
     
     @classmethod
     def setUpClass(cls):
@@ -10,12 +11,12 @@ class Base(unittest.TestCase):
         cls.ui = AbstractUI(cls.pump.port)
         
     @classmethod
-    def tearDown(cls):
+    def tearDownClass(cls):
         cls.pump.close()
                 
         
 class TestReadAndWriteParameter(Base):
-    
+        
     def test_uint(self):
         q, r = self.ui.write_parameter(200, 1)
         
@@ -40,10 +41,13 @@ class TestReadAndWriteParameter(Base):
         self.assertEqual(r.parameter_number, 1)
         self.assertEqual(r.parameter_index, 0)
         self.assertEqual(r.parameter_value, 200)
+        
+        q, r = self.ui.read_parameter(1)
 
         
     def test_sint(self):
-        q, r = self.ui.read_parameter(1)
+        pass
+        #q, r = self.ui.read_parameter(1)
 
         
 #class TestSendAndReceive(Base):

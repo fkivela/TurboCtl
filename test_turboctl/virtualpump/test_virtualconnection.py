@@ -1,14 +1,17 @@
+"""Unit tests for the virtualconnection module."""
+
 import unittest
-import time
 import os
 from serial import Serial
 
 from turboctl import VirtualConnection
 
+
 class DummyVC(VirtualConnection):
     
     def process(self, input_):
         return b'reply to ' + input_
+
     
 class Base(unittest.TestCase):
     
@@ -17,6 +20,7 @@ class Base(unittest.TestCase):
         
     def tearDown(self):
         self.vc.close()
+
 
 class TestMessaging(Base):
     
@@ -46,7 +50,7 @@ class TestMessaging(Base):
         self.ser.write(msg)
         
         reply = self.ser.read(100)
-        self.assertEqual(reply, b'reply to hello_reply to there')
+        self.assertEqual(reply, b'reply to hello_there')
         
     def test_message_larger_than_vc_buffer_and_read_in_pieces(self):
         
@@ -57,7 +61,7 @@ class TestMessaging(Base):
         self.assertEqual(reply, b'reply to hello_')
         
         reply = self.ser.read(15)
-        self.assertEqual(reply, b'reply to there')
+        self.assertEqual(reply, b'there')
         
         reply = self.ser.read(15)
         self.assertEqual(reply, b'')
@@ -71,6 +75,7 @@ class TestMessaging(Base):
         self.assertEqual(self.ser.read(100), b'reply to there')
                 
         self.assertEqual(self.ser.read(100), b'')
+
         
 class TestStartingAndStopping(Base):
         
@@ -90,33 +95,48 @@ class TestStartingAndStopping(Base):
             os.fstat(self.vc.user_end)
         with self.assertRaises(OSError):
             os.fstat(self.vc.virtual_end)
+            
+    def test_close_after_close(self):
+        """Make sure closing a VC twice doesn't raise errors."""
+        self.vc.close()
+        self.vc.close()
                     
     def test_close_all(self):
-        
         vc1 = self.vc
         vc2 = DummyVC()
         vc3 = DummyVC()
-        
         self.assertTrue(vc1.is_running())
         self.assertTrue(vc2.is_running())
         self.assertTrue(vc3.is_running())
         
         VirtualConnection.close_all()
-        
-        # It may take a nonzero amount of time for parallel threads to
-        # finish executing. 
-        time.sleep(0.01)        
         self.assertFalse(vc1.is_running())
         self.assertFalse(vc2.is_running())
         self.assertFalse(vc3.is_running())
         
     def test_init_after_close_all(self):
         VirtualConnection.close_all()
-        vc = VirtualConnection()
+        with VirtualConnection() as vc:
+            self.assertTrue(vc.is_running)
+            self.assertTrue(os.fstat(vc.user_end))
+            self.assertTrue(os.fstat(vc.virtual_end))
         
-        self.assertTrue(vc.is_running)
-        self.assertTrue(os.fstat(vc.user_end))
-        self.assertTrue(os.fstat(vc.virtual_end))
+    def test_running_instances(self):
+        VirtualConnection.close_all()
+        
+        self.assertEqual(len(VirtualConnection.running_instances), 0)
+        vc1 = DummyVC()
+        self.assertEqual(len(VirtualConnection.running_instances), 1)
+        DummyVC()
+        self.assertEqual(len(VirtualConnection.running_instances), 2)
+        DummyVC()
+        self.assertEqual(len(VirtualConnection.running_instances), 3)
+
+        vc1.close()
+        self.assertEqual(len(VirtualConnection.running_instances), 2)
+        VirtualConnection.close_all()
+        self.assertEqual(len(VirtualConnection.running_instances), 0)
+        
         
 if __name__ == '__main__':
     unittest.main()
