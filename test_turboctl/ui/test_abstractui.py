@@ -1,102 +1,63 @@
 import unittest
-import enum as e
-from collections import namedtuple
 
-from turboctl.ui.abstractui import AbstractUI
-from turboctl.virtualpump import VirtualConnection
-from turboctl.telegram.test.test_parameters import TEST_PARAMETERS
-from turboctl.telegram import telegram_wrapper
+from turboctl import AbstractUI, VirtualPump, Query, Reply, TEST_PARAMETERS
 
-telegram_wrapper.PARAMETERS = TEST_PARAMETERS
-Query = telegram_wrapper.Query
-Reply = telegram_wrapper.Reply
+Query.parameters = TEST_PARAMETERS
+Reply.parameters = TEST_PARAMETERS
 
-        
-class ReplyMode(e.Enum):
-    
-    MIRROR = e.auto()
-    NO_REPLY = e.auto()
-    WRONG_LENGTH = e.auto()
-    INVALID_CONTENT = e.auto()
-    CONSTANT = e.auto()
-
-class DummyVC(VirtualConnection):
-    
-    def __init__(self, *args, **kwargs):
-        self.mode = ReplyMode.MIRROR
-        super().__init__(*args, **kwargs)
-        
-    def process(self, input_):
-        
-        if self.mode == ReplyMode.MIRROR:
-            return super().process(input_)
-        
-        if self.mode == ReplyMode.NO_REPLY:
-            return b''
-        
-        if self.mode == ReplyMode.WRONG_LENGTH:
-            return bytes(10)
-        
-        if self.mode == ReplyMode.INVALID_CONTENT:
-            return bytes(24)
-        
-        if self.mode == ReplyMode.CONSTANT:
-            return self.reply.data
-        
-        raise ValueError(f'Invalid mode: {self.mode}')
-        
 class Base(unittest.TestCase):
     
-    def setUp(self):
-        self.vc = DummyVC(buffer_size=Query.LENGTH)
-        self.port = self.vc.port
-        self.invalid_port = 'invalid_port'
-        self.ui = AbstractUI(self.port)
-        self.ui_invalid_port = AbstractUI(self.invalid_port)
-        self.maxDiff = None # Print long strings when comparing them
+    def setUpClass(cls):
+        self.pump = VirtualPump(TEST_PARAMETERS)
+        self.ui = AbstractUI(self.pump.port)
         
     def tearDown(self):
-        self.vc.close()
-
-class TestInit(Base):
-    
-    def test_initial_attributes_for_valid_port(self):
-        self.assertTrue(self.ui.connection)
-        self.assertEqual(self.ui.port, self.port)
-        
-    def test_initial_attributes_for_invalid_port(self):
-        self.assertEqual(self.ui_invalid_port.connection, None)
-        self.assertEqual(self.ui_invalid_port.port, self.invalid_port)
+        self.pump.close()
                 
-class TestSend(Base):
-    
-    def test_success(self):
-        query, reply = self.ui._send(Query())
-        
-        self.assertTrue(isinstance(query, Query))
-        self.assertTrue(isinstance(reply, Reply))
-        self.assertEqual(query, Query())
-        
-    def test_failure(self):
-        
-        for mode in ['NO_REPLY', 'WRONG_LENGTH', 'INVALID_CONTENT']:
-            with self.subTest(i=mode):
-                self.vc.mode = ReplyMode[mode]
-        
-                with self.assertRaises(ValueError):
-                    q, r = self.ui._send(Query())
+#class TestSendAndReceive(Base):
+#    
+#    def test_success(self):
+#        query, reply = self.ui._send(Query())
+#        
+#        self.assertTrue(isinstance(query, Query))
+#        self.assertTrue(isinstance(reply, Reply))
+#        self.assertEqual(query, Query())
+#        
+#    def test_failure(self):
+#        
+#        for mode in ['NO_REPLY', 'WRONG_LENGTH', 'INVALID_CONTENT']:
+#            with self.subTest(i=mode):
+#                self.vc.mode = ReplyMode[mode]
+#        
+#                with self.assertRaises(ValueError):
+#                    q, r = self.ui._send(Query())
 
 class TestCommands(Base):
     
-    def test_pump_on(self):
-        query, reply = self.ui.on_off()
-        
-        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
-        correct_query = Query(correct_bits)
-        
-        self.assertEqual(query, reply, correct_query)
-        
-        
+#    def test_pump_on(self):
+#        query, reply = self.ui.on_off()
+#        
+#        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
+#        correct_query = Query(correct_bits)
+#        
+#        self.assertEqual(query, reply, correct_query)
+    
+    def test_turn_on_and_off(self):
+        q, r = read_parameter(args)
+        val = r.parameter_value
+
+
+
+
+
+
+
+
+
+
+
+
+    
     def test_status(self):
     
         query, reply = self.ui.status()
@@ -105,6 +66,8 @@ class TestCommands(Base):
         correct_query = Query(correct_bits)
         
         self.assertEqual(query, reply, correct_query)
+        
+    def test
         
         
         

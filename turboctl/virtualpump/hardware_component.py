@@ -151,7 +151,7 @@ class HardwareComponent():
             self.set_errors([], [], [])
             
     def handle_status_bits(self, reply):
-        
+                
         if not self.dynamic_status:
             reply.status_set = self.status_set
             return

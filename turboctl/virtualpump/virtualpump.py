@@ -127,10 +127,6 @@ class VirtualPump():
         """
         self.lock.acquire()        
         reply = self.parameter_component.handle_parameter(query)
-        
-        # TODO: self.handle_control_word(query, reply)
-        reply.control_set = set()
-
         self.hardware_component.handle_hardware(query, reply)
         self.lock.release()
         return reply

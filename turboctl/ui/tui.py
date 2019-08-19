@@ -8,33 +8,34 @@ from ..data import PARAMETERS, ERRORS, WARNINGS, Types
 from .abstractui import AbstractUI
 from .print_table import print_table
 from .command_parser import CommandParser
-from .output import output, help_string
+from .output import (help_string, full_output, parameter_output, 
+                     control_or_status_output, hardware_output)
 from .ui_errors import UIError, UIValueError, UITypeError
 
-Command = namedtuple('Command', 'name, function, args, description')    
+Command = namedtuple('Command', 'names, function, args, description')    
 
 COMMAND_LIST = [
-    Command(name='onoff',
+    Command(names=['onoff', 'o'],
         function='cmd_onoff',
         args=[],
         description='Turn the pump on or off'),
 
-    Command(name='status',
+    Command(names=['status', 's'],
             function='cmd_status',
             args=[],
             description='Report pump status'),
 
-    Command(name='read',
+    Command(names=['read', 'r'],
             function='cmd_read',
             args=['number', 'index=0'],
             description='Read the value of a parameter'),
 
-    Command(name='write',
+    Command(names=['write', 'w'],
             function='cmd_write',
             args=['value', 'number', 'index=0'],
             description='Write a value to a parameter'),
                         
-    Command(name='list',
+    Command(names=['list', 'l'],
             function='cmd_list',
             args=['letter', 'numbers'],
             description=(
@@ -44,7 +45,7 @@ COMMAND_LIST = [
                 "*numbers* should be an iterable "
                 "of the numbers to be listed or 'all'.")),
 
-    Command(name='info',
+    Command(names=['info', 'i'],
             function='cmd_info',
             args=['letter', 'number'],
             description=(
@@ -52,20 +53,25 @@ COMMAND_LIST = [
                 "error (letter='e') "
                 "or warning (letter='w'). ")),
 
-    Command(name='help',
+    Command(names=['help', 'h'],
             function='cmd_help',
             args=[],
             description='Display a help message'),
 
-    Command(name='exit',
+    Command(names=['exit', 'e', 'x', 'q'],
             function='cmd_exit',
             args=[],
             description='Exit the program'),
     
-    Command(name='debug',
+    Command(names=['debug', 'd'],
             function='cmd_debug',
             args=[],
-            description='Turn debug mode on or off')
+            description='Turn debug mode on or off'),
+    
+    Command(names=['verbosity', 'v'],
+        function='cmd_verbosity',
+        args=['value'],
+        description='Set output verbosity (valid values are 1, 2 and 3)')
 ]
 
 
@@ -80,6 +86,10 @@ class AbstractTUI(AbstractUI):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.verbosity = 2
+        # Verbosity 3: Print all data in query and reply with the full_output function.
+        # Verbosity 2: Print only data relevant to the command in question.
+        # Verbosity 1: Print only the absolute minimum.
         self.debug = False
         self.cmd_parser = CommandParser(self, COMMAND_LIST)
         
@@ -91,12 +101,37 @@ class AbstractTUI(AbstractUI):
             return False
         
     def cmd_onoff(self):
-        query, reply = self.on_off()
-        self._print_output(query, reply)
+        query, reply = self.on_off()       
+
+        if self.verbosity == 3:
+            print(full_output(query, reply))
+        
+        elif self.verbosity == 2:
+            print('Turning the pump on or off')
+            conditions = control_or_status_output(reply)
+            if conditions:
+                print(conditions)
+        
+        elif self.verbosity == 1:
+            pass
         
     def cmd_status(self):
         query, reply = self.status()
-        self._print_output(query, reply)
+        
+        if self.verbosity == 3:
+            print(full_output(query, reply))
+        
+        elif self.verbosity == 2:
+            conditions = control_or_status_output(reply)
+            if conditions:
+                print(conditions)
+            print(hardware_output(reply))
+        
+        elif self.verbosity == 1:
+            conditions = control_or_status_output(reply, verbose=False)
+            if conditions:
+                print(conditions)
+            print(hardware_output(reply, verbose=False))
         
     def cmd_read(self, number, index=0):
         
@@ -105,7 +140,15 @@ class AbstractTUI(AbstractUI):
         self._check_pew_number('parameter', number)
         
         query, reply = self.read_parameter(number, index)
-        self._print_output(query, reply)
+        
+        if self.verbosity == 3:
+            print(full_output(query, reply))
+        
+        elif self.verbosity == 2:
+            print(parameter_output(reply))
+        
+        elif self.verbosity == 1:
+            print(parameter_output(reply, verbose=False))
        
     def cmd_write(self, value, number, index=0):
         
@@ -115,8 +158,16 @@ class AbstractTUI(AbstractUI):
         self._check_parameter_type(number, value)
         
         query, reply = self.write_parameter(value, number, index)
-        self._print_output(query, reply)
-           
+        
+        if self.verbosity == 3:
+            print(full_output(query, reply))
+        
+        elif self.verbosity == 2:
+            print(parameter_output(reply))
+        
+        elif self.verbosity == 1:
+            print(parameter_output(reply, verbose=False))
+            
     def cmd_list(self, letter, numbers):
         name = self._letter_to_name(letter)
         self._check_pew_numbers(name, numbers)
@@ -146,10 +197,13 @@ class AbstractTUI(AbstractUI):
     def cmd_debug(self):
         self.debug = not self.debug
         print(f'debug={self.debug}')
-           
-    def _print_output(self, query, reply):
-        print('\n' + output(query, reply) + '\n')
         
+    def cmd_verbosity(self, value):
+        if value not in (1, 2, 3):
+            raise UIValueError(
+                f"The argument 'value' should be 1, 2 or 3, not {repr(value)}")
+        self.verbosity = value
+               
     def cmd_help(self):
         print(help_string(COMMAND_LIST))
         
@@ -215,7 +269,8 @@ class InteractiveTUI(AbstractTUI):
         super().__init__(port)
     
     def run(self):
-        prompt = "Type a command or 'help' for a list of commands: "
+        print("Type a command or 'help' for a list of commands")
+        prompt = '>> '
         
         stop = False
         while not stop:

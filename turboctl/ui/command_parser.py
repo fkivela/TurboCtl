@@ -11,7 +11,14 @@ class CommandParser():
     
     def __init__(self, ui, command_list):
         self.ui = ui
-        self.command_dict = {cmd.name: cmd for cmd in command_list}
+        #self.command_dict = {cmd.name: cmd for cmd in command_list}
+        
+        self.command_dict = {name: cmd for cmd in command_list for name in cmd.names}
+
+        
+                
+
+        
 
     def parse(self, string: str, debug: bool) -> bool:
         """Parse a command and perform the requested action.

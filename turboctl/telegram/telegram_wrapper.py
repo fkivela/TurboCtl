@@ -51,6 +51,8 @@ class TelegramWrapper(Telegram):
         self._parameter_number_is_set = False
         super().__init__(*args, **kwargs)
         self._parameter_number_is_set = True
+        # Update cs set in case *self* was created from data.
+        self._update_cs_set()
         
     def _set_kwargs(self, **kwargs):
         """Initialize properties given as keyword arguments."""

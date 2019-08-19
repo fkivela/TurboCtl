@@ -65,9 +65,12 @@ from .ui import (
     UITypeError, 
     UIValueError, 
     # Functions
+    control_or_status_output,
     correct_error_message, 
+    full_output,
+    hardware_output,
     help_string, 
-    output, 
+    parameter_output,
     print_table, 
 )
 

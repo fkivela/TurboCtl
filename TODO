@@ -24,6 +24,7 @@ Priority 2 (soon)
 -Comment and test all modules
 -Test with the real pump
 -Double-check control and status bits etc.
+-Check voltage units in UI
 
 Priority 3 (when I have time)
 -Change setup methods to setupclass methods
