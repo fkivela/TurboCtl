@@ -1,6 +1,7 @@
 import unittest
+import time
 
-from turboctl import AbstractUI, VirtualPump, Query, Reply, Types, PARAMETERS, ParameterError
+from turboctl import AbstractUI, VirtualPump, Query, Reply, Types, PARAMETERS, ParameterError, ControlBits, StatusBits
 from test_turboctl import dummy_parameter
 
 new_parameters = [
@@ -9,9 +10,7 @@ new_parameters = [
     dummy_parameter(number=2003, type_=Types.FLOAT, min_ = -1000),
     dummy_parameter(number=2004, indices=range(5)),
     dummy_parameter(number=2005, writable=False),
-    # 2006: wrong num
-    # 2007: cannot change
-    dummy_parameter(number=2008, max_=10),
+    dummy_parameter(number=2006, max_=10),
 ]
 PARAMETERS.update({p.number: p for p in new_parameters})
 
@@ -65,6 +64,7 @@ class TestReadAndWriteParameter(Base):
         self.read_and_write(-100, 2002, 0)
         
     def test_float(self):
+        # This also tests reading 32-bit numbers.
         self.read_and_write(123.456, 2003, 0)
         
     def test_indexed(self):
@@ -77,21 +77,9 @@ class TestReadAndWriteParameter(Base):
         self.assertEqual(r.parameter_number, 2005)
         self.assertEqual(r.parameter_index, 0)
         self.assertEqual(r.parameter_value, 123)
-        
-    def test_error_wrong_num(self):
-        q, r = self.ui.write_parameter(123, 2006, 0)
-        self.assertEqual(r.parameter_mode, 'error')
-        self.assertEqual(r.error_code, ParameterError.WRONG_NUM)
-        
-    def test_error_minmax(self):
-        q, r = self.ui.write_parameter(11, 2008, 0)
-        self.assertEqual(r.parameter_mode, 'error')
-        self.assertEqual(r.error_code, ParameterError.MINMAX)
-        
-    # Cannot change
-    
-    def test_error_other(self):
-        q, r = self.ui.write_parameter(11, 2008, 0)
+                
+    def test_error(self):
+        q, r = self.ui.write_parameter(11, 2006, 0)
         self.assertEqual(r.parameter_mode, 'error')
         self.assertEqual(r.error_code, ParameterError.MINMAX)
 
@@ -99,12 +87,6 @@ class TestReadAndWriteParameter(Base):
         
         
         
-        
-#    WRONG_NUM     = (0, 'impermissible parameter number')
-#    CANNOT_CHANGE = (1, 'parameter cannot be changed')
-#    MINMAX        = (2, 'min./max. restriction')
-#    OTHER         = (18, 'all other errors')
-
 
         
 #class TestSendAndReceive(Base):
@@ -125,42 +107,68 @@ class TestReadAndWriteParameter(Base):
 #                with self.assertRaises(ValueError):
 #                    q, r = self.ui._send(Query())
 
-#class TestCommands(Base):
-#    
-##    def test_pump_on(self):
-##        query, reply = self.ui.on_off()
-##        
-##        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
-##        correct_query = Query(correct_bits)
-##        
-##        self.assertEqual(query, reply, correct_query)
-#    
-#    def test_turn_on_and_off(self):
-#        q, r = read_parameter(args)
-#        val = r.parameter_value
-#
-#    
-#    def test_status(self):
-#    
-#        query, reply = self.ui.status()
-#        
-#        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20]
-#        correct_query = Query(correct_bits)
-#        
-#        self.assertEqual(query, reply, correct_query)
-        
-        
-        
-        
-        
-        
-#    def test_read_parameter(self):
-        
-        
-        
-        
-        
+class TestOther(Base):
     
+    
+    def test_on_off_and_status(self):
+        
+        # Make sure the status signal is correct, and the pump is 
+        # initially not turning.
+        q, r = self.ui.status()
+        status_bits = [2,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20]
+        status_query = Query(status_bits)
+        self.assertEqual(q, status_query)        
+        self.assertFalse(StatusBits.TURNING in r.control_or_status_set)
+
+        # Make sure the on_off signal is correct.
+        q, r = self.ui.on_off()
+        onoff_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
+        onoff_query = Query(onoff_bits)
+        self.assertEqual(q, onoff_query)
+        
+        # Wait for the pump to start.
+        time.sleep(0.1)
+        
+        # Make sure the pump starts turning.
+        q, r = self.ui.status()
+        self.assertTrue(StatusBits.TURNING in r.control_or_status_set)
+        
+    def test_save_data(self):
+        # Turn the pump on.
+        self.ui.on_off()
+        
+        # Write a value and restart the pump.
+        self.ui.write_parameter(200, 1)
+        self.ui.on_off()
+        self.ui.on_off()
+        # The written value is replaced by the default value.
+        q, r = self.ui.read_parameter(1)
+        self.assertEqual(r.parameter_value, 180)
+        
+        # The written value is saved to nonvolatile memory.
+        self.ui.write_parameter(200, 1)
+        self.ui.save_data()
+        self.ui.on_off()
+        self.ui.on_off()
+        q, r = self.ui.read_parameter(1)
+        self.assertEqual(r.parameter_value, 200)
+        
+    def test_set_frequency(self):
+        # Turn the pump on.
+        self.ui.on_off()
+        
+        # Make sure the setpoint frequency is the default value.
+        q, r = self.ui.read_parameter(24)
+        self.assertEqual(r.parameter_value, 1000)
+        
+        # Set a new setpoint.
+        self.ui.set_frequency(800)
+        time.sleep(0.1)
+        
+        # Make sure the change was applied.
+        q, r = self.ui.read_parameter(24)
+        self.assertEqual(r.parameter_value, 800)
+
         
 if __name__ == '__main__':
     unittest.main()

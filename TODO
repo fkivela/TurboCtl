@@ -54,6 +54,7 @@ Things that have to be tested with the real pump:
 -How does the pump behave when it is off? Is only the motor off? Does the pump read/answer commands?
 -Does the onoff command reset parameters?
 -Real parameters have a default value of 0 and a minumum value of > 0. How does this work?
+-What happens if the frequency setpoint is set to an illegal valuee without accessing parameters?
 
 Parameters to be read from a file(?):
 -Description field width

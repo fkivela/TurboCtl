@@ -71,7 +71,17 @@ COMMAND_LIST = [
     Command(names=['verbosity', 'v'],
         function='cmd_verbosity',
         args=['value'],
-        description='Set output verbosity (valid values are 1, 2 and 3)')
+        description='Set output verbosity (valid values are 1, 2 and 3)'),
+    
+    Command(names=['frequency', 'f'],
+        function='cmd_frequency',
+        args=['value'],
+        description='Set frequency setpoint'),
+            
+    Command(names=['save', 'sv'],
+        function='cmd_save',
+        args=[],
+        description='Save parameters to nonvolatile memory'),
 ]
 
 
@@ -203,6 +213,13 @@ class AbstractTUI(AbstractUI):
             raise UIValueError(
                 f"The argument 'value' should be 1, 2 or 3, not {repr(value)}")
         self.verbosity = value
+        
+    def cmd_frequency(self, value):
+        self._check_type('value', value, int)
+        self.set_frequency(value)
+        
+    def cmd_save(self):
+        self.save_data()
                
     def cmd_help(self):
         print(help_string(COMMAND_LIST))

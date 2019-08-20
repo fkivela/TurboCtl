@@ -160,6 +160,6 @@ class AbstractUI():
             Reply object that was received.
         """
         query = Query()
-        query.control_or_status_set = set(ControlBits.FREQ_SETPOINT)   
+        query.control_or_status_set = {ControlBits.FREQ_SETPOINT}
         query.frequency = frequency        
         return self._send(query)
