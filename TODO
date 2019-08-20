@@ -1,22 +1,11 @@
 State of packages/modules: (Code OK; Tests OK, Comments OK)
 - telegram package (OK, OK, OK)
 - data package (OK, OK, OK)
-- virtualconnevtion module (OK, OK, OK)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- virtualpump package (OK, --, OK)
+    - virtualconnection module (OK, OK, OK)
+    - parameter_component module (OK, --, OK)
+    - virtualpump module (OK, --, OK)
+    -hardware_component module (OK, --, OK)
 
 
 Priority 1 (current)
@@ -55,6 +44,9 @@ Things that have to be tested with the real pump:
 -Does the onoff command reset parameters?
 -Real parameters have a default value of 0 and a minumum value of > 0. How does this work?
 -What happens if the frequency setpoint is set to an illegal valuee without accessing parameters?
+# Should a wrong parameter index raise a parameter number error or 
+# other error (currently raise parameter number error)?
+
 
 Parameters to be read from a file(?):
 -Description field width

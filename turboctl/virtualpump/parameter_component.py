@@ -47,7 +47,7 @@ class ParameterComponent():
         
         except CannotChangeError as error:
             # CannotChangeError also contains an error code, 
-            # but the 'no write' parameter response options 
+            # but the 'no write' parameter response option 
             # seems to be the option more likely used by the pump.
             self.latest_error = error
             reply.parameter_mode = 'no write'
@@ -58,7 +58,6 @@ class ParameterComponent():
             reply.parameter_mode = 'error'
             reply.error_code = error.CODE
             return reply
-    
 
     def _access_parameter(self, query):
         """Write or read the value of a parameter.
@@ -106,18 +105,28 @@ class ExtendedParameters(dict):
         """Initialize a new ExtendedParameters based on *parameters* 
         (a dict of Parameter objects).
         """
-        self.original_parameters = parameters
-        extended_parameters = {k: ExtendedParameter(v, self) 
-                               for k, v in parameters.items() if not (isinstance(v.min, str) or isinstance(v.max, str))}
-        extended_parameters.update({k: ExtendedParameter(v, self) 
-                               for k, v in parameters.items() if isinstance(v.min, str) or isinstance(v.max, str)})
         
+        extended_parameters = {}
+        max_iters = 5
+        # The min and max values of some parameters depend on the 
+        # values of other parameters, and so some parameters cannot be 
+        # initialized on the first iteration, or the first several 
+        # iterations, in case their dependencies also have 
+        # dependencies.
+        # In practice two iterations seems to be enough if real pump 
+        # parameters are used, but there could in theory be long 
+        # dependency chains that need more iterations.
+        for i in range(max_iters):
+            for num, p in parameters.items():
+                if num not in extended_parameters.keys():
+                    try:
+                        extended_parameters[num] = ExtendedParameter(p, self)
+                    # A KeyError is raised if a parameter's dependency 
+                    # has not been initialized.
+                    except KeyError:
+                        pass
+                    
         super().__init__(extended_parameters)
-        
-    def reset(self):
-        """Reset all parameters to their original values."""
-        for p in self.values():
-            p.value = self.default_value
         
 
 class ExtendedParameter(Parameter):
@@ -150,7 +159,6 @@ class ExtendedParameter(Parameter):
                 (See the Parameter class for a description of its valid 
                 attribute values.)
         """
-        
         self.__dict__.update(parameter.__dict__)
         self.parameters = extended_parameters
         self.value = self.default_value
@@ -166,51 +174,6 @@ class ExtendedParameter(Parameter):
         string = ', '.join(strings)
         return f'{type(self).__name__}({string})'
         
-    @property
-    def value(self):
-        """Return the value of this parameter (an int/a float for 
-        unindexed parameters, a list of those for indexed ones).
-        
-        Accessing the parameter value through this property (without 
-        using the get_value/set_value methods) bypasses the access type 
-        check and doesn't raise any custom parameter errors.
-        
-        Setter args:
-            new_value: An int or a float for unindexed parameters, 
-                a list of those for indexed ones. 
-        
-        Setter raises:
-            ValueError: If *new_value* is out of range or has the wrong
-                number of indices (if the parameter is indexed).
-            TypeError: If a list is passed to an unindexed parameter
-                or an int/float to an indexed one.
-        """
-        return self._value
-    
-    @value.setter
-    def value(self, new_value):
-        # TODO: Fix this
-        #if self.indexed:
-        #    
-        #    if not all([self.min_value <= x <= self.max_value 
-        #                for x in new_value]):
-        #        raise ValueError(
-        #            f'Some of the values in {new_value} are out of range '
-        #            f'({self.min_value}...{self.max_value})')
-        #    
-        #    if len(new_value) != len(self.indices):
-        #        raise ValueError(
-        #            f'Wrong number of indices (should be {len(self.indices)}, '
-        #            f'is {len(new_value)})')
-        #else:
-        #    if not self.min_value <= new_value <= self.max_value:
-        #        print('#############3', self.number)
-        #        raise ValueError(
-        #            f'Value ({new_value}) out of range '
-        #            f'({self.min_value}...{self.max_value})')
-            
-        self._value = new_value
-
     @property
     def default_value(self):
         """Return the default value of this parameter.
