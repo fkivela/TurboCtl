@@ -1,9 +1,15 @@
 import unittest
 import time
+import serial
 
-from turboctl import AbstractUI, VirtualPump, Query, Reply, Types, PARAMETERS, ParameterError, ControlBits, StatusBits
+from turboctl import (AbstractUI, VirtualPump, VirtualConnection, Query, 
+                      Types, PARAMETERS, ParameterError, StatusBits) 
 from test_turboctl import dummy_parameter
 
+# Add some new parameters for simpler testing.
+# The largest actual parameter numberr is 1102, so these won't 
+# override any old parameters. Otherwise the virtual pump might not 
+# work, since it accesses hardware parameters.
 new_parameters = [
     dummy_parameter(number=2001, type_=Types.UINT),
     dummy_parameter(number=2002, type_=Types.SINT, min_ = -1000),
@@ -14,15 +20,12 @@ new_parameters = [
 ]
 PARAMETERS.update({p.number: p for p in new_parameters})
 
-#Query.parameters = PARAMETERS
-#Reply.parameters = TEST_PARAMETERS
 
 class Base(unittest.TestCase):
-    pass
     
     @classmethod
     def setUpClass(cls):
-        cls.pump = VirtualPump()#TEST_PARAMETERS)
+        cls.pump = VirtualPump()
         cls.ui = AbstractUI(cls.pump.port)
         
     @classmethod
@@ -83,32 +86,8 @@ class TestReadAndWriteParameter(Base):
         self.assertEqual(r.parameter_mode, 'error')
         self.assertEqual(r.error_code, ParameterError.MINMAX)
 
-    
         
-        
-        
-
-        
-#class TestSendAndReceive(Base):
-#    
-#    def test_success(self):
-#        query, reply = self.ui._send(Query())
-#        
-#        self.assertTrue(isinstance(query, Query))
-#        self.assertTrue(isinstance(reply, Reply))
-#        self.assertEqual(query, Query())
-#        
-#    def test_failure(self):
-#        
-#        for mode in ['NO_REPLY', 'WRONG_LENGTH', 'INVALID_CONTENT']:
-#            with self.subTest(i=mode):
-#                self.vc.mode = ReplyMode[mode]
-#        
-#                with self.assertRaises(ValueError):
-#                    q, r = self.ui._send(Query())
-
-class TestOther(Base):
-    
+class TestOtherCommands(Base):
     
     def test_on_off_and_status(self):
         
@@ -168,6 +147,41 @@ class TestOther(Base):
         # Make sure the change was applied.
         q, r = self.ui.read_parameter(24)
         self.assertEqual(r.parameter_value, 800)
+        
+        
+class TestConnection(unittest.TestCase):
+    
+    @classmethod
+    def setUpClass(cls):
+        cls.vc = VirtualConnection()
+        cls.ui = AbstractUI(cls.vc.port)
+        
+    @classmethod
+    def tearDownClass(cls):
+        cls.vc.close()
+    
+    def test_invalid_port(self):
+        with self.assertRaises(serial.SerialException):
+            AbstractUI('test')
+            
+    def test_empty_port(self):
+        ui = AbstractUI(None)
+        with self.assertRaises(serial.SerialException):
+            ui.status()
+            
+    def test_no_response(self):
+        def process(input_):        
+            return b''
+        self.vc.process = process
+        with self.assertRaises(ValueError):
+            self.ui.status()
+            
+    def test_invalid_response(self):
+        def process(input_):        
+            return b'1234'
+        self.vc.process = process
+        with self.assertRaises(ValueError):
+            self.ui.status()
 
         
 if __name__ == '__main__':

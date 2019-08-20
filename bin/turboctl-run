@@ -21,7 +21,7 @@ mode_group.add_argument('-i', '--interactive', help='run in interactive mode',
 
 vpump_group = parser.add_mutually_exclusive_group()
 vpump_group.add_argument('-v', '--virtual', help='use a virtual pump',
-                    action='store_true')
+                         action='store_true')
 vpump_group.add_argument('-p', '--port', 
                          help='the address of the serial port device')
 

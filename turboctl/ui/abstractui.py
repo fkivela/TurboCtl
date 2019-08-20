@@ -14,7 +14,8 @@ class AbstractUI():
     and subclassed to create user interfaces.
     
     All methods in this class that access the pump will raise a 
-    serial.SerialException if a connection to the pump can't be formed.
+    serial.SerialException if a connection to the pump can't be formed
+    or if it is interrupted.
     """
     
     # Parameters for the RS 232/485 serial connection on the 
@@ -32,11 +33,15 @@ class AbstractUI():
     def __init__(self, port):
         """Initialize a new AbstractUI and connect to the pump.
         
-        If a connection 
         Args:
             port: The device name for port that should be used for 
                 the connection. Other parameters of the connection 
                 are class attributes of this class.
+        
+        Raises:
+            serial.SerialException: If *port* is not None and it can't 
+                be connected to. If *port* is None, an exception will 
+                be raised when a telegram should be sent to the pump.
         """
         self.port = port
         self.connection = serial.Serial(port      = self.port, 
@@ -59,10 +64,6 @@ class AbstractUI():
         Returns: A Query object detailing the message that was sent to 
             the pump and a  Reply object detailing the response from 
             the pump.
-            
-        Raises:
-            serial.SerialException: If a connection to the pump can't 
-            be formed.
         """
         self.connection.write(query.data)
         return query, self._receive()
@@ -73,8 +74,6 @@ class AbstractUI():
         Returns: An instance of the Reply class.
             
         Raises:
-            serial.SerialException: If a connection to the pump can't 
-                be formed.
             ValueError: If the pump sends an invalid response or no 
                 response at all.
         """
@@ -113,8 +112,6 @@ class AbstractUI():
                 
         Returns: The Query object that was sent to the pump and the 
             Reply object that was received.
-        
-        Raises: #TODO
         """
         query = Query(parameter_number=number)
         query.parameter_index = index
@@ -133,8 +130,6 @@ class AbstractUI():
                 
         Returns: The Query object that was sent to the pump and the 
             Reply object that was received.
-        
-        Raises: #TODO
         """
         query = Query(parameter_number=number)
         query.parameter_index = index

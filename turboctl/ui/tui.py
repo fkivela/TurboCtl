@@ -1,3 +1,5 @@
+"""Text-based user interfaces for the pump."""
+
 import readline 
 # Importing the readline module adds better editing capabilities 
 # to the input function.
@@ -86,24 +88,34 @@ COMMAND_LIST = [
 
 
 class AbstractTUI(AbstractUI):
+    """An abstract class for text-based user interfaces (TUIs).
+    
+    Specific TUI implementations are created by subclassing this class.
+    """
             
     databases = {'parameter': PARAMETERS, 'error': ERRORS, 'warning': WARNINGS}
-    
     widths = {'parameter': {'name': 20, 'type': 16, 'description': 50}, 
               'error'    : {'name': 30, 'possible_cause': 50, 'remedy': 50}, 
               'warning'  : {'name': 30, 'possible_cause': 50, 'remedy': 50}
              }
     
     def __init__(self, *args, **kwargs):
+        """Initialize a new AbstractTUI.
+        
+        Arguments are delegated to AbstractUI.__init__().
+        """
         super().__init__(*args, **kwargs)
         self.verbosity = 2
-        # Verbosity 3: Print all data in query and reply with the full_output function.
-        # Verbosity 2: Print only data relevant to the command in question.
-        # Verbosity 1: Print only the absolute minimum.
         self.debug = False
         self.cmd_parser = CommandParser(self, COMMAND_LIST)
         
     def process_input(self, string):
+        """Process *string* and execute the commands defined 
+        therein.
+        
+        Returns: True if the command is an exit command, False 
+            otherwise.
+        """
         try:
             return self.cmd_parser.parse(string, self.debug)
         except UIError as e:
@@ -111,6 +123,8 @@ class AbstractTUI(AbstractUI):
             return False
         
     def cmd_onoff(self):
+        """Call AbstractUI.on_off() and print the results."""
+        
         query, reply = self.on_off()       
 
         if self.verbosity == 3:
@@ -126,6 +140,8 @@ class AbstractTUI(AbstractUI):
             pass
         
     def cmd_status(self):
+        """Call AbstractUI.status() and print the results."""
+        
         query, reply = self.status()
         
         if self.verbosity == 3:
@@ -144,6 +160,12 @@ class AbstractTUI(AbstractUI):
             print(hardware_output(reply, verbose=False))
         
     def cmd_read(self, number, index=0):
+        """Call AbstractUI.read_parameter() and print the results.
+        
+        The arguments are passed to AbstractUI.read_parameter() 
+        unchanged, but a UIValueError or UITypeError will be 
+        raised if the arguments are invalid.
+        """
         
         self._check_type('number', number, int)
         self._check_type('index', index, int)
@@ -161,6 +183,12 @@ class AbstractTUI(AbstractUI):
             print(parameter_output(reply, verbose=False))
        
     def cmd_write(self, value, number, index=0):
+        """Call AbstractUI.write_parameter() and print the results.
+        
+        The arguments are passed to AbstractUI.read_parameter() 
+        unchanged, but a UIValueError or UITypeError will be 
+        raised if the arguments are invalid.
+        """
         
         self._check_type('value', value, (int, float))
         self._check_type('number', number, int)
@@ -179,6 +207,19 @@ class AbstractTUI(AbstractUI):
             print(parameter_output(reply, verbose=False))
             
     def cmd_list(self, letter, numbers):
+        """List parameters, error or warnings.
+        
+        This command opens an information table with the less program.
+        
+        Args:
+            letter: 'p', 'e' or 'w' depending on what should be listed.
+                'p' lists parameters, 'e' errors and 'w' warnings.
+            numbers: An iterable of numbers or 'all'. This defined 
+                which parameters/errors/warnings should be displayed.
+        
+        Raises:
+            UIValueError or UITypeError if the arguments are invalid.
+        """
         name = self._letter_to_name(letter)
         self._check_pew_numbers(name, numbers)
         
@@ -186,6 +227,20 @@ class AbstractTUI(AbstractUI):
                     use_less=True)
 
     def cmd_info(self, letter, number):
+        """Display information about a single parameters, error or 
+        warnings.
+        
+        Unlike *cmd_list*, this command doesn't use less, and prints 
+        the output normally instead.
+        
+        Args:
+            letter: 'p', 'e' or 'w' in the same way as in *cmd_list*.
+            number: A single number determining which 
+                parameter/error/warning should be displayed.
+        
+        Raises:
+            UIValueError or UITypeError if the arguments are invalid.
+        """
         name = self._letter_to_name(letter)
         self._check_pew_number(name, number)
         

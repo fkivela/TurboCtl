@@ -6,6 +6,9 @@ State of packages/modules: (Code OK; Tests OK, Comments OK)
     - parameter_component module (OK, --, OK)
     - virtualpump module (OK, --, OK)
     -hardware_component module (OK, --, OK)
+- ui package:
+    - abstract_ui module: (OK, OK, OK)
+    
 
 
 Priority 1 (current)

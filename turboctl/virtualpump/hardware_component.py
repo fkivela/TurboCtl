@@ -100,9 +100,9 @@ class HardwareComponent():
         self.variables = Variables(parameters)
         
         # The timestep of iteration in seconds.
-        self.step = 0.123
+        self.step = 0.1
         # The rate of pump acceleration and deceleration in Hz/s.
-        self.abs_acceleration = 123.456
+        self.abs_acceleration = 100
         
         # Initialize the pump to an off state.
         self.store()
