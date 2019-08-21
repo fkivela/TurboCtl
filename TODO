@@ -1,19 +1,22 @@
-State of packages/modules: (Code OK; Tests OK, Comments OK)
-- telegram package (OK, OK, OK)
-- data package (OK, OK, OK)
-- virtualpump package (OK, --, OK)
-    - virtualconnection module (OK, OK, OK)
-    - parameter_component module (OK, --, OK)
-    - virtualpump module (OK, --, OK)
-    -hardware_component module (OK, --, OK)
-- ui package:
-    - abstract_ui module: (OK, OK, OK)
-    - command_parser module (OK, --, OK)
-    - correct_error_message module (OK, OK, OK)
-    - output module (OK, --, --)
-    - print_table module (--, --, --)
-    - tui module (OK, --, OK)
-    - ui_errors module (OK, N/A, OK)
+State of packages and modules: Code Tests Comments
+
+telegram                OK OK OK
+data                    OK OK OK
+virtualpump             OK -- OK
+- virtualconnection       OK OK OK
+- parameter_component     OK -- OK
+- virtualpump             OK -- OK
+-hardware_component       OK -- OK
+ui                      -- -- --
+- abstract_ui module:     OK OK OK
+- command_parser module   OK -- OK
+- correct_error_message   OK OK OK
+- output module           OK -- --
+- print_table module      -- -- --
+- tui module              OK -- OK
+- ui_errors module        OK NA OK
+test_turboctl           -- -- --
+bin                     -- -- --
     
     
 
