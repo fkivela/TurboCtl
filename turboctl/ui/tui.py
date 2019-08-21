@@ -1,6 +1,6 @@
 """Text-based user interfaces for the pump."""
 
-import readline 
+import readline
 # Importing the readline module adds better editing capabilities 
 # to the input function.
 from collections import namedtuple 
@@ -75,8 +75,8 @@ COMMAND_LIST = [
         args=['value'],
         description='Set output verbosity (valid values are 1, 2 and 3)'),
     
-    Command(names=['frequency', 'f'],
-        function='cmd_frequency',
+    Command(names=['setpoint', 'sp'],
+        function='cmd_setpoint',
         args=['value'],
         description='Set frequency setpoint'),
             
@@ -248,54 +248,141 @@ class AbstractTUI(AbstractUI):
                     use_less=False)
         
     def _letter_to_name(self, letter):
+        """Return a word ('parameter', 'error' or 'warning') based on 
+        *letter* ('p', 'e', 'w').
+        
+        Raises:
+            UITypeError: If *letter* isn't a string. 
+            UIValueError: If *letter* is a string but not 
+                'p', 'e' or 'w'.
+        """
         names = {'p': 'parameter',
                  'e': 'error',
                  'w': 'warning'}
         
-        self._check_type('letter', letter, (str))
+        self._check_type('letter', letter, str)
         try:
             return names[letter]
         except KeyError:
             raise UIValueError(
-                f"The argument 'letter' should be 'p', 'e' or 'w', not {repr(letter)}")
+                f"The argument 'letter' should be 'p', 'e' or 'w', "
+                f"not {repr(letter)}")
                                         
-    def cmd_debug(self):
-        self.debug = not self.debug
+    def cmd_debug(self, value):
+        """Turn debug mode on or off.
+        
+        Args:
+            Value: True, False, 1 or 0.
+            
+        Raises:
+            UITypeError or UIValueError if *value* is invalid.
+        
+        by setting *value* to True/1 or False/0."""
+        self._check_type('value', value, (int, bool))
+        # In Python, True == 1 and False == 0.
+        if not value in (True, False):
+            raise UIValueError(
+                f"The argument 'value' should be True, False, 1 or 0,"
+                f"not {repr(value)}")
+        
+        self.debug = bool(value)
         print(f'debug={self.debug}')
         
     def cmd_verbosity(self, value):
+        """Set verbosity to the desired level.
+        
+        Verbosity affects how much text is displayed when running TUI 
+        commands.
+        
+        verbosity=3 prints all information carried by both the 
+            telegram sent to the pump and the telegram received back.
+        verbosity=2 is the default level, and doesn't print 
+            information that is irrelevant to the command that was run.
+        verbosity=1 only prints the bare minum needed to display the 
+            output of the command.
+        
+        Args:
+            Value: 1, 2 or 3.
+            
+        Raises:
+            UITypeError or UIValueError: If *value* is invalid.
+        """
+        self._check_type('value', value, int)
         if value not in (1, 2, 3):
             raise UIValueError(
                 f"The argument 'value' should be 1, 2 or 3, not {repr(value)}")
         self.verbosity = value
         
-    def cmd_frequency(self, value):
+    def cmd_setpoint(self, value):
+        """Set the frequency setpoint to *value*.
+        
+        Args:
+            value: An int.
+            
+        Raises:
+            UITypeError: If *value* isn't an int.
+        """
         self._check_type('value', value, int)
         self.set_frequency(value)
         
     def cmd_save(self):
+        """Save modified parameters to nonvolatile memory.
+        
+        Parameters that are not saved will be reset when the pump 
+        is restarted.
+        """
         self.save_data()
                
     def cmd_help(self):
+        """Print a help message."""
         print(help_string(COMMAND_LIST))
         
     def cmd_exit(self):
+        """Return True, which tells the TUI to exit the program."""
         return True
         
     def _check_type(self, name, value, types):
+        """Make sure that *value* is an instance of any of the types 
+        in *types*.
+        
+        Args:
+            name: The variable name that should be used in error 
+                messages (a string).
+            value: The value of the variable.
+            types: A type or a tuple of types.
+        
+        Raises:
+            UITypeError: If *value* is not an instance of any of the 
+                types in *types*.
+        """
         
         if not isinstance(value, types):
             raise UITypeError(
-                f"The argument '{name}' should be of one of the following types: "
-                f'{types}, not {type(value)}')
+                f"The argument '{name}' should be of one of the following "
+                f"types: '{types}, not {type(value)}")
                     
     def _check_pew_numbers(self, name, numbers):
+        """Make sure that all the numbers in *numbers* are valid 
+        parameter, error or warning numbers.
         
+        Args:
+            name: 'parameter', 'error' or 'warning'.
+            numbers: An iterable of ints.
+            
+        Raises:
+            UIValueError: 
+                - If *numbers* is a string other than 'all'.
+                - If *name* is not 'parameter', 'error' or 'warning'.
+                - If any of the numbers in *numbers* is not a valid 
+                    parameter/error/warning number.
+            UITypeError: If *numbers* is not an iterable.
+        """
         if isinstance(numbers, str):
             if numbers == 'all':
                 return numbers
             raise UIValueError(
-                f"The only permitted string value for the argument 'numbers' is 'all'")
+                f"The only permitted string value for the argument "
+                f"'numbers' is 'all'")
             
         try:
             for n in numbers:
@@ -309,7 +396,19 @@ class AbstractTUI(AbstractUI):
             f"{type(numbers).__name__}")
             
     def _check_pew_number(self, name, number):
+        """Make sure that *number* is a valid parameter, error or 
+        warning number.
         
+        Args:
+            name: 'parameter', 'error' or 'warning'.
+            number: An ints.
+            
+        Raises:
+            UIValueError: 
+                - If *name* is not 'parameter', 'error' or 'warning'.
+                - If number is not a valid parameter/error/warning 
+                    number.
+        """
         if name == 'parameter':
             database = PARAMETERS
         elif name == 'error':
@@ -325,6 +424,13 @@ class AbstractTUI(AbstractUI):
             raise UIValueError(f'There is no {name} {number}')
                 
     def _check_parameter_type(self, number, value):
+        """Make sure that *value* is of the same type as parameter *number*.
+        
+        Raises:
+            UIValueError: If there is no parameter *number*.
+            UITypeError: If type(value) doesn't match the type of the 
+                parameter.
+        """
 
         self._check_pew_number('parameter', number)
         type_ = self.databases['parameter'][number].type
@@ -336,11 +442,17 @@ class AbstractTUI(AbstractUI):
 
         
 class InteractiveTUI(AbstractTUI):
+    """An interactive TUI that runs until exited."""
     
     def __init__(self, port):
         super().__init__(port)
     
     def run(self):
+        """Run the UI.
+        
+        The UI asks for input and executes commands until a command 
+        returns True, after which the UI exits.
+        """
         print("Type a command or 'help' for a list of commands")
         prompt = '>> '
         
@@ -350,9 +462,11 @@ class InteractiveTUI(AbstractTUI):
 
 
 class ShellTUI(AbstractTUI):
+    """A TUI that runs a single command."""
     
     def __init__(self, port):
         super().__init__(port)
     
     def run(self, command):
+        """Process and execute *command* (a string)."""
         super().process_input(command)

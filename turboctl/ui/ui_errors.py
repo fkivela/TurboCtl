@@ -1,23 +1,31 @@
+"""This module contains UI error classes to be used in a TUI."""
+
 class UIError(Exception):
-    """Abstract superclass"""
+    """An abstract superclass for UI errors."""
     pass
 
 class UITypeError(UIError):
-    """For arguments with a wrong type"""
+    """An UI error raised when the argument of a function is of an 
+    invalid type."""
     pass
 
 class UIValueError(UIError):
-    """For arguments with a correct type but a wrong value"""
+    """An UI error raised when the argument of a function is of a 
+    valid type but has an invalid value."""
     pass
 
 class UIArgumentNumberError(UIError):
-    """For wrong number of arguments"""
+    """An UI error raised when a function is given a wrong number of 
+    arguments.
+    """
     pass
 
 class UICommandError(UIError):
-    """For an invalid command"""
+    """An UI error raised when the UI is given an invalid command."""
     pass
 
 class UIParseError(UIError):
-    """For commands or arguments that cannot be parsed"""
+    """An UI error raised when a string containing a command and/or 
+    its arguments cannot be parsed.
+    """
     pass
