@@ -3,14 +3,15 @@ import time
 import serial
 
 from turboctl import (AbstractUI, VirtualPump, VirtualConnection, Query, 
-                      Types, PARAMETERS, ParameterError, StatusBits) 
+                      TelegramWrapper, Types, PARAMETERS, ParameterError, 
+                      StatusBits)
 from test_turboctl import dummy_parameter
 
 # Add some new parameters for simpler testing.
-# The largest actual parameter numberr is 1102, so these won't 
+# The largest actual parameter number is 1102, so these won't 
 # override any old parameters. Otherwise the virtual pump might not 
 # work, since it accesses hardware parameters.
-new_parameters = [
+new_parameter_list = [
     dummy_parameter(number=2001, type_=Types.UINT),
     dummy_parameter(number=2002, type_=Types.SINT, min_ = -1000),
     dummy_parameter(number=2003, type_=Types.FLOAT, min_ = -1000),
@@ -18,19 +19,27 @@ new_parameters = [
     dummy_parameter(number=2005, writable=False),
     dummy_parameter(number=2006, max_=10),
 ]
-PARAMETERS.update({p.number: p for p in new_parameters})
 
 
 class Base(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.pump = VirtualPump()
+        # Replace *PARAMETERS* with *new_parameters*
+        new_parameters = PARAMETERS 
+        new_parameters.update({p.number: p for p in new_parameter_list})
+        TelegramWrapper.parameters = new_parameters
+        
+        cls.pump = VirtualPump(new_parameters)
         cls.ui = AbstractUI(cls.pump.port)
         
     @classmethod
     def tearDownClass(cls):
         cls.pump.close()
+        # Reset TelegramWrapper back to its original state to avoid 
+        # breaking tests in other test modules when running all unit 
+        # tests at once.
+        TelegramWrapper.parameters = PARAMETERS
                 
         
 class TestReadAndWriteParameter(Base):

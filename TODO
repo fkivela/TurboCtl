@@ -17,10 +17,9 @@ ui                      -- -- --
 - ui_errors               OK NA OK
 test_turboctl           -- -- --
 bin                     -- -- --
-- count_lines           OK -- OK
+- count_lines           OK OK OK
 - turboctl-run          OK -- OK
-test_turboctl           -- -- --
-- run_tests.py          -- -- --
+test_turboctl           OK OK OK
     
     
 

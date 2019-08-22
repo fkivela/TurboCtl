@@ -2,7 +2,7 @@
 import unittest
     
 from turboctl import (Telegram, Types, TelegramWrapper, Query, Reply, 
-                      StatusBits)
+                      StatusBits, PARAMETERS)
 from test_turboctl import dummy_parameter
 
 class TestParameterMode(unittest.TestCase):
@@ -19,6 +19,12 @@ class TestParameterMode(unittest.TestCase):
         self.r16F = Reply(parameter_number=2)
         self.r32 = Reply(parameter_number=3)
         self.r32F = Reply(parameter_number=4)
+        
+    def tearDown(self):
+        # Reset Reply back to its original state to avoid breaking 
+        # tests in other test modules when running all unit tests at 
+        # once.
+        Reply.parameters = PARAMETERS
 
     def mode_test(self, name, code, query):
         query.parameter_mode = name
@@ -160,15 +166,15 @@ class TestUtils(unittest.TestCase):
                 
     def test_eq(self):
         
-        self.assertEqual(Query(), Query())
-        self.assertEqual(Query(), Reply())
-        self.assertEqual(Query(), TelegramWrapper())
-        self.assertEqual(Query(), Telegram())
+        self.assertEqual(Reply(), Query())
+        self.assertEqual(Reply(), Reply())
+        self.assertEqual(Reply(), TelegramWrapper())
+        self.assertEqual(Reply(), Telegram())
         
-        self.assertNotEqual(Query(), Query(parameter_number=1))
-        self.assertNotEqual(Query(), Reply(parameter_number=1))
-        self.assertNotEqual(Query(), TelegramWrapper(parameter_number=1))
-        self.assertNotEqual(Query(), Telegram(parameter_number=1))
+        self.assertNotEqual(Reply(), Query(parameter_number=1))
+        self.assertNotEqual(Reply(), Reply(parameter_number=1))
+        self.assertNotEqual(Reply(), TelegramWrapper(parameter_number=1))
+        self.assertNotEqual(Reply(), Telegram(parameter_number=1))
         
         
 if __name__ == '__main__':

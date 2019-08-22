@@ -1,7 +1,8 @@
 """Unit tests for the Query class of the telegram_wrapper module."""
 import unittest
     
-from turboctl import Telegram, TelegramWrapper, Query, Reply, ControlBits
+from turboctl import (Telegram, TelegramWrapper, Query, Reply, ControlBits, 
+                      PARAMETERS)
 from test_turboctl import dummy_parameter
 
 class TestParameterMode(unittest.TestCase):
@@ -19,6 +20,12 @@ class TestParameterMode(unittest.TestCase):
         self.q16F = Query(parameter_number=2)
         self.q32 = Query(parameter_number=3)
         self.q32F = Query(parameter_number=4)
+        
+    def tearDown(self):
+        # Reset Query back to its original state to avoid breaking 
+        # tests in other test modules when running all unit tests at 
+        # once.
+        Query.parameters = PARAMETERS
         
     def mode_test(self, name, code, query):
         query.parameter_mode = name
