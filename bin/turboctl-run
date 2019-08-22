@@ -18,7 +18,7 @@ import turboctl, test_turboctl
 
 # The argparse module hepls with parsing command line arguments.
 # The -h option displays an automatically generated help message.
-parser = argparse.ArgumentParser(description='run turboctl')
+parser = argparse.ArgumentParser(description='This script runs TurboCtrl')
 
 # TurbCtl can be run in three modes: run tests (-t), run interactively
 # (-i) or run a single ommand (no letter).
@@ -38,7 +38,8 @@ vpump_group.add_argument('-p', '--port',
 
 # All command line arguments after those defined above are passed to 
 # the UI.
-parser.add_argument('command', help='the command to be run', nargs='*')
+parser.add_argument('command', help='the command to be run and its arguments '
+                    '(ignored if -i is specified)', nargs='*')
 
 args = parser.parse_args()
 

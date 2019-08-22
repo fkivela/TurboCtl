@@ -15,75 +15,51 @@ ui                      -- -- --
 - print_table             -- -- --
 - tui module              OK -- OK
 - ui_errors               OK NA OK
-test_turboctl           -- -- --
-bin                     -- -- --
-- count_lines           OK OK OK
-- turboctl-run          OK -- OK
+bin                     OK OK OK
 test_turboctl           OK OK OK
     
     
-
+TODO:    
 
 Priority 1 (current)
--Fix rotor not turning
+-Comment and test all modules
 
 Priority 2 (soon)
--Comment and test all modules
--Test with the real pump
--Double-check control and status bits etc.
--Check voltage units in UI
+- Test the program with the real pump
+- Double-check control and status bits etc.
+- Check units in the TUI (0.1 V vs V etc.)
 
 Priority 3 (when I have time)
--Change setup methods to setupclass methods
--type(x) -> type(x).__name__ in error messages
--Use the _ignore_ class property to define enum properties
--XOR -> ^
--Running two different test scripts with enums in them causes two identical 
-enum instances to not be equal
--Rename ParameterError
--License
--Replace 'instance of enum' with 'member'
+- Change setup methods to setupclass methods in some tests in order 
+  to make them faster
+- Replace type(x) with type(x).__name__ in error and UI messages
+- Use the _ignore_ class property to define enum properties
+- Replace XOR with ^ in Telegram
+- Rename ParameterError to avoid confusion with the parameter error classes
+- Add a license
+- Add a README
+- Replace 'instance of enum' with 'member'
 
 Priority 4 (maybe never)
--Add a config file
--Add functionality for changing the telegram address
-
+- Add a config file
+- Add functionality for changing the telegram address
 
 
 Things that have to be tested with the real pump:
--If a parameter number is specified but there is no parameter access, will the parameter data be included in the return telegram?
--Is it OK to define index for an unindexed telegram?
--When is the cannot change error message used?
--Writability of parameters where the manual doesn't specify it
--Does the pump return a parameter error if the parameter access code is invalid
--How does the pump behave when it is off? Is only the motor off? Does the pump read/answer commands?
--Does the onoff command reset parameters?
--Real parameters have a default value of 0 and a minumum value of > 0. How does this work?
--What happens if the frequency setpoint is set to an illegal valuee without accessing parameters?
-# Should a wrong parameter index raise a parameter number error or 
-# other error (currently raise parameter number error)?
-
-
-Parameters to be read from a file(?):
--Description field width
--Script to be run?
-
-
-# Important parameters:
-# 3: Frequency (u16, not writable)
-# 4: Voltage
-# 5: Current
-# 8: Save data into nonvolatile memory
-# 11: Temperature
-# 6: Motor power
-# 7: Motor temperature
-# 24: Setpoint frequency
-# 40: Error counter
-# 41: Overload error counter
-# 43: Power failure error counter
-# 171: 254 most recent errors (latest first)
-# 171: Frequency at the time of error
-# 176: Operational hours at the time of error    
-# 184: Converter operating hours
-# 227: Warnings (1 warning per bit)
-# 1025: Reset to factory default    
+- If a parameter number is specified but there is no parameter access, 
+  will the parameter data be included in the return telegram?
+- Is it OK to define an index when accessing an unindexed parameter?
+- When is the "cannot change" error message used?
+- What is the writability of parameters for which the manual doesn't specify 
+  it?
+- Does the pump return a parameter error if the parameter access code is 
+  invalid?
+- How does the pump behave when it is off? Is only the motor off? Does the 
+  pump read/answer commands?
+- Does the onoff command reset parameters?
+- Real parameters have a default value of 0 and a minumum value of > 0. 
+  How does this work?
+- What happens if the frequency setpoint is set to an illegal value through 
+  the setpoint command (without accessing parameters)?
+- Should an invalid parameter index raise a parameter number error or 
+  other error (currently VPump raises a parameter number error)?
