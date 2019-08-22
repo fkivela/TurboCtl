@@ -9,14 +9,18 @@ virtualpump             OK -- OK
 -hardware_component       OK -- OK
 ui                      -- -- --
 - abstract_ui module:     OK OK OK
-- command_parser module   OK -- OK
+- command_parser          OK -- OK
 - correct_error_message   OK OK OK
 - output module           OK -- --
-- print_table module      -- -- --
+- print_table             -- -- --
 - tui module              OK -- OK
-- ui_errors module        OK NA OK
+- ui_errors               OK NA OK
 test_turboctl           -- -- --
 bin                     -- -- --
+- count_lines           OK -- OK
+- turboctl-run          OK -- OK
+test_turboctl           -- -- --
+- run_tests.py          -- -- --
     
     
 

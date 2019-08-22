@@ -45,8 +45,8 @@ Received a telegram with the following contents:
     No status conditions present
     Stator frequency: 0 Hz
     Frequency converter temperature: 0 °C
-    Motor current: 0×10⁻¹ A
-    Intermediate circuit voltage: 0×10⁻¹ V
+    Motor current: 0×0.1 A
+    Intermediate circuit voltage: 0×0.1 V
 """)
         
         self.ui.run(str_in)
