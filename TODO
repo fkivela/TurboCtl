@@ -6,13 +6,13 @@ virtualpump             OK -- OK
 - virtualconnection       OK OK OK
 - parameter_component     OK -- OK
 - virtualpump             OK -- OK
--hardware_component       OK -- OK
+- hardware_component      OK -- OK
 ui                      -- -- --
 - abstract_ui module:     OK OK OK
 - command_parser          OK -- OK
 - correct_error_message   OK OK OK
 - output module           OK -- --
-- print_table             -- -- --
+- table                   OK OK OK
 - tui module              OK -- OK
 - ui_errors               OK NA OK
 bin                     OK OK OK

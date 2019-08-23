@@ -1,3 +1,5 @@
+"""Create formatted output strings for the TUI."""
+
 import textwrap
 import tabulate
 from textwrap import wrap
@@ -8,6 +10,13 @@ from ..telegram import Query, Reply
 INDENT = 4 * ' '
 
 def help_string(commands):
+    """Return the help string.
+    
+    Args:
+        commands: A list of Command objects detailing the commands 
+            accepted by the TUI.
+    """
+    
     string = 'Accepted commands:'
     description_width = 30
     
@@ -30,6 +39,34 @@ def help_string(commands):
                                              tablefmt='plain')
 
 def full_output(query, reply):
+    """Return a string displaying all data that was sent and received 
+    when a command was executed.
+    
+    Args:
+        query: The Query object that was sent to the pump.
+        reply: The Reply object that was received from the pump.
+        
+    Returns:
+        A string like the following:
+            
+        Sent a telegram with the following contents:
+            No parameter access
+            No control bits active
+            Stator frequency: 0 Hz
+            Frequency converter temperature: 0 °C
+            Motor current: 0×0.1 A
+            Intermediate circuit voltage: 0×0.1 V
+    
+        Received a telegram with the following contents:
+            No parameter access
+            Present status conditions:
+                Ready for operation
+            Stator frequency: 0 Hz
+            Frequency converter temperature: 0 °C
+            Motor current: 0×0.1 A
+            Intermediate circuit voltage: 0×0.1 V
+    """
+    
     return (
         'Sent a telegram with the following contents:\n'
         + _wrapper_output(query) + '\n'
@@ -39,6 +76,9 @@ def full_output(query, reply):
         )
     
 def _wrapper_output(query_or_reply):
+    """Return a string displaying all data that was sent in a Query 
+    object or received in a Reply object.
+    """
     strings = [parameter_output(query_or_reply), 
                control_or_status_output(query_or_reply), 
                hardware_output(query_or_reply)]
@@ -46,6 +86,33 @@ def _wrapper_output(query_or_reply):
     return textwrap.indent(string, INDENT)
 
 def parameter_output(wrapper, verbose=True):
+    """Return a string displaying parameter data.
+    
+    Args:
+        wrapper: A Query or Reply object where the data is read from.
+        verbose=True: If this is False, the string will be very brief.
+        
+    Returns:
+        A string matching one of formats below.    
+        
+        If verbose=True, the possible formats are
+        - 'No parameter access'
+        - 'Return the value of parameter 1'
+        - 'Write the value 100 to parameter 1'
+        for queries and
+        - 'No parameter access
+        - 'The value of parameter 1 is 100'
+        - 'Can't access parameter 1; error type: min./max. restriction'
+        - 'Parameter 1 isn't writable'
+        for replies.
+        
+        If verbose=False, the formats are
+        - ''
+        - '100'
+        - 'Error: min./max. restriction'
+        - 'Not writable'
+        for replies; queries always return ''.
+    """
     
     mode = wrapper.parameter_mode
     number = wrapper.parameter_number
@@ -82,7 +149,31 @@ def parameter_output(wrapper, verbose=True):
     raise RuntimeError(f'Invalid parameter_mode: {wrapper.parameter_mode}')    
          
 def control_or_status_output(wrapper, verbose=True):
+    """Return a string displaying active control or status bits.
     
+    Args:
+        wrapper: A Query or Reply object where the data is read from.
+        verbose=True: If this is False, the string will be very brief.
+        
+    Returns:
+        A string matching one of formats below.
+        
+        If verbose=True, the possible formats are
+        - ('Active control bits:\n'
+           '    Start/stop\n'
+           '    Enable control bits 0, 5, 6, 7, 8, 13, 14, 15')
+        - 'No control bits active'
+        for control bits and
+        - ('Present status conditions:\n'
+           '    Pump is turning\n'
+           '    Accelerating')
+        - 'No status conditions present'
+        for status bits.
+            
+        If verbose=False, 'Errors present' or 'Warnings present' is 
+        returned if *wrapper* is a Reply and the warning or error bits 
+        are active. Otherwise, '' is returned.
+    """
     if not verbose:
         strings = []
         if StatusBits.ERROR in wrapper.control_or_status_set:
@@ -110,6 +201,27 @@ def control_or_status_output(wrapper, verbose=True):
         return empty
     
 def hardware_output(wrapper, verbose=True):
+    """Return a string displaying hardware data.
+    
+    Args:
+        wrapper: A Query or Reply object where the data is read from.
+        verbose=True: If this is False, the string will be very brief.
+        
+    Returns:
+        A string matching one of formats below.
+        
+        If verbose=True:
+        ('Stator frequency: 0 Hz\n'
+         'Frequency converter temperature: 0 °C\n'
+         'Motor current: 0×0.1 A\n'
+         'Intermediate circuit voltage: 0×0.1 V\n')
+        If verbose=False:
+        ('f=0 Hz\n'
+         'T=0 °C\n'
+         'I=0×0.1 A\n'
+         'U=0×0.1 V')
+    """
+    
     f_val = f'{wrapper.frequency} Hz'
     T_val = f'{wrapper.temperature} °C'
     I_val = f'{wrapper.current}×0.1 A'

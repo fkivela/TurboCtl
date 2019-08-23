@@ -4,11 +4,12 @@ import readline
 # Importing the readline module adds better editing capabilities 
 # to the input function.
 from collections import namedtuple 
+import os
 
 from ..data import PARAMETERS, ERRORS, WARNINGS, Types
 
 from .abstractui import AbstractUI
-from .print_table import print_table
+from .table import table
 from .command_parser import CommandParser
 from .output import (help_string, full_output, parameter_output, 
                      control_or_status_output, hardware_output)
@@ -223,8 +224,10 @@ class AbstractTUI(AbstractUI):
         name = self._letter_to_name(letter)
         self._check_pew_numbers(name, numbers)
         
-        print_table(self.databases[name], numbers, self.widths[name], 
-                    use_less=True)
+        command = 'less -S'
+        pipe = os.popen(command, 'w')
+        pipe.write(table(self.databases[name], numbers, self.widths[name]))
+        pipe.close()
 
     def cmd_info(self, letter, number):
         """Display information about a single parameters, error or 
@@ -244,8 +247,7 @@ class AbstractTUI(AbstractUI):
         name = self._letter_to_name(letter)
         self._check_pew_number(name, number)
         
-        print_table(self.databases[name], [number], self.widths[name], 
-                    use_less=False)
+        print(table(self.databases[name], [number], self.widths[name]))
         
     def _letter_to_name(self, letter):
         """Return a word ('parameter', 'error' or 'warning') based on 
