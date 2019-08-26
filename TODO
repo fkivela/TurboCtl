@@ -9,11 +9,11 @@ virtualpump             OK -- OK
 - hardware_component      OK -- OK
 ui                      -- -- --
 - abstract_ui module:     OK OK OK
-- command_parser          OK -- OK
+- command_parser          OK OK OK
 - correct_error_message   OK OK OK
-- output module           OK -- --
+- output module           OK OK OK
 - table                   OK OK OK
-- tui module              OK -- OK
+- tui module              -- -- OK
 - ui_errors               OK NA OK
 bin                     OK OK OK
 test_turboctl           OK OK OK
@@ -22,12 +22,14 @@ test_turboctl           OK OK OK
 TODO:    
 
 Priority 1 (current)
--Comment and test all modules
+- Comment and test all modules
+- Add output to the setpoint command
 
 Priority 2 (soon)
 - Test the program with the real pump
 - Double-check control and status bits etc.
 - Check units in the TUI (0.1 V vs V etc.)
+- Improve the TUI help message
 
 Priority 3 (when I have time)
 - Change setup methods to setupclass methods in some tests in order 

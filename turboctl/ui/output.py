@@ -139,7 +139,7 @@ def parameter_output(wrapper, verbose=True):
                 if verbose else value_str)
     
     if mode == 'error':
-        return (f"Can't access parameter; error type: {wrapper.error_message}"
+        return (f"Can't access parameter {number_str}: {wrapper.error_message}"
                 if verbose else f'Error: {wrapper.error_message}')
         
     if mode == 'no write':
@@ -210,16 +210,21 @@ def hardware_output(wrapper, verbose=True):
     Returns:
         A string matching one of formats below.
         
-        If verbose=True:
+        If verbose=True, the format is
         ('Stator frequency: 0 Hz\n'
          'Frequency converter temperature: 0 °C\n'
          'Motor current: 0×0.1 A\n'
-         'Intermediate circuit voltage: 0×0.1 V\n')
-        If verbose=False:
+         'Intermediate circuit voltage: 0×0.1 V')
+        for replies and
+        'Stator frequency setpoint: 1000 Hz' (if the frequency 
+        setpoint is activated) or '' for queries.
+        
+        If verbose=False, the format is
         ('f=0 Hz\n'
          'T=0 °C\n'
          'I=0×0.1 A\n'
          'U=0×0.1 V')
+        for replies and '' for queries.
     """
     
     f_val = f'{wrapper.frequency} Hz'
@@ -228,12 +233,11 @@ def hardware_output(wrapper, verbose=True):
     U_val = f'{wrapper.voltage}×0.1 V'
     
     if verbose and ControlBits.FREQ_SETPOINT in wrapper.control_or_status_set:
-        f_str = 'Stator frequency setpoint: '
-    elif verbose:
-        f_str = 'Stator frequency: '
-    else:
-        f_str = 'f='
-        
+        return f'Stator frequency setpoint: {f_val}'
+    elif isinstance(wrapper, Query):
+        return ''
+    
+    f_str = 'Stator frequency: ' if verbose else 'f='
     T_str = 'Frequency converter temperature: ' if verbose else 'T='
     I_str = 'Motor current: ' if verbose else 'I='
     U_str = 'Intermediate circuit voltage: ' if verbose else 'U='

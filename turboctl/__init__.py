@@ -54,6 +54,7 @@ from .telegram import (
 from .ui import (
     # Classes
     AbstractUI, 
+    Command,
     CommandParser,
     InteractiveTUI, 
     ShellTUI, 

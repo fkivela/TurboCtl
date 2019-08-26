@@ -192,8 +192,8 @@ class ParameterError(IntAndDescription):
     
     WRONG_NUM     = (0, 'impermissible parameter number')
     CANNOT_CHANGE = (1, 'parameter cannot be changed')
-    MINMAX        = (2, 'min./max. restriction')
-    OTHER         = (18, 'all other errors')
+    MINMAX        = (2, 'min/max restriction')
+    OTHER         = (18, 'other error')
             
     
 class ControlBits(IntAndDescription):
@@ -207,7 +207,7 @@ class ControlBits(IntAndDescription):
         description: A string describing the effect of the bit.
     """
         
-    START_STOP    = ( 0, 'Start/stop')
+    START_STOP    = ( 0, 'Start/Stop')
     UNUSED1       = ( 1, 'Control bit 1 (not assigned)')
     UNUSED2       = ( 2, 'Control bit 2 (not assigned)')
     UNUSED3       = ( 3, 'Control bit 3 (not assigned)')
