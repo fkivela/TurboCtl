@@ -25,7 +25,10 @@ MODS_BY_PKG['telegram'] = [
 
 MODS_BY_PKG['ui'] = [
     'test_abstractui',
-    'test_correct_error_message', 
+    'test_command_parser',
+    'test_correct_error_message',
+    'test_output',
+    'test_table',
     'test_tui',
     ]
 

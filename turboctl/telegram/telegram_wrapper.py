@@ -175,6 +175,7 @@ class TelegramWrapper(Telegram):
     
     @control_or_status_set.setter
     def control_or_status_set(self, value):
+        self.control_or_status_set.clear()
         self.control_or_status_set.update(value)
         self._update_cs_bits()
     

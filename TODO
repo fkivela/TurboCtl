@@ -1,6 +1,8 @@
 State of packages and modules: Code Tests Comments
 
-telegram                OK OK OK
+telegram                OK -- OK
+- update test_telegram_wrapper (cs_set setter changed)
+- change value errors to type errors in conversions
 data                    OK OK OK
 virtualpump             OK -- OK
 - virtualconnection       OK OK OK
@@ -9,7 +11,8 @@ virtualpump             OK -- OK
 - hardware_component      OK -- OK
 ui                      -- -- --
 - abstract_ui module:     OK OK OK
-- command_parser          OK OK OK
+- command_parser          OK -- OK
+  - test UIArgumentNumberError
 - correct_error_message   OK OK OK
 - output module           OK OK OK
 - table                   OK OK OK

@@ -138,7 +138,10 @@ class AbstractTUI(AbstractUI):
                 print(conditions)
         
         elif self.verbosity == 1:
-            pass
+            print('Turning the pump on or off')
+            conditions = control_or_status_output(reply, verbose=False)
+            if conditions:
+                print(conditions)
         
     def cmd_status(self):
         """Call AbstractUI.status() and print the results."""
@@ -167,6 +170,10 @@ class AbstractTUI(AbstractUI):
         unchanged, but a UIValueError or UITypeError will be 
         raised if the arguments are invalid.
         """
+        
+        
+        
+        
         
         self._check_type('number', number, int)
         self._check_type('index', index, int)
