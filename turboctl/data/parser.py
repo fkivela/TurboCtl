@@ -14,7 +14,7 @@ from .types import Types
 
 @dataclass
 class Parameter:
-    """Class for representing pump parameters."""
+    """A class for representing pump parameters."""
     
     # Type hints have to be used with dataclasses.
     number: int

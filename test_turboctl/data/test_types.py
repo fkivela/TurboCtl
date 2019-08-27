@@ -1,3 +1,5 @@
+"""Unit tests for the Types module."""
+
 import unittest
 
 from turboctl import Types

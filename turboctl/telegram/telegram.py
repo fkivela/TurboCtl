@@ -123,7 +123,7 @@ class Telegram:
         'parameter_number',
         'parameter_index',
         'parameter_value',
-        'control_bits',
+        'control_or_status_bits',
         'frequency',
         'temperature',
         'current',
@@ -410,7 +410,7 @@ class Telegram:
         return self.typedbytes[self.VALUE_BYTES, type_]
         
     @property
-    def control_bits(self):
+    def control_or_status_bits(self):
         """Get or set control/status bits.
         
         This property defines which control or status bits are active.
@@ -430,14 +430,14 @@ class Telegram:
         reverse_bits = self.typedbytes[self.CONTROL_BYTES, Types.STR]
         return reverse_bits[::-1]
     
-    @control_bits.setter
-    def control_bits(self, bits):
+    @control_or_status_bits.setter
+    def control_or_status_bits(self, bits):
         self._assert_valid_bits(bits, 16)
         reverse_bits = bits[::-1];
         self.typedbytes[self.CONTROL_BYTES] = reverse_bits
         self.set_checksum()
         
-    def set_control_bits(self, indices, values):
+    def set_control_or_status_bits(self, indices, values):
         """Set specific control/status bits.
         
         Args:
@@ -454,13 +454,13 @@ class Telegram:
         
         # Python strings are immutable, so the control bit string is 
         # converted to a list so that it can be edited.
-        ctrl_bits = list(self.control_bits);
+        ctrl_bits = list(self.control_or_status_bits);
         
         for n, ind in enumerate(indices):
             ctrl_bits[ind] = values[n]
         
         # Convert the list back to a string with join
-        self.control_bits = ''.join(ctrl_bits)
+        self.control_or_status_bits = ''.join(ctrl_bits)
 
     @property
     def frequency(self):

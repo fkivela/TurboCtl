@@ -1,4 +1,4 @@
-"""This module is used to run all unit tests at once."""
+"""Run all unit tests at once."""
 import unittest
 import importlib
 import tabulate
@@ -8,31 +8,40 @@ import tabulate
 MODS_BY_PKG = {}
 
 MODS_BY_PKG['data'] = [
-    'test_parameters',
+    'test_codes',
+    'test_parser',
+    'test_types',
     ]
 
 MODS_BY_PKG['telegram'] = [
     'test_byteholder',
     'test_conversions', 
-    'test_numtypes',
     'test_query',
     'test_reply',
     'test_telegram_wrapper',
     'test_telegram',
-    'test_typedbytes'
+    'test_typedbytes',
+    ]
+
+MODS_BY_PKG['ui'] = [
+    'test_abstractui',
+    'test_command_parser',
+    'test_correct_error_message',
+    'test_output',
+    'test_table',
+    'test_tui',
     ]
 
 MODS_BY_PKG['virtualpump'] = [
-    'test_virtualpump', 
-    'test_virtualconnection'
+    'test_virtualconnection',
+    #'test_virtualpump', 
     ]
 
 # Uncommenting this module adds 1 successful test, 2 failures, 
 # 3 errors and 4 skipped tests. 
 # This can be used to test the run_tests() function.
-#MODS_BY_PKG['general'] = [
-#    'test_testrunner'
-#    ]
+
+#MODS_BY_PKG['run_tests'] = ['test_run_tests']
 
 class Module():
     """A class representing a single module and its test results."""
@@ -102,7 +111,7 @@ class Module():
         return len(self.skipped)        
 
 class FailedResult():
-    """A class representing any kind of unsuccessful test result 
+    """A class representing an unsuccessful test result of any kind 
     (failed, error or skipped)."""
     
     def __init__(self, type_, name, message):
@@ -157,13 +166,19 @@ def run_tests():
     
     modlist.append(total)
     results = [row(module) for module in modlist]
+ 
     _print_results(results)    
     print()
-#    _print_messages(modlist)    
+    _print_messages(modlist)
 
 def _print_results(results):    
     """Print a table displaying the quantities of different test 
     results.
+    
+    The number of successful tests isn't displayed, since subtests 
+    make calculating it difficult. (A successful test with subtests 
+    is counted as only one test, but an unsuccesful one contributes 
+    one failure per each failed subtest.) 
     """
     
     headers = ['Package', 'Module', 'Total', 'Failures', 'Errors', 'Skipped']

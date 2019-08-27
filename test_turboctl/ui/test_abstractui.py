@@ -1,210 +1,197 @@
 import unittest
-import enum as e
-from collections import namedtuple
+import time
+import serial
 
-from turboctl.ui.abstractui import AbstractUI
-from turboctl.virtualpump import VirtualConnection
-from turboctl.telegram.test.test_parameters import TEST_PARAMETERS
-from turboctl.telegram import telegram_wrapper
+from turboctl import (AbstractUI, VirtualPump, VirtualConnection, Query, 
+                      TelegramWrapper, Types, PARAMETERS, ParameterError, 
+                      StatusBits)
+from test_turboctl import dummy_parameter
 
-telegram_wrapper.PARAMETERS = TEST_PARAMETERS
-Query = telegram_wrapper.Query
-Reply = telegram_wrapper.Reply
+# Add some new parameters for simpler testing.
+# The largest actual parameter number is 1102, so these won't 
+# override any old parameters. Otherwise the virtual pump might not 
+# work, since it accesses hardware parameters.
+new_parameter_list = [
+    dummy_parameter(number=2001, type_=Types.UINT),
+    dummy_parameter(number=2002, type_=Types.SINT, min_ = -1000),
+    dummy_parameter(number=2003, type_=Types.FLOAT, min_ = -1000),
+    dummy_parameter(number=2004, indices=range(5)),
+    dummy_parameter(number=2005, writable=False),
+    dummy_parameter(number=2006, max_=10),
+]
 
-        
-class ReplyMode(e.Enum):
-    
-    MIRROR = e.auto()
-    NO_REPLY = e.auto()
-    WRONG_LENGTH = e.auto()
-    INVALID_CONTENT = e.auto()
-    CONSTANT = e.auto()
 
-class DummyVC(VirtualConnection):
-    
-    def __init__(self, *args, **kwargs):
-        self.mode = ReplyMode.MIRROR
-        super().__init__(*args, **kwargs)
-        
-    def process(self, input_):
-        
-        if self.mode == ReplyMode.MIRROR:
-            return super().process(input_)
-        
-        if self.mode == ReplyMode.NO_REPLY:
-            return b''
-        
-        if self.mode == ReplyMode.WRONG_LENGTH:
-            return bytes(10)
-        
-        if self.mode == ReplyMode.INVALID_CONTENT:
-            return bytes(24)
-        
-        if self.mode == ReplyMode.CONSTANT:
-            return self.reply.data
-        
-        raise ValueError(f'Invalid mode: {self.mode}')
-        
 class Base(unittest.TestCase):
     
-    def setUp(self):
-        self.vc = DummyVC(buffer_size=Query.LENGTH)
-        self.port = self.vc.port
-        self.invalid_port = 'invalid_port'
-        self.ui = AbstractUI(self.port)
-        self.ui_invalid_port = AbstractUI(self.invalid_port)
-        self.maxDiff = None # Print long strings when comparing them
+    @classmethod
+    def setUpClass(cls):
+        # Replace *PARAMETERS* with *new_parameters*
+        new_parameters = PARAMETERS 
+        new_parameters.update({p.number: p for p in new_parameter_list})
+        TelegramWrapper.parameters = new_parameters
         
-    def tearDown(self):
-        self.vc.close()
-
-class TestInit(Base):
+        cls.pump = VirtualPump(new_parameters)
+        cls.ui = AbstractUI(cls.pump.port)
+        
+    @classmethod
+    def tearDownClass(cls):
+        cls.pump.close()
+        # Reset TelegramWrapper back to its original state to avoid 
+        # breaking tests in other test modules when running all unit 
+        # tests at once.
+        TelegramWrapper.parameters = PARAMETERS
+                
+        
+class TestReadAndWriteParameter(Base):
     
-    def test_initial_attributes_for_valid_port(self):
-        self.assertTrue(self.ui.connection)
-        self.assertEqual(self.ui.port, self.port)
+    def read_and_write(self, value, number, index):
+        q, r = self.ui.write_parameter(value, number, index)
         
-    def test_initial_attributes_for_invalid_port(self):
-        self.assertEqual(self.ui_invalid_port.connection, None)
-        self.assertEqual(self.ui_invalid_port.port, self.invalid_port)
+        self.assertEqual(q.parameter_mode, 'write')
+        self.assertEqual(q.parameter_number, number)
+        self.assertEqual(q.parameter_index, index)
+        self.assertAlmostEqual(q.parameter_value, value, 5)
+        
+        self.assertEqual(r.parameter_mode, 'response')
+        self.assertEqual(r.parameter_number, number)
+        self.assertEqual(r.parameter_index, index)
+        self.assertAlmostEqual(r.parameter_value, value, 5)
+        
+        q, r = self.ui.read_parameter(number, index)
+        
+        self.assertEqual(q.parameter_mode, 'read')
+        self.assertEqual(q.parameter_number, number)
+        self.assertEqual(q.parameter_index, index)
+        self.assertAlmostEqual(q.parameter_value, 0, 5)
+        
+        self.assertEqual(r.parameter_mode, 'response')
+        self.assertEqual(r.parameter_number, number)
+        self.assertEqual(r.parameter_index, index)
+        self.assertAlmostEqual(r.parameter_value, value, 5)
+        
+    def test_uint(self):
+        self.read_and_write(100, 2001, 0)
+        
+    def test_sint(self):
+        self.read_and_write(-100, 2002, 0)
+        
+    def test_float(self):
+        # This also tests reading 32-bit numbers.
+        self.read_and_write(123.456, 2003, 0)
+        
+    def test_indexed(self):
+        self.read_and_write(123, 2004, 3)
+        
+    def test_no_write(self):
+        q, r = self.ui.write_parameter(123, 2005, 0)
+        
+        self.assertEqual(r.parameter_mode, 'no write')
+        self.assertEqual(r.parameter_number, 2005)
+        self.assertEqual(r.parameter_index, 0)
+        self.assertEqual(r.parameter_value, 123)
                 
-class TestSend(Base):
-    
-    def test_success(self):
-        query, reply = self.ui._send(Query())
-        
-        self.assertTrue(isinstance(query, Query))
-        self.assertTrue(isinstance(reply, Reply))
-        self.assertEqual(query, Query())
-        
-    def test_failure(self):
-        
-        for mode in ['NO_REPLY', 'WRONG_LENGTH', 'INVALID_CONTENT']:
-            with self.subTest(i=mode):
-                self.vc.mode = ReplyMode[mode]
-        
-                with self.assertRaises(ValueError):
-                    q, r = self.ui._send(Query())
+    def test_error(self):
+        q, r = self.ui.write_parameter(11, 2006, 0)
+        self.assertEqual(r.parameter_mode, 'error')
+        self.assertEqual(r.error_code, ParameterError.MINMAX)
 
-class TestCommands(Base):
+        
+class TestOtherCommands(Base):
     
-    def test_pump_on(self):
-        query, reply = self.ui.on_off()
+    def test_on_off_and_status(self):
         
-        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
-        correct_query = Query(correct_bits)
+        # Make sure the status signal is correct, and the pump is 
+        # initially not turning.
+        q, r = self.ui.status()
+        status_bits = [2,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20]
+        status_query = Query(status_bits)
+        self.assertEqual(q, status_query)        
+        self.assertFalse(StatusBits.TURNING in r.control_or_status_set)
+
+        # Make sure the on_off signal is correct.
+        q, r = self.ui.on_off()
+        onoff_bits = [2,22,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,17]
+        onoff_query = Query(onoff_bits)
+        self.assertEqual(q, onoff_query)
         
-        self.assertEqual(query, reply, correct_query)
+        # Wait for the pump to start.
+        time.sleep(0.1)
+        
+        # Make sure the pump starts turning.
+        q, r = self.ui.status()
+        self.assertTrue(StatusBits.TURNING in r.control_or_status_set)
+        
+    def test_save_data(self):
+        # Turn the pump on.
+        self.ui.on_off()
+        
+        # Write a value and restart the pump.
+        self.ui.write_parameter(200, 1)
+        self.ui.on_off()
+        self.ui.on_off()
+        # The written value is replaced by the default value.
+        q, r = self.ui.read_parameter(1)
+        self.assertEqual(r.parameter_value, 180)
+        
+        # The written value is saved to nonvolatile memory.
+        self.ui.write_parameter(200, 1)
+        self.ui.save_data()
+        self.ui.on_off()
+        self.ui.on_off()
+        q, r = self.ui.read_parameter(1)
+        self.assertEqual(r.parameter_value, 200)
+        
+    def test_set_frequency(self):
+        # Turn the pump on.
+        self.ui.on_off()
+        
+        # Make sure the setpoint frequency is the default value.
+        q, r = self.ui.read_parameter(24)
+        self.assertEqual(r.parameter_value, 1000)
+        
+        # Set a new setpoint.
+        self.ui.set_frequency(800)
+        time.sleep(0.1)
+        
+        # Make sure the change was applied.
+        q, r = self.ui.read_parameter(24)
+        self.assertEqual(r.parameter_value, 800)
         
         
-    def test_status(self):
+class TestConnection(unittest.TestCase):
     
-        query, reply = self.ui.status()
+    @classmethod
+    def setUpClass(cls):
+        cls.vc = VirtualConnection()
+        cls.ui = AbstractUI(cls.vc.port)
         
-        correct_bits = [2,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20]
-        correct_query = Query(correct_bits)
-        
-        self.assertEqual(query, reply, correct_query)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        # No.  Designation                      Min.    Max.    Default                     Unit     r/w Format Description
-1      "Test parameter 1"               0       100     10                          "0.1 Â°C" r/w u16    "Test description 1" 
-2[1:5] "Test parameter 2\nAnother line" 0       100     1                           ""       r   u16    "Test description 2\nwith two lines"
-3       ""                              0       100     0                           ""       r/w u16    ""
-4[1:5]  ""                              0       100     [1,2,3,4,5]                 ""       r   u16    ""
-5       ""                              0       100     0                           ""       r/w u32    ""
-6[1:5]  ""                              0       100     0                           ""       r   u32    ""
-7       ""                              0       100     0                           ""       r/w u32    ""
-8[1:5]  ""                              0       100     0                           ""       r   u32    ""
-9       ""                              -50     50      -10                         ""       r/w s16    ""
-10[1:5] ""                              -50     50      [-1,-2,-3,-4,-5]            ""       r   s16    ""
-11      ""                              -50     50      0                           ""       r/w s16    ""
-12[1:5] ""                              -50     50      0                           ""       r   s16    ""
-13      ""                              -50     50      0                           ""       r/w s32    ""
-14[1:5] ""                              -50     50      0                           ""       r   s32    ""
-15      ""                              -50     50      0                           ""       r/w s32    ""
-16[1:5] ""                              -50     50      0                           ""       r   s32    ""
-17      ""                              -1.2e-3 1.2e3   -1.0                        ""       r/w real32 ""
-18[1:5] ""                              -1.2e-3 1.2e3   1.0                         ""       r   real32 ""
-19      ""                              P17     P18     0                           ""       r/w real32 ""
-20[1:5] ""                              -1.2e-3 1.2e3   [1.0,2.0,3.0,4.0,5.0]       ""       r   real32 ""
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    def test_write_parameter(self):
-        
-        TestParameter = namedtuple('TestParameter', 'format, number, index, value, uint_value')
-        TestParameter(
-        
-        
-        [
-        ('u16',      1, 0,  5,            5),
-        ('u16F',     2, 1,  5,            5),
-        ('u32',      5, 0,  5,            5),
-        ('u32F'      6, 1,  5,            5),
-        ('s16'       9, 0, -5,   4294967291),
-        ('s16F'     10, 1, -5,   4294967291),
-        ('s32'      13, 0, -5,   4294967291),
-        ('s32F'     14, 1, -5,   4294967291),
-        ('real32',  17, 0,  5.5, 1085276160),
-        ('real32F', 18, 1,  5.5, 1085276160)
-        ]
-
-
-        [2, 22, 0, 10, 96] + 18*[0] + [106]
-
-        for p in parameters:
-            with self.subTest(i=p):
-                if index:
-                    query, _ = self.ui.write_parameter(value=p.value, number=p.number)
-                else:
-                    query, _ = self.ui.write_parameter(value=p.value, number=p.number)
-                
-                
-                
-                
-                
-                self.assertEqual(i % 2, 0)
-        
-        
-        self.ui.write_parameter(value=10, number=1) #u16 u16F u32 u32F 
-            
-            
-            
-            
-            
-            
-            pass
-            
-        
-        
-        
-        
-        
-        
-#    def test_read_parameter(self):
-        
-        
-        
-        
-        
+    @classmethod
+    def tearDownClass(cls):
+        cls.vc.close()
     
+    def test_invalid_port(self):
+        with self.assertRaises(serial.SerialException):
+            AbstractUI('test')
+            
+    def test_empty_port(self):
+        ui = AbstractUI(None)
+        with self.assertRaises(serial.SerialException):
+            ui.status()
+            
+    def test_no_response(self):
+        def process(input_):        
+            return b''
+        self.vc.process = process
+        with self.assertRaises(ValueError):
+            self.ui.status()
+            
+    def test_invalid_response(self):
+        def process(input_):        
+            return b'1234'
+        self.vc.process = process
+        with self.assertRaises(ValueError):
+            self.ui.status()
+
         
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,5 @@
+"""Unit tests for the typedbytes module."""
+
 import unittest
 
 from turboctl import TypedBytes, Types

@@ -1,6 +1,5 @@
 """This module defines the ByteHolder class."""
 
-#from turboctl.telegram import conversions as c
 from . import conversions as c
 
 class ByteHolder:

@@ -7,7 +7,7 @@ def correct_error_message(message):
     If an invalid number of arguments is given to a TUI command, 
     Python raises a TypeError.
     However, the error message can't be shown to the user unaltered,
-    because it reports the number of arguments wrong (because a TUI 
+    since it reports the number of arguments wrong (because a TUI 
     always automatically passes the *self* argument to all command 
     methods) and calls commands by their method names instead of the 
     names visible to the user.
@@ -30,9 +30,10 @@ def _change_function_name(message):
     return re.sub(regex, new_name, message)
 
 def _change_argument_count(message):
-    """Take a string of matching the format '<function_name> takes x 
-    positional arguments but y were given' and decrease the numbers 
-    (x and y in this example) by 1."""
+    """Take a string matching the format 
+    "<function_name> takes x positional arguments but y were given" 
+    and decrease the numbers (x and y in this example) by 1.
+    """
     
     regex = ('(.* takes) (\d+|from \d+ to \d+) (positional argument)(s)? '
              '(but) (\d+) (was|were) (given)') 

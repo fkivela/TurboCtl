@@ -1,6 +1,9 @@
+"""Unit tests for the Telegram_Wrapper class of the 
+telegram_wrapper module.
+"""
 import unittest
 
-from turboctl import Types, Telegram, TelegramWrapper
+from turboctl import Types, Telegram, TelegramWrapper, PARAMETERS
 from test_turboctl import dummy_parameter
 
 class TestInit(unittest.TestCase):
@@ -9,6 +12,12 @@ class TestInit(unittest.TestCase):
         self.data = Telegram(current=1).data
         self.telegram = Telegram(self.data)
         TelegramWrapper.parameters = {1: dummy_parameter(type_=Types.SINT)}
+    
+    def tearDown(self):
+        # Reset TelegramWrapper back to its original state to avoid 
+        # breaking tests in other test modules when running all unit 
+        # tests at once.
+        TelegramWrapper.parameters = PARAMETERS
     
     def test_from_data(self):
         tw = TelegramWrapper(self.data)

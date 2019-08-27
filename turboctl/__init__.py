@@ -54,6 +54,7 @@ from .telegram import (
 from .ui import (
     # Classes
     AbstractUI, 
+    Command,
     CommandParser,
     InteractiveTUI, 
     ShellTUI, 
@@ -65,10 +66,14 @@ from .ui import (
     UITypeError, 
     UIValueError, 
     # Functions
+    array,
+    control_or_status_output,
     correct_error_message, 
+    full_output,
+    hardware_output,
     help_string, 
-    output, 
-    print_table, 
+    parameter_output,
+    table, 
 )
 
 from .virtualpump import (

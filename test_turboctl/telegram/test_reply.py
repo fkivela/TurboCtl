@@ -1,7 +1,8 @@
+"""Unit tests for the Reply class of the telegram_wrapper module."""
 import unittest
     
 from turboctl import (Telegram, Types, TelegramWrapper, Query, Reply, 
-                      StatusBits)
+                      StatusBits, PARAMETERS)
 from test_turboctl import dummy_parameter
 
 class TestParameterMode(unittest.TestCase):
@@ -18,6 +19,12 @@ class TestParameterMode(unittest.TestCase):
         self.r16F = Reply(parameter_number=2)
         self.r32 = Reply(parameter_number=3)
         self.r32F = Reply(parameter_number=4)
+        
+    def tearDown(self):
+        # Reset Reply back to its original state to avoid breaking 
+        # tests in other test modules when running all unit tests at 
+        # once.
+        Reply.parameters = PARAMETERS
 
     def mode_test(self, name, code, query):
         query.parameter_mode = name
@@ -53,17 +60,31 @@ class TestStatusSet(unittest.TestCase):
     
     def test_empty(self):
         r = Reply()
-        self.assertEqual(r.status_set, set())
+        self.assertEqual(r.control_or_status_set, set())
         
     def test_set(self):
-        r = Reply(status_set = {StatusBits.OPERATION, 
+        r = Reply(control_or_status_set = {StatusBits.OPERATION, 
                                 StatusBits.ACCELERATION})
-        self.assertEqual(r.control_bits, '0010100000000000')
+        self.assertEqual(r.control_or_status_bits, '0010100000000000')
         
     def test_get(self):
-        r = Reply(control_bits = '0010100000000000')
-        self.assertEqual(r.status_set, {StatusBits.OPERATION, 
-                                        StatusBits.ACCELERATION})            
+        r = Reply(control_or_status_bits = '0010100000000000')
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION, 
+                                        StatusBits.ACCELERATION})     
+            
+    def test_add(self):
+        r = Reply(control_or_status_bits = '0010000000000000')
+        r.control_or_status_set.add(StatusBits.ACCELERATION)
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION, 
+                                        StatusBits.ACCELERATION})     
+        self.assertEqual(r.control_or_status_bits, '0010100000000000')
+            
+    def test_remove(self):
+        r = Reply(control_or_status_bits = '0010100000000000')
+        r.control_or_status_set.remove(StatusBits.ACCELERATION)
+        self.assertEqual(r.control_or_status_set, {StatusBits.OPERATION})
+        self.assertEqual(r.control_or_status_bits, '0010000000000000')
+
             
 class TestErrorMessage(unittest.TestCase):
     
@@ -124,7 +145,7 @@ class TestUtils(unittest.TestCase):
                         "parameter_number=0, "
                         "parameter_index=0, "
                         "parameter_value=0, "
-                        "control_bits='0000000000000000', "
+                        "control_or_status_bits='0000000000000000', "
                         "frequency=0, "
                         "temperature=0, "
                         "current=0, "
@@ -135,29 +156,25 @@ class TestUtils(unittest.TestCase):
                         "parameter_unit='', "
                         "parameter_indexed=False, "
                         "parameter_mode='none', "
+                        "control_or_status_set=SynchronizedSet(), "
                         "error_code=0, "
-                        "error_message='', "
-                        "status_set=set())")
+                        "error_message='')"
+        )
         
         self.maxDiff=None #Print long strings.
         self.assertEqual(str(r), string)
-        
-    def test_repr(self):
-        r = Reply()
-        copy = eval(repr(r))
-        self.assertEqual(copy, r)
-        
+                
     def test_eq(self):
         
-        self.assertEqual(Query(), Query())
-        self.assertEqual(Query(), Reply())
-        self.assertEqual(Query(), TelegramWrapper())
-        self.assertEqual(Query(), Telegram())
+        self.assertEqual(Reply(), Query())
+        self.assertEqual(Reply(), Reply())
+        self.assertEqual(Reply(), TelegramWrapper())
+        self.assertEqual(Reply(), Telegram())
         
-        self.assertNotEqual(Query(), Query(parameter_number=1))
-        self.assertNotEqual(Query(), Reply(parameter_number=1))
-        self.assertNotEqual(Query(), TelegramWrapper(parameter_number=1))
-        self.assertNotEqual(Query(), Telegram(parameter_number=1))
+        self.assertNotEqual(Reply(), Query(parameter_number=1))
+        self.assertNotEqual(Reply(), Reply(parameter_number=1))
+        self.assertNotEqual(Reply(), TelegramWrapper(parameter_number=1))
+        self.assertNotEqual(Reply(), Telegram(parameter_number=1))
         
         
 if __name__ == '__main__':

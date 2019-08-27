@@ -8,52 +8,27 @@ class ValueAndDescription(e.Enum):
     """A superclass for enums that contains an additional attribute 
     (*description*) in addition to *value*.
     
-    This enum doesn't have any instances, since it's only meant to 
+    This enum doesn't have any members, since it's only meant to 
     be subclassed.
     
-    An instance of a subclass of this enum can be returned with
+    A member of a subclass of this enum can be returned with
     any of the following:
-    >> instance_of_enum = EnumName.NAME_OF_INSTANCE
-    >> instance_of_enum = EnumName['NAME_OF_INSTANCE']
-    >> instance_of_enum = EnumName(value_of_instance)
-    >> instance_of_enum = EnumName(instance_of_enum)
+    >> member = EnumName.MEMBER_NAME
+    >> member = EnumName['MEMBER_NAME']
+    >> member = EnumName(member_value)
+    >> member = EnumName(member)
     """
-            
+    
     def __new__(cls, value, description):
-        """Setting *_value_* in __init__ raises an error because 
-        *description* isn't an int.
+        """__new__ is defined instead of __init__, because setting 
+        *_value_* in __init__ prevents the syntax 
+        "member = EnumName(value_of_member)" from working.
         """
         obj = object.__new__(cls)
         obj._value_ = value
         obj.description = description
         return obj
             
-    def __repr__(self):
-        return str(self)
-
-    
-#    def __init__(self, value, description):
-#        """Create a new instance of this enum.
-#        
-#        New instances are defined inside a class definition using the 
-#        following special syntax:
-#            
-#            class Numbers(ValueAndDescription):
-#                
-#                ONE = (1, 'The number one')
-#                TWO = (2, 'The number two')
-#                THREE = (3, 'The number three')
-#        
-#        Args:
-#            value: Anything accepted by as a value by the Enum class.
-#            description: Meant to be a string, but could be anything.
-#        """
-#        self._value_ = value
-#        # The *value* attribute of enums is internally called 
-#        # *_value_.* 
-#        # The second '_' means it is not a private attribute.
-#        self.description = description
-        
     def __repr__(self):
         """repr(self) returns '<ParameterAccess.XYZ: 1234>' by default.
         It must be overridden so that the syntax 
@@ -66,7 +41,7 @@ class ValueAndDescription(e.Enum):
 class ParameterAccess(ValueAndDescription):
     """Different parameter access modes.
     
-    Instances of this enum have the following attributes:
+    Members of this enum have the following attributes:
         value: The parameter access code as a 4-character string of 1's
             and 0's.
         description: A string describing the meaning of the code.
@@ -89,42 +64,42 @@ class ParameterAccess(ValueAndDescription):
     
     @classmethod
     def read_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         reading a parameter.
         """
         return {cls.R, cls.RF}
 
     @classmethod
     def write_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         writing to a parameter.
         """
         return {cls.W16, cls.W32, cls.W16F, cls.W32F}
     
     @classmethod
     def sixteen_bit_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         accessing 16 bit parameters.
         """
         return {cls.R, cls.RF, cls.W16, cls.W16F}
     
     @classmethod    
     def thirty_two_bit_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         accessing 32 bit parameters.
         """
         return {cls.R, cls.RF, cls.W32, cls.W32F}
     
     @classmethod    
     def unindexed_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         accessing unindexed parameters.
         """
         return {cls.R, cls.W16, cls.W32}
     
     @classmethod
     def indexed_modes(cls):
-        """Returns a set of the modes (instances of this enum) used for 
+        """Returns a set of the modes (members of this enum) used for 
         accessing indexed parameters.
         """
         return {cls.RF, cls.W16F, cls.W32F}
@@ -133,7 +108,7 @@ class ParameterAccess(ValueAndDescription):
 class ParameterResponse(ValueAndDescription):
     """Different parameter response modes.
     
-    Instances of this enum have the following attributes:
+    Members of this enum have the following attributes:
         value: The parameter response code as a 4-character string of 1's
             and 0's.
         description: A string describing the meaning of the code.
@@ -154,55 +129,54 @@ class ParameterResponse(ValueAndDescription):
     
     @classmethod
     def sixteen_bit_modes(cls):
-        """Returns a set of the modes (instances of this enum) where 
+        """Returns a set of the modes (members of this enum) where 
         a 16 bit parameter was accessed.
         """
         return  {cls.S16, cls.S16F}
     
     @classmethod
     def thirty_two_bit_modes(cls):
-        """Returns a set of the modes (instances of this enum) where 
+        """Returns a set of the modes (members of this enum) where 
         a 32 bit parameter was accessed.
         """
         return {cls.S32, cls.S32F}
     
     @classmethod    
     def unindexed_modes(cls):
-        """Returns a set of the modes (instances of this enum) where 
+        """Returns a set of the modes (members of this enum) where 
         an unindexed parameter was accessed.
         """
         return {cls.S16, cls.S32}
     
     @classmethod
     def indexed_modes(cls):
-        """Returns a set of the modes (instances of this enum) where 
+        """Returns a set of the modes (members of this enum) where 
         an indexed parameter was accessed.
         """
         return {cls.S16F, cls.S32F}
 
 
-class IntAndDescription(e.IntEnum):
-    """The same as ValueAndDescription, but inherits from IntEnum 
-    instead of enum. This means that instances support operations 
-    such as ordering, but values can only be ints.
+class CustomInt(int):
+    """The arguments of __new__ methods in enums inheriting int are 
+    always passed to the __new__ method of the int class, which raises 
+    an error if the *description* argument is present.
+    This class solves the problem by preventing *description* from 
+    being passed to int.__new__.
     """
-            
-    def __new__(cls, value, description):
-        """Setting *_value_* in __init__ raises an error because 
-        *description* isn't an int.
-        """
-        obj = int.__new__(cls)
-        obj._value_ = value
-        obj.description = description
-        return obj
     
-    def __hash__(self):
-        """IntEnum is unhashable for some reason, so __hash__ 
-        has to be defined manually.
-        The implementation is identical with the hash function of the
-        Enum class."""
-        return hash(self._name_)
+    def __new__(cls, value, description):
+        return int.__new__(cls, value)
+
+
+class IntAndDescription(CustomInt, e.Enum):
+    """The same as ValueAndDescription, but members also behave like 
+    ints.
+    """    
                 
+    def __init__(self, value, description):
+        self._value_ = value
+        self.description = description
+                    
     def __repr__(self):
         return str(self)
 
@@ -210,7 +184,7 @@ class IntAndDescription(e.IntEnum):
 class ParameterError(IntAndDescription):
     """Different parameter error types.
     
-    Instances of this enum have the following attributes:
+    Members of this enum have the following attributes:
         value: The error code as an integer. In the case of an error, 
             the parameter value will be replaced with this number.
         description: A string describing the meaning of the error.
@@ -218,8 +192,8 @@ class ParameterError(IntAndDescription):
     
     WRONG_NUM     = (0, 'impermissible parameter number')
     CANNOT_CHANGE = (1, 'parameter cannot be changed')
-    MINMAX        = (2, 'min./max. restriction')
-    OTHER         = (18, 'all other errors')
+    MINMAX        = (2, 'min/max restriction')
+    OTHER         = (18, 'other error')
             
     
 class ControlBits(IntAndDescription):
@@ -228,7 +202,7 @@ class ControlBits(IntAndDescription):
     Unused control bits have been assigned values in order to 
     prevent error conditions.
     
-    Instances of this enum have the following attributes:
+    Members of this enum have the following attributes:
         value: The index of the bit as an integer.
         description: A string describing the effect of the bit.
     """
@@ -238,22 +212,17 @@ class ControlBits(IntAndDescription):
     UNUSED2       = ( 2, 'Control bit 2 (not assigned)')
     UNUSED3       = ( 3, 'Control bit 3 (not assigned)')
     UNUSED4       = ( 4, 'Control bit 4 (not assigned)')
-    UNUSED5       = ( 5, 'Control bit 5 (not assigned)')
-    AIR_COOLING   = ( 5, '24 VDC output X201') 
-        # Air cooling accessory
-    FREQ_SETPOINT = ( 6, 'Enable main setpoint PZD2 (speed setpoint)')
-        # Enable frequency setpoint
+    AIR_COOLING   = ( 5, 'Output X201 (air cooling)') 
+    FREQ_SETPOINT = ( 6, 'Set frequency setpoint')
     RESET_ERROR   = ( 7, 'Reset error (all components)')
-    STANDBY       = ( 8, 'Enable standby function')
-    COMMAND       = (10, 'Enable process data (Bit 0, 5, 6, 7, 8, 13, 14, 15)')
+    STANDBY       = ( 8, 'Enable standby')
+    UNUSED9       = ( 9, 'Control bit 9 (not assigned)')
+    COMMAND       = (10, 'Enable control bits 0, 5, 6, 7, 8, 13, 14, 15')
     X1_ERROR      = (11, 'Error operation relay X1')
     X1_WARNING    = (12, 'Normal operation relay X1')
     X1_NORMAL     = (13, 'Warning relay X1')
-    
-    PP_RELAY      = (14, '24 VDC output X202') 
-        # Relay box for packing pump
-    VENTING       = (15, '24 VDC output X203') 
-        # Venting valve
+    PP_RELAY      = (14, 'Output X202 (packing pump)')
+    VENTING       = (15, 'Output X203 (venting valve)') 
 
 
 class StatusBits(IntAndDescription):
@@ -262,7 +231,7 @@ class StatusBits(IntAndDescription):
     Unused status bits have been assigned values in order to 
     prevent error conditions.
     
-    Instances of this enum have the following attributes:
+    Members of this enum have the following attributes:
         value: The index of the bit as an integer.
         description: A string describing the effect of the bit.
     """

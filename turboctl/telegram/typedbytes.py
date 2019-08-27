@@ -1,10 +1,7 @@
-"""This module defines the TypedBytes subclass of ByteHolder."""
-
+"""This module defines the TypedBytes class to save multi-byte 
+numbers to a bytearray.
+"""
 import math
-
-#from turboctl.telegram import conversions as c
-#from turboctl.telegram.byteholder import ByteHolder
-#from turboctl.telegram.numtypes import Types
 
 from ..data import Types
 
