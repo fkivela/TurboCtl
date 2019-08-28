@@ -7,7 +7,33 @@ variable.
 import struct
 import re
 
-def in_signed_range(i, bits):
+check(bits, types=int, min_=0)
+
+
+def check_val(val, types=None, min=-float('inf'), max=float('inf'), values=None):
+    pass
+
+
+
+
+
+def check_type(var, name, types):
+    
+    try:      
+        valid_types = ', '.join([t.__name__ for t in types])
+    except TypeError:
+        valid_types = types.__name__
+        
+    msg = (f"'{name}' should be one of the following: {valid_types}; "
+           f"not {type(var).__name__}")
+
+    if not isinstance(var, types):
+        raise TypeError(msg)
+
+def check_range()
+
+
+def is_sint(i, bits):
     """Return True if *i* is a valid *bits* bit signed integer.
     
     For example, 8 bits is enough to represent signed integers from 
@@ -27,7 +53,7 @@ def in_signed_range(i, bits):
     Raises:
         ValueError: If bits is not positive.
     """
-    
+    check_uint(bits, float('inf'))
     if bits <= 0:
         raise ValueError(
             f"'bits' should be a positive number, now was {bits}.")
@@ -37,7 +63,7 @@ def in_signed_range(i, bits):
     
     return -2**(bits-1) <= i < 2**(bits-1)
 
-def in_unsigned_range(i, bits):
+def in_uint_range(i, bits):
     """Return True if *i* is a valid *bits* bit unsigned integer.
     
     For example, 8 bits is enough to represent signed integers from 
@@ -57,6 +83,7 @@ def in_unsigned_range(i, bits):
     Raises:
         ValueError: If bits is not positive.
     """
+    
     
     if bits <= 0:
         raise ValueError(
