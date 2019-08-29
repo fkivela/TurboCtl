@@ -102,7 +102,7 @@ def parameter_output(wrapper, verbose=True):
         for queries and
         - 'No parameter access
         - 'The value of parameter 1 is 100'
-        - 'Can't access parameter 1; error type: min./max. restriction'
+        - 'Can't access parameter 1: min./max. restriction'
         - 'Parameter 1 isn't writable'
         for replies.
         
@@ -145,8 +145,11 @@ def parameter_output(wrapper, verbose=True):
     if mode == 'no write':
         return (f"Parameter {number} isn't writable" if verbose 
                 else 'Not writable')
+        
+    if mode == 'invalid':
+        return (f'invalid parameter mode: {wrapper.parameter_access_type}')
     
-    raise RuntimeError(f'Invalid parameter_mode: {wrapper.parameter_mode}')    
+    raise RuntimeError(f"This shouldn't happen")    
          
 def control_or_status_output(wrapper, verbose=True):
     """Return a string displaying active control or status bits.
@@ -232,7 +235,7 @@ def hardware_output(wrapper, verbose=True):
     I_val = f'{wrapper.current}×0.1 A'
     U_val = f'{wrapper.voltage}×0.1 V'
     
-    if verbose and ControlBits.FREQ_SETPOINT in wrapper.control_or_status_set:
+    if verbose and ControlBits.SETPOINT in wrapper.control_or_status_set:
         return f'Stator frequency setpoint: {f_val}'
     elif isinstance(wrapper, Query):
         return ''

@@ -33,10 +33,9 @@ class TestIntAndDescription(unittest.TestCase):
     def test_set(self):
         """Make sure sets of enum members behave as they should."""
         bitnames = [    
-            'START_STOP', 'UNUSED1', 'UNUSED2', 'UNUSED3', 'UNUSED4', 
-            'AIR_COOLING', 'FREQ_SETPOINT', 'RESET_ERROR', 'STANDBY', 
-            'UNUSED9', 'COMMAND', 'X1_ERROR', 'X1_WARNING', 'X1_NORMAL', 
-            'PP_RELAY', 'VENTING'
+            'ON', 'UNUSED1', 'UNUSED2', 'UNUSED3', 'UNUSED4', 'X201', 
+            'SETPOINT', 'RESET_ERROR', 'STANDBY', 'UNUSED9', 'COMMAND', 
+            'X1_ERROR', 'X1_WARNING', 'X1_NORMAL', 'X202', 'X203'
         ]
         self.maxDiff = None
         bits_in_order = [ControlBits[name] for name in bitnames]
@@ -52,14 +51,14 @@ class TestIntAndDescription(unittest.TestCase):
         
     def test_equal(self):
         """Make sure ControlBits are equal to ints."""
-        self.assertEqual(ControlBits.START_STOP, 0)
+        self.assertEqual(ControlBits.ON, 0)
         self.assertEqual(ControlBits.COMMAND, 10)
         
     def test_add(self):
         """Make sure ControlBits are compatible with arithmetical 
         operations.
         """
-        self.assertEqual(ControlBits.COMMAND + ControlBits.START_STOP, 10)
+        self.assertEqual(ControlBits.COMMAND + ControlBits.ON, 10)
     
     
 if __name__ == '__main__':

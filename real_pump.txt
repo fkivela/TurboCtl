@@ -1,0 +1,178 @@
+Testing turboctl:
+
+Lisäsin itseni dialout-ryhmään, jotta portti toimisi:
+sudo adduser feliks dialout
+
+Alussa (pummpu pois päältä):
+	Present status conditions:
+		Ready for operation
+		Parameter channel enabled
+	Stator frequency: 0 Hz
+	Frequency converter temperature: 27 °C
+	Motor current: 0×0.1 A
+	Intermediate circuit voltage: 24×0.1 V
+
+	The value of parameter 24 is 1200 Hz
+
+onoff:
+	Present status conditions:
+		Ready for operation
+		Parameter channel enabled
+		Process channel enabled
+Heti onoffin jälkeen:
+	Present status conditions:
+		Operation enabled
+		Accelerating
+		Parameter channel enabled
+		Pump is turning
+		Process channel enabled
+	Stator frequency: 28 Hz
+	Frequency converter temperature: 27 °C
+	Motor current: 62×0.1 A
+	Intermediate circuit voltage: 24×0.1 V
+
+
+Present status conditions:
+    Operation enabled
+    Accelerating
+    Status bit 8 (not assigned)
+    Parameter channel enabled
+    Pump is turning
+    Process channel enabled
+Stator frequency: 832 Hz
+Frequency converter temperature: 34 °C
+Motor current: 90×0.1 A
+Intermediate circuit voltage: 24×0.1 V
+
+
+Present status conditions:
+    Operation enabled
+    Accelerating
+    Parameter channel enabled
+    Normal operation detained
+    Pump is turning
+    Process channel enabled
+Stator frequency: 1200 Hz
+Frequency converter temperature: 30 °C
+Motor current: 7×0.1 A
+Intermediate circuit voltage: 24×0.1 V
+
+Present status conditions:
+    Operation enabled
+    Parameter channel enabled
+    Normal operation detained
+    Pump is turning
+    Process channel enabled
+Stator frequency: 1200 Hz
+Frequency converter temperature: 28 °C
+Motor current: 7×0.1 A
+Intermediate circuit voltage: 24×0.1 V
+
+
+
+>> onoff
+Turning the pump on or off
+Present status conditions:
+    Operation enabled
+    Parameter channel enabled
+    Normal operation detained
+    Pump is turning
+    Process channel enabled
+>> s
+Present status conditions:
+    Ready for operation
+    Parameter channel enabled
+    Pump is turning
+Stator frequency: 1200 Hz
+Frequency converter temperature: 28 °C
+Motor current: 7×0.1 A
+Intermediate circuit voltage: 24×0.1 V
+>> s
+
+
+>> s
+Present status conditions:
+    Ready for operation
+    Decelerating
+    Parameter channel enabled
+    Pump is turning
+Stator frequency: 1178 Hz
+Frequency converter temperature: 28 °C
+Motor current: 2×0.1 A
+Intermediate circuit voltage: 24×0.1 V
+>> 
+
+
+
+
+
+
+
+Parametrejä:
+The value of parameter 1 is 192
+
+>> write 200 1
+Can't access parameter 1: parameter cannot be changed
+
+reading after saving:'
+>> read 32
+Can't access parameter 32: invalid error code: 102
+
+reading after reset:
+Can't access parameter 32: invalid error code: 102
+
+
+>> read 1025
+The value of parameter 1025 is 0 0
+
+Reset: any value resets all parameters upon next power off
+
+
+
+Things that have to be tested with the real pump:
+- If a parameter number is specified but there is no parameter access, 
+  will the parameter data be included in the return telegram?
+  Parameter data will be included, copied from the sent Telegram. No parameters are changed or accessed.
+  
+- Is it OK to define an index when accessing an unindexed parameter?
+  Index != 0 -> error code 3
+
+- When is the "cannot change" error message used?
+  Always
+
+- What is the writability of parameters for which the manual doesn't specify 
+  it?
+  686 and 690 are writable.
+  
+- Does the pump return a parameter error if the parameter access code is 
+  invalid?
+  Accessing unindexed as indexed: Can't access parameter 1: invalid error code: 5
+  Accessing indexed as unindexed: works, if index=0, if index=1, invalid error code: 5
+  Wrong bits: error code 5
+  
+
+- How does the pump behave when it is off? Is only the motor off? Does the 
+  pump read/answer commands?
+  Motor is off but power is on; reads and accepts commands
+
+- Does the onoff command reset parameters?
+  No, powering the pump off does.
+
+- Real parameters have a default value of 0 and a minumum value of > 0. 
+  How does this work?
+  Their minimum is actually lower than 0.
+
+- What happens if the frequency setpoint is set to an illegal value through 
+  the setpoint command (without accessing parameters)?
+  They don't affect each other; setpoint is on only until next telegram 
+
+- Should an invalid parameter index raise a parameter number error or 
+  other error (currently VPump raises a parameter number error)?
+  Error code 3.
+  
+  
+  
+  
+  Changes to TurboCtl:
+  -Added new parameter error codes
+  -Change the changed the onoff command so that the on bit is always kept on

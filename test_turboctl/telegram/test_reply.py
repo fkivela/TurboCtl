@@ -103,7 +103,7 @@ class TestErrorMessage(unittest.TestCase):
         
         for r in [self.r_uint, self.r_sint, self.r_float]:
             with self.subTest(i=r):
-                string = 'impermissible parameter number'
+                string = 'invalid parameter number'
                 self.assertEqual(r.error_message, string)
         
                 r.error_code=1

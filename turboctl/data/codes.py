@@ -190,10 +190,15 @@ class ParameterError(IntAndDescription):
         description: A string describing the meaning of the error.
     """
     
-    WRONG_NUM     = (0, 'impermissible parameter number')
-    CANNOT_CHANGE = (1, 'parameter cannot be changed')
-    MINMAX        = (2, 'min/max restriction')
-    OTHER         = (18, 'other error')
+    WRONG_NUM     = (  0, 'invalid parameter number')
+    CANNOT_CHANGE = (  1, 'parameter cannot be changed')
+    MINMAX        = (  2, 'min/max error')
+    INDEX         = (  3, 'index error')
+    ACCESS        = (  5, "access mode doesn't match parameter")
+    OTHER         = ( 18, 'other error')
+    SAVING        = (102, 'parameter is being saved to nonvolatile memory')
+    # Error codes 3, 5 and 102 aren't included in the manual, but were 
+    # discovered while testing the pump.
             
     
 class ControlBits(IntAndDescription):
@@ -207,22 +212,25 @@ class ControlBits(IntAndDescription):
         description: A string describing the effect of the bit.
     """
         
-    START_STOP    = ( 0, 'Start/Stop')
-    UNUSED1       = ( 1, 'Control bit 1 (not assigned)')
-    UNUSED2       = ( 2, 'Control bit 2 (not assigned)')
-    UNUSED3       = ( 3, 'Control bit 3 (not assigned)')
-    UNUSED4       = ( 4, 'Control bit 4 (not assigned)')
-    AIR_COOLING   = ( 5, 'Output X201 (air cooling)') 
-    FREQ_SETPOINT = ( 6, 'Set frequency setpoint')
+    ON            = ( 0, 'Turn or keep the pump on')
+    UNUSED1       = ( 1, 'Unknown control bit: 1')
+    UNUSED2       = ( 2, 'Unknown control bit: 2')
+    UNUSED3       = ( 3, 'Unknown control bit: 3')
+    UNUSED4       = ( 4, 'Unknown control bit: 4')
+    X201          = ( 5, 'Output X201 (air cooling)') 
+    SETPOINT      = ( 6, 'Enable frequency setpoint')
     RESET_ERROR   = ( 7, 'Reset error (all components)')
     STANDBY       = ( 8, 'Enable standby')
-    UNUSED9       = ( 9, 'Control bit 9 (not assigned)')
-    COMMAND       = (10, 'Enable control bits 0, 5, 6, 7, 8, 13, 14, 15')
+    UNUSED9       = ( 9, 'Unknown control bit: 9')
+    COMMAND       = (10, 'Enable control bits')
     X1_ERROR      = (11, 'Error operation relay X1')
     X1_WARNING    = (12, 'Normal operation relay X1')
     X1_NORMAL     = (13, 'Warning relay X1')
-    PP_RELAY      = (14, 'Output X202 (packing pump)')
-    VENTING       = (15, 'Output X203 (venting valve)') 
+    X202          = (14, 'Output X202 (packing pump)')
+    X203          = (15, 'Output X203 (venting valve)') 
+    # According to the manual, bit 10 enables bits 
+    # 0, 5, 6, 7, 8, 13, 14 and 15. Either bits 11 and 12 don't need 
+    # to be enabled, or the manual is wrong.
 
 
 class StatusBits(IntAndDescription):
@@ -236,19 +244,19 @@ class StatusBits(IntAndDescription):
         description: A string describing the effect of the bit.
     """
     
-    READY           = (0, 'Ready for operation')
-    UNUSED1         = (1, 'Status bit 1 (not assigned)')
-    OPERATION       = (2, 'Operation enabled')
-    ERROR           = (3, 'Error condition (all components)')
-    ACCELERATION    = (4, 'Accelerating')
-    DECELERATION    = (5, 'Decelerating')
-    SWITCH_ON_LOCK  = (6, 'Switch-on lock')
-    TEMP_WARNING    = (7, 'Temperature warning')
-    UNUSED8         = (8, 'Status bit 8 (not assigned)')
-    PARAM_CHANNEL   = (9, 'Parameter channel enabled')
+    READY           = ( 0, 'Ready for operation')
+    UNUSED1         = ( 1, 'Unknown status bit: 1')
+    OPERATION       = ( 2, 'Operation enabled')
+    ERROR           = ( 3, 'Error condition (all components)')
+    ACCELERATION    = ( 4, 'Accelerating')
+    DECELERATION    = ( 5, 'Decelerating')
+    SWITCH_ON_LOCK  = ( 6, 'Switch-on lock')
+    TEMP_WARNING    = ( 7, 'Temperature warning')
+    UNUSED8         = ( 8, 'Unknown status bit: 8')
+    PARAM_CHANNEL   = ( 9, 'Parameter channel enabled')
     DETAINED        = (10, 'Normal operation detained')
     TURNING         = (11, 'Pump is turning')
-    UNUSED12        = (12, 'Status bit 12 (not assigned)')
+    UNUSED12        = (12, 'Unknown status bit: 12')
     OVERLOAD        = (13, 'Overload warning')
     WARNING         = (14, 'Collective warning')
     PROCESS_CHANNEL = (15, 'Process channel enabled')
