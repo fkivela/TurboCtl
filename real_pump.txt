@@ -149,6 +149,7 @@ Things that have to be tested with the real pump:
   Accessing unindexed as indexed: Can't access parameter 1: invalid error code: 5
   Accessing indexed as unindexed: works, if index=0, if index=1, invalid error code: 5
   Wrong bits: error code 5
+  Invalid code: returns 0
   
 
 - How does the pump behave when it is off? Is only the motor off? Does the 
