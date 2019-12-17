@@ -1,3 +1,10 @@
+Aikataulu:
+To: numtypes loppuun, sen dokumentointi, sphinx-dokkarit alkuun, sama telegramille
+Pe: telegram_wrapper ja api kuntoon
+Ma ja Ti: UI kuntoon
+Ke ja To: Virtualpump kuntoon ja testaus
+
+
 State of packages and modules: Code Tests Comments
 
 telegram                OK -- OK
@@ -22,6 +29,11 @@ bin                     OK OK OK
 test_turboctl           OK OK OK
     
     
+    
+# TurboCtl
+__main__ module
+    
+    
 TODO:    
 
 Priority 1 (current)
@@ -29,12 +41,15 @@ Priority 1 (current)
 - Add output to the setpoint command
 
 Priority 2 (soon)
+- Add a __main__ module
 - Test the program with the real pump
 - Double-check control and status bits etc.
 - Check units in the TUI (0.1 V vs V etc.)
 - Improve the TUI help message
 
 Priority 3 (when I have time)
+- Try generic functions (functools.singledispatch)
+- Try mock objects (unittest.mock)
 - Change setup methods to setupclass methods in some tests in order 
   to make them faster
 - Replace type(x) with type(x).__name__ in error and UI messages

@@ -1,8 +1,7 @@
 import threading
 import time
 
-from ..data import StatusBits, ControlBits
-from ..telegram import str_to_int    
+from ..telegram import StatusBits, ControlBits
 
 
 class HWParameters():
@@ -142,7 +141,7 @@ class HardwareComponent():
         """
         
         if {ControlBits.COMMAND, ControlBits.ON}.issubset(
-        query.control_or_status_set):
+        query.flag_set):
             self.on()
         else:
             self.off()
@@ -160,24 +159,24 @@ class HardwareComponent():
             PROCESS_CHANNEL
         """
             
-        reply.control_or_status_set.add(StatusBits.PARAM_CHANNEL)
+        reply.flag_set.add(StatusBits.PARAM_CHANNEL)
         
-        if ControlBits.COMMAND in query.control_or_status_set:
-            reply.control_or_status_set.add(StatusBits.PROCESS_CHANNEL)
+        if ControlBits.COMMAND in query.flag_set:
+            reply.flag_set.add(StatusBits.PROCESS_CHANNEL)
           
         if self.is_on:
-            reply.control_or_status_set.add(StatusBits.OPERATION)
+            reply.flag_set.add(StatusBits.OPERATION)
         else:
-            reply.control_or_status_set.add(StatusBits.READY)
+            reply.flag_set.add(StatusBits.READY)
             
         if self.variables.frequency:
-            reply.control_or_status_set.add(StatusBits.TURNING)
+            reply.flag_set.add(StatusBits.TURNING)
             
         if self.acceleration > 0:
-            reply.control_or_status_set.add(StatusBits.ACCELERATION)
+            reply.flag_set.add(StatusBits.ACCELERATION)
             
         if self.acceleration < 0:
-            reply.control_or_status_set.add(StatusBits.DECELERATION)
+            reply.flag_set.add(StatusBits.DECELERATION)
             
     def handle_hardware(self, query, reply):
         """Write hardware data to *reply.*

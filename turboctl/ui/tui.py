@@ -6,7 +6,7 @@ import readline
 from collections import namedtuple 
 import os
 
-from ..data import PARAMETERS, ERRORS, WARNINGS, Types
+from ..telegram import PARAMETERS, ERRORS, WARNINGS, TurboNum
 
 from .abstractui import AbstractUI
 from .table import table
@@ -201,7 +201,10 @@ class AbstractTUI(AbstractUI):
         command = 'less -S'
         pipe = os.popen(command, 'w')
         pipe.write(table(self.databases[name], numbers, self.widths[name]))
-        pipe.close()
+        try:
+            pipe.close()
+        except BrokenPipeError:
+            pass
 
     def cmd_info(self, letter, number):
         """Display information about a single parameters, error or 
@@ -337,7 +340,7 @@ class AbstractTUI(AbstractUI):
             print('\n'.join([s for s in strings if s]))
         
         if self.debug:
-            print(f'\nquery={query}\n\nreply={reply}')
+            print(f'\nquery={query.fullstr()}\n\nreply={reply.fullstr()}')
         
     def _check_type(self, name, value, types):
         """Make sure that *value* is an instance of any of the types 
@@ -431,12 +434,13 @@ class AbstractTUI(AbstractUI):
         """
 
         self._check_pew_number('parameter', number)
-        type_ = self.databases['parameter'][number].type
+        type_ = self.databases['parameter'][number].type_
         
-        if not Types.is_type(value, type_):
-            raise UITypeError(
-                f'The type of parameter {number} is {type_.description}, '
-                f'not {Types.type_of(value).description}')
+        # TODO: FIX THIS
+        #if not Types.is_type(value, type_):
+        #    raise UITypeError(
+        #        f'The type of parameter {number} is {type_.description}, '
+        #        f'not {Types.type_of(value).description}')
 
         
 class InteractiveTUI(AbstractTUI):

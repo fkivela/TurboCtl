@@ -1,1 +1,5 @@
+# Ignore __pycache__ folders and their contents.
 __pycache__
+
+# Ignore all pdf files
+.pdf

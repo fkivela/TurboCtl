@@ -2,7 +2,7 @@
 import textwrap as tx
 import tabulate
 
-from ..data import Types
+from ..telegram import TurboNum
         
 tabulate.PRESERVE_WHITESPACE = True
         
@@ -106,7 +106,7 @@ def _format_field(name, value, width):
         these are preserved.
     """
     
-    if isinstance(value, Types):
+    if isinstance(value, type) and issubclass(value, TurboNum):
         value = value.description
         
     if isinstance(value, range):
