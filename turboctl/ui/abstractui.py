@@ -43,6 +43,7 @@ class AbstractUI():
                 be connected to. If *port* is None, an exception will 
                 be raised when a telegram should be sent to the pump.
         """
+        self.pump_on = False
         self.port = port
         self.connection = serial.Serial(port      = self.port, 
                                         baudrate  = self.BAUDRATE,
@@ -58,6 +59,9 @@ class AbstractUI():
     def _send(self, query):
         """Send a query to the pump.
         
+        If *self.pump_on* is True, a command to turn or keep the pump 
+        on is added to *query*.
+        
         Args:
             query: A Query object.
             
@@ -65,6 +69,9 @@ class AbstractUI():
             the pump and a  Reply object detailing the response from 
             the pump.
         """
+        if self.pump_on:
+            query.control_or_status_set.update({ControlBits.COMMAND, 
+                                                ControlBits.ON})
         self.connection.write(query.data)
         return query, self._receive()
         
@@ -82,17 +89,6 @@ class AbstractUI():
             raise ValueError('No reply received from the pump')
         return Reply(answer_bytes)
         
-    def on_off(self):
-        """Send the on/off signal to the pump.
-        
-        Returns: The Query object that was sent to the pump and the 
-            Reply object that was received.
-        """
-        query = Query()
-        query.control_or_status_set = set([ControlBits.COMMAND, 
-                                           ControlBits.START_STOP])
-        return self._send(query)
-        
     def status(self):
         """Request pump status by sending an empty telegram.
         
@@ -101,7 +97,7 @@ class AbstractUI():
         """
         query = Query()
         return self._send(query)
-            
+                
     def read_parameter(self, number, index=0):
         """Read the value of a parameter from the pump.
         
@@ -156,6 +152,16 @@ class AbstractUI():
         """
         query = Query()
         query.control_or_status_set = {ControlBits.COMMAND, 
-                                       ControlBits.FREQ_SETPOINT}
+                                       ControlBits.SETPOINT}
         query.frequency = frequency        
         return self._send(query)
+    
+    def test(self, *args, **kwargs):
+        """This method is intended for testing the pump and 
+        debugging.
+        
+        Commands that can't be sent using the other functions can be 
+        easily defined here.
+        """
+        q = Query()
+        return self._send(q)        

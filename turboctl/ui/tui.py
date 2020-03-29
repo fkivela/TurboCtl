@@ -17,11 +17,19 @@ from .ui_errors import UIError, UIValueError, UITypeError
 
 Command = namedtuple('Command', 'names, function, args, description')    
 
-COMMAND_LIST = [
-    Command(names=['onoff', 'o'],
-        function='cmd_onoff',
+COMMAND_LIST = [        
+    Command(names=['on'],
+        function='cmd_on',
         args=[],
-        description='Turn the pump on or off'),
+        description=('After calling this command, all telegrams sent to the '
+                     'pump include a signal to turn or keep the pump on.')),
+            
+    Command(names=['off'],
+        function='cmd_off',
+        args=[],
+        description=('After calling this command, telegrams sent to the pump '
+                     'no longer include a signal to turn or keep the pump '
+                     'on.')),
 
     Command(names=['status', 's'],
             function='cmd_status',
@@ -85,6 +93,11 @@ COMMAND_LIST = [
         function='cmd_save',
         args=[],
         description='Save parameters to nonvolatile memory'),
+            
+    Command(names=['test', 't'],
+        function='cmd_test',
+        args=[],
+        description='A sandbox function for testing the pump'),
 ]
 
 
@@ -122,47 +135,22 @@ class AbstractTUI(AbstractUI):
         except UIError as e:
             print(e)
             return False
+                        
+    def cmd_on(self):
+        """Turn the pump on."""
+        self.pump_on = True
+        self.cmd_status()
         
-    def cmd_onoff(self):
-        """Call AbstractUI.on_off() and print the results."""
-        
-        query, reply = self.on_off()       
-
-        if self.verbosity == 3:
-            print(full_output(query, reply))
-        
-        elif self.verbosity == 2:
-            print('Turning the pump on or off')
-            conditions = control_or_status_output(reply)
-            if conditions:
-                print(conditions)
-        
-        elif self.verbosity == 1:
-            print('Turning the pump on or off')
-            conditions = control_or_status_output(reply, verbose=False)
-            if conditions:
-                print(conditions)
+    def cmd_off(self):
+        """Turn the pump off."""
+        self.pump_on = False
+        self.cmd_status()
         
     def cmd_status(self):
         """Call AbstractUI.status() and print the results."""
-        
         query, reply = self.status()
-        
-        if self.verbosity == 3:
-            print(full_output(query, reply))
-        
-        elif self.verbosity == 2:
-            conditions = control_or_status_output(reply)
-            if conditions:
-                print(conditions)
-            print(hardware_output(reply))
-        
-        elif self.verbosity == 1:
-            conditions = control_or_status_output(reply, verbose=False)
-            if conditions:
-                print(conditions)
-            print(hardware_output(reply, verbose=False))
-        
+        self.print_output(query, reply, 'control_or_status', 'hardware')
+                
     def cmd_read(self, number, index=0):
         """Call AbstractUI.read_parameter() and print the results.
         
@@ -170,26 +158,13 @@ class AbstractTUI(AbstractUI):
         unchanged, but a UIValueError or UITypeError will be 
         raised if the arguments are invalid.
         """
-        
-        
-        
-        
-        
         self._check_type('number', number, int)
         self._check_type('index', index, int)
         self._check_pew_number('parameter', number)
         
         query, reply = self.read_parameter(number, index)
-        
-        if self.verbosity == 3:
-            print(full_output(query, reply))
-        
-        elif self.verbosity == 2:
-            print(parameter_output(reply))
-        
-        elif self.verbosity == 1:
-            print(parameter_output(reply, verbose=False))
-       
+        self.print_output(query, reply, 'parameter')
+                   
     def cmd_write(self, value, number, index=0):
         """Call AbstractUI.write_parameter() and print the results.
         
@@ -204,15 +179,7 @@ class AbstractTUI(AbstractUI):
         self._check_parameter_type(number, value)
         
         query, reply = self.write_parameter(value, number, index)
-        
-        if self.verbosity == 3:
-            print(full_output(query, reply))
-        
-        elif self.verbosity == 2:
-            print(parameter_output(reply))
-        
-        elif self.verbosity == 1:
-            print(parameter_output(reply, verbose=False))
+        self.print_output(query, reply, 'parameter')
             
     def cmd_list(self, letter, numbers):
         """List parameters, error or warnings.
@@ -349,6 +316,28 @@ class AbstractTUI(AbstractUI):
     def cmd_exit(self):
         """Return True, which tells the TUI to exit the program."""
         return True
+    
+    def cmd_test(self, *args, **kwargs):
+        query, reply = self.test(*args, **kwargs)
+        print(full_output(query, reply))
+        
+    def print_output(self, query, reply, *args):
+        
+        if self.verbosity == 3:
+            print(full_output(query, reply))
+        else:
+            verbose = self.verbosity == 2
+            strings = []
+            if 'parameter' in args:
+                strings.append(parameter_output(reply, verbose=verbose))
+            if 'control_or_status' in args:
+                strings.append(control_or_status_output(reply, verbose=verbose))
+            if 'hardware' in args:
+                strings.append(hardware_output(reply, verbose=verbose))
+            print('\n'.join([s for s in strings if s]))
+        
+        if self.debug:
+            print(f'\nquery={query}\n\nreply={reply}')
         
     def _check_type(self, name, value, types):
         """Make sure that *value* is an instance of any of the types 
@@ -463,6 +452,8 @@ class InteractiveTUI(AbstractTUI):
         returns True, after which the UI exits.
         """
         print("Type a command or 'help' for a list of commands")
+        print("If the pump is on, run the 'on' command first to prevent it "
+              "from turning off")
         prompt = '>> '
         
         stop = False

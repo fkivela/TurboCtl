@@ -90,26 +90,26 @@ class TestControlSet(unittest.TestCase):
         self.assertEqual(q.control_or_status_set, set())
         
     def test_set(self):
-        q = Query(control_or_status_set=({ControlBits.START_STOP, 
-                                          ControlBits.COMMAND}))
+        q = Query(control_or_status_set=({ControlBits.COMMAND, 
+                                          ControlBits.ON}))
         self.assertEqual(q.control_or_status_bits, '1000000000100000')
         
     def test_get(self):
         q = Query(control_or_status_bits = '1000000000100000')
-        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP, 
-                                                   ControlBits.COMMAND})
+        self.assertEqual(q.control_or_status_set, {ControlBits.COMMAND, 
+                                                   ControlBits.ON})
             
     def test_add(self):
         q = Query(control_or_status_bits = '1000000000000000')
         q.control_or_status_set.add(ControlBits.COMMAND)
-        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP, 
-                                                   ControlBits.COMMAND})
+        self.assertEqual(q.control_or_status_set, {ControlBits.COMMAND, 
+                                                   ControlBits.ON})
         self.assertEqual(q.control_or_status_bits, '1000000000100000')
             
     def test_remove(self):
         q = Query(control_or_status_bits = '1000000000100000')
         q.control_or_status_set.remove(ControlBits.COMMAND)
-        self.assertEqual(q.control_or_status_set, {ControlBits.START_STOP})
+        self.assertEqual(q.control_or_status_set, {ControlBits.ON})
         self.assertEqual(q.control_or_status_bits, '1000000000000000')
 
             

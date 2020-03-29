@@ -21,7 +21,7 @@ class TestOther(Base):
                   parameter_value=123,
                   parameter_mode='write',
                   control_or_status_set={ControlBits.COMMAND,
-                                         ControlBits.START_STOP,
+                                         ControlBits.ON,
                                          ControlBits.FREQ_SETPOINT},
                    frequency=1000
                    )
@@ -156,9 +156,9 @@ class TestParameterOutput(Base):
         self.r.error_code = ParameterError.MINMAX.value
         self.ri.error_code = ParameterError.MINMAX.value
         
-        string = "Can't access parameter 1: min/max restriction"
+        string = "Can't access parameter 1: min/max error"
         index_string = (
-            "Can't access parameter 29, index 1: min/max restriction")
+            "Can't access parameter 29, index 1: min/max error")
         
         self.assertEqual(parameter_output(self.r), string)
         self.assertEqual(parameter_output(self.ri), index_string)
@@ -185,14 +185,14 @@ class TestControlOrStatusOutput(Base):
     
     def test_normal(self):
         
-        self.q = Query(control_or_status_set = {ControlBits.START_STOP, 
+        self.q = Query(control_or_status_set = {ControlBits.ON, 
                                                    ControlBits.COMMAND})
         self.r = Reply(control_or_status_set = {StatusBits.TURNING, 
                                                 StatusBits.ACCELERATION})
 
         control_string = ('Active control bits:\n'
                           '    Start/Stop\n'
-                          '    Enable control bits 0, 5, 6, 7, 8, 13, 14, 15')
+                          '    Enable control bits')
         status_string = ('Present status conditions:\n'
                          '    Accelerating\n'
                          '    Pump is turning')
@@ -247,7 +247,7 @@ class TestHardwareOutput(unittest.TestCase):
     def test_setpoint(self):
         q = Query(frequency=1000, temperature=30, current=100, voltage=120, 
                   control_or_status_set = {ControlBits.COMMAND, 
-                                           ControlBits.FREQ_SETPOINT})
+                                           ControlBits.SETPOINT})
         
         string = ('Stator frequency setpoint: 1000 Hz')
         
