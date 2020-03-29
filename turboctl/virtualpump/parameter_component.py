@@ -1,7 +1,6 @@
 """This module handles parameter access in a VirtualPump."""
 
-from ..data import Parameter, ParameterError
-from ..telegram import Reply
+from ..telegram import Reply, Parameter, ParameterError
 
 
 class ParameterComponent():
@@ -77,13 +76,14 @@ class ParameterComponent():
                 f'Invalid parameter number: {query.parameter_number}')
         
         if query.parameter_mode == 'read':
-            return parameter.get_value(indexed=query.parameter_indexed, 
+            #TODO: Fix
+            return parameter.get_value(indexed=bool(query._parameter.indices), 
                                        index=query.parameter_index)
         
         if query.parameter_mode == 'write':
             parameter.set_value(new_value=query.parameter_value,
-                                bits=query.parameter_size, 
-                                indexed=query.parameter_indexed, 
+                                bits=query._parameter.bits, 
+                                indexed=bool(query._parameter.indices), 
                                 index=query.parameter_index)
             return query.parameter_value
         
@@ -223,7 +223,7 @@ class ExtendedParameter(Parameter):
         Raises:
             ValueError: If self.min has an invalid value.
         """
-        return self._get_true_value(self.min)
+        return self._get_true_value(self.min_)
     
     @property
     def max_value(self):
@@ -236,7 +236,7 @@ class ExtendedParameter(Parameter):
         Raises:
             ValueError: If self.max has an invalid value.
         """
-        return self._get_true_value(self.max)
+        return self._get_true_value(self.max_)
     
     def _get_true_value(self, value):
         """Returns the numerical value (int or float) of *value*.
@@ -295,7 +295,7 @@ class ExtendedParameter(Parameter):
         # to values that automatically pass.
         # The access code for read access doesn't specify the size of 
         # the parameter.
-        self._check_access_mode(write_access=False, bits=self.size, 
+        self._check_access_mode(write_access=False, bits=self.bits, 
                                 indexed=indexed)
         
         if indexed:
@@ -376,7 +376,7 @@ class ExtendedParameter(Parameter):
         if write_access and not self.min_value <= value <= self.max_value:
             raise MinMaxError('Value out of range')
         
-        if bits != self.size:
+        if bits != self.bits:
             raise OtherError(f'Bits should be {self.size}, not {bits}')
         
         if indexed != self.indexed:

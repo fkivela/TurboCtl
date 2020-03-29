@@ -4,8 +4,7 @@ import textwrap
 import tabulate
 from textwrap import wrap
 
-from ..data import ControlBits, StatusBits
-from ..telegram import Query, Reply
+from ..telegram import Query, Reply, ControlBits, StatusBits
 
 INDENT = 4 * ' '
 
@@ -102,7 +101,7 @@ def parameter_output(wrapper, verbose=True):
         for queries and
         - 'No parameter access
         - 'The value of parameter 1 is 100'
-        - 'Can't access parameter 1; error type: min./max. restriction'
+        - 'Can't access parameter 1: min./max. restriction'
         - 'Parameter 1 isn't writable'
         for replies.
         
@@ -117,9 +116,10 @@ def parameter_output(wrapper, verbose=True):
     mode = wrapper.parameter_mode
     number = wrapper.parameter_number
     index = wrapper.parameter_index
-    indexed = wrapper.parameter_indexed
+    # TODO: Fix
+    indexed = wrapper._parameter.indices
     value = wrapper.parameter_value
-    unit = wrapper.parameter_unit
+    unit = wrapper._parameter.unit
         
     value_str = f'{value} {unit}' if unit else f'{value}'
     number_str = f'{number}, index {index}' if indexed else f'{number}'
@@ -145,8 +145,11 @@ def parameter_output(wrapper, verbose=True):
     if mode == 'no write':
         return (f"Parameter {number} isn't writable" if verbose 
                 else 'Not writable')
+        
+    if mode == 'invalid':
+        return (f'invalid parameter mode: {wrapper.parameter_access_type}')
     
-    raise RuntimeError(f'Invalid parameter_mode: {wrapper.parameter_mode}')    
+    raise RuntimeError(f"This shouldn't happen")    
          
 def control_or_status_output(wrapper, verbose=True):
     """Return a string displaying active control or status bits.
@@ -176,9 +179,9 @@ def control_or_status_output(wrapper, verbose=True):
     """
     if not verbose:
         strings = []
-        if StatusBits.ERROR in wrapper.control_or_status_set:
+        if StatusBits.ERROR in wrapper.flag_set:
             strings.append('Error(s) present')
-        if StatusBits.WARNING in wrapper.control_or_status_set:
+        if StatusBits.WARNING in wrapper.flag_set:
             strings.append('Warning(s) present')
         return '\n'.join(strings)
     
@@ -192,7 +195,7 @@ def control_or_status_output(wrapper, verbose=True):
         raise TypeError(
             f'*wrapper* should be a Query or a Reply, not {type(wrapper)}')
     
-    cslist = sorted(list(wrapper.control_or_status_set))
+    cslist = sorted(list(wrapper.flag_set))
     descriptions = [INDENT + cs.description for cs in cslist]
     
     if descriptions:
@@ -232,7 +235,7 @@ def hardware_output(wrapper, verbose=True):
     I_val = f'{wrapper.current}×0.1 A'
     U_val = f'{wrapper.voltage}×0.1 V'
     
-    if verbose and ControlBits.FREQ_SETPOINT in wrapper.control_or_status_set:
+    if verbose and ControlBits.SETPOINT in wrapper.flag_set:
         return f'Stator frequency setpoint: {f_val}'
     elif isinstance(wrapper, Query):
         return ''

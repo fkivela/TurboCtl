@@ -1,9 +1,14 @@
 """This module provides a more user friendly intefrace to the Telegram 
 class.
 """
-from ..data import (Types, PARAMETERS, ParameterAccess, ParameterResponse, 
-                    ParameterError, ControlBits, StatusBits)    
 
+from collections import OrderedDict
+from typing import Dict
+
+from .codes import (ParameterAccess, ParameterResponse, ParameterError, 
+                    ControlBits, StatusBits)    
+from .parser import Parameter, PARAMETERS
+from .numtypes import TurboNum, Uint, Sint, Bin
 from .telegram import Telegram
 
 
@@ -11,255 +16,129 @@ class TelegramWrapper(Telegram):
     """An abstract superclass for Query and Reply objects.
     
     Query and Reply objects provide a layer of abstraction on top of 
-    Telegram objects. Parameters can be accessed by setting the 
-    *parameter_number* and *parameter_mode* properties of a 
-    TelegramWrapper class, without knowing the size or type of the 
-    parameter. Control and status bits can be defined as a set of 
-    enum instances instead of a string of '1's and '0's.
+    Telegram objects. By setting the parameter_mode attribute to a 
+    value such as 'read' or 'write', the parameter access or response 
+    code is set automatically to its correct value. Control and status 
+    bits can be defined as a set of enum instances instead of a string 
+    of '1's and '0's through the flag_set attribute. 
     
-    telegram_wrapper.control_or_status_set is a SynchronizedSet object 
-    which behaves lika an ordinary set, but any changes to it are 
-    instantly copied to telegram_wrapper.control_or_status_bits.
+    flag_bits and parameter_code can still be accessed, and changes to
+    them will also change flag_set and parameter_mode (and vice versa.)
+    
+    Unlike in the Telegram class, parameter_type is not changed when 
+    parameter_value is set. Instead, it is updated each time 
+    parameter_number is set to reflect the type of the parameter. 
+    parameter_type can also be changed by hand.
     """
-        
-    READABLE_PROPERTIES = Telegram.READABLE_PROPERTIES + [
-        'parameter_type', 
-        'parameter_size', 
-        'parameter_unit',
-        'parameter_indexed',
-        'parameter_mode',
-        'control_or_status_set'
-    ]
-    WRITABLE_PROPERTIES = Telegram.WRITABLE_PROPERTIES + [
-        'parameter_mode', 
-        'control_or_status_set']
+    Attribute = Telegram.Attribute
+    attributes = OrderedDict((a.name, a) for a in [
+        #         name                type       default bits printed writable 
+        Attribute('parameter_mode',   str,       'none',   None, 1, 1),
+        Attribute('parameter_code',   Bin,       '0000',      4, 0, 1),
+        Attribute('parameter_number', Uint,      0,          11, 1, 1),
+        Attribute('_parameter',       Parameter, None,     None, 0, 1),
+        Attribute('parameter_index',  Uint,      0,           8, 1, 1),
+        Attribute('parameter_value',  TurboNum,  0,          32, 1, 1),
+        Attribute('_parameter_bytes', bytes,     bytes(4), None, 0, 1),
+        Attribute('parameter_type',   type,      Uint,     None, 1, 1),
+        Attribute('flag_set',         set,       set(),    None, 1, 1),
+        Attribute('flag_bits',        Bin,       16*'0',     16, 0, 1),
+        Attribute('frequency',        Uint,      0,          16, 1, 1),
+        Attribute('temperature',      Sint,      0,          16, 1, 1),
+        Attribute('current',          Uint,      0,          16, 1, 1),
+        Attribute('voltage',          Uint,      0,          16, 1, 1),
+    ])
+    # parameter_code and flag_bits are left out of __repr__ and __str__
+    # to keep them shorter. Use self.fullstr() to display them.
     
-    parameters = PARAMETERS
-    # The set of parameters can be changed for testing purposes.
     enum = None
-    # *enum* is set in subclasses.
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, parameters: Dict[int, Parameter]=PARAMETERS, 
+                 *args, **kwargs): 
         """Initialize a new TelegramWrapper.
-        All arguments are passed to the Telegram class.
-        """
-        self._control_or_status_set = SynchronizedSet(self._update_cs_bits)
-        self.cs_bit_lock = False
-        
-        # *parameter_number* can't be changed after initialization, 
-        # because the values of other properties depend on it.
-        self._parameter_number_is_set = False
-        super().__init__(*args, **kwargs)
-        self._parameter_number_is_set = True
-        # Update cs set in case *self* was created from data.
-        self._update_cs_set()
-        
-    def _set_kwargs(self, **kwargs):
-        """Initialize properties given as keyword arguments."""
-        try:
-            # Set *parameter_number* before other kwargs.
-            self.parameter_number = kwargs['parameter_number']
-            kwargs.pop('parameter_number')
-        except KeyError:
-            pass
-        super()._set_kwargs(**kwargs)
-    
-    @Telegram.parameter_number.setter        
-    def parameter_number(self, value):
-        """Set self.parameter_number, or raise a RuntimeError if this 
-        method is called after initialization.
-        """
-        if self._parameter_number_is_set:
-            raise RuntimeError(
-                'parameter_number cannot be set after initialization')
-        Telegram.parameter_number.fset(self, value)
-    
-    @property
-    def _parameter(self):
-        """Return a parameter object or None, if a parameter 
-        corresponding to self.parameter_number doesn't exist.
-        """
-        try:
-            return self.parameters[self.parameter_number]
-        except KeyError:
-            return None
-        
-    @property
-    def parameter_type(self):
-        """Return the type of the parameter (a Types enum instance), 
-        or Types.UINT if a parameter corresponding to 
-        self.parameter_number doesn't exist.
-        """
-        if not self._parameter:
-            return Types.UINT
-        return self._parameter.type
-    
-    @property
-    def parameter_size(self):
-        """Return the size of the parameter in bits, or 0 if a 
-        parameter corresponding to self.parameter_number 
-        doesn't exist.
-        """
-        if not self._parameter:
-            return 0
-        return self._parameter.size
-    
-    @property
-    def parameter_unit(self):
-        """Return the unit of the parameter (a string), or '' if a
-        parameter corresponding to self.parameter_number doesn't exist.
-        """
-        if not self._parameter:
-            return ''
-        return self._parameter.unit
-    
-    @property
-    def parameter_indexed(self):
-        """Return a boolean describing whether the parameter is 
-        indexed (return True) or not (return False), or False if a
-        parameter corresponding to self.parameter_number doesn't exist.
-        """
-        if not self._parameter:
-            return False
-        return bool(self._parameter.indices)
-        
-    @property
-    def parameter_value(self):
-        """Get or set the value of the parameter.
-        
-        The getter returns a positive or negative int or a float; the 
-        return type is set automatically according to the parameter.
-        
-        The setter raises a TypeError if the type of *value* doesn't 
-        match the parameter.
-        """
-        return self.get_parameter_value(self.parameter_type)
-    
-    @parameter_value.setter
-    def parameter_value(self, value):             
-        try:
-             typed_value = Types.to_type(value, self.parameter_type)
-        except TypeError as e:
-            raise TypeError(
-                    f"The type of *value* (now {type(value)}) should match "
-                    f"the type of the parameter "
-                    f"({self.parameter_type.description})"
-                    ) from e
-        Telegram.parameter_value.fset(self, typed_value)
-        
-    @property        
-    def parameter_mode(self):
-        """Get or set parameter access or response mode. 
-        This property is defined the subclasses of this class.
-        """
-        raise NotImplementedError('This is an abstract function left '
-                                  'to be defined in subclasses.')
-        
-    @parameter_mode.setter
-    def parameter_mode(self):
-        raise NotImplementedError('This is an abstract function left '
-                                  'to be defined in subclasses.')
-    
-    @property
-    def control_or_status_set(self):
-        """Get or set control or status bits as a set of enum 
-        instances.
-        
-        The set returned by the getter is a SynchronizedSet object, 
-        which updates self.control_or_status_set every time it is changed.
-        
-        Setting this property to a new set updates the SynchronizedSet 
-        object instead of replacing it.
-        """
-        return self._control_or_status_set
-    
-    @control_or_status_set.setter
-    def control_or_status_set(self, value):
-        self.control_or_status_set.clear()
-        self.control_or_status_set.update(value)
-        self._update_cs_bits()
-    
-    @property
-    def control_or_status_bits(self):
-        """Get or set self.control_or_status_bits, and update 
-        self.control_or_status_set accordingly.
-        """
-        return super().control_or_status_bits
-    
-    @control_or_status_bits.setter
-    def control_or_status_bits(self, value):
-        Telegram.control_or_status_bits.fset(self, value)
-        self._update_cs_set()
-    
-    def _update_cs_bits(self):
-        """Update self.control_or_status_bits to match 
-        self.control_or_status_set.
-        """
-        if self.cs_bit_lock:
-            return
-        
-        indices = [i.value for i in self.control_or_status_set]        
-        bits = ''.join(['1' if i in indices else '0' for i in range(16)])
-        
-        # The lock prevents a recursive loop where accessing 
-        # self.control_or_status_set calls this method again.
-        self.cs_bit_lock = True
-        self.control_or_status_bits = bits    
-        self.cs_bit_lock = False
-        
-    def _update_cs_set(self):
-        """Update self.control_or_status_set to match 
-        self.control_or_status_bits.
-        """
-        if self.cs_bit_lock:
-            return
-
-        bits = self.control_or_status_bits
-        set_ = {self.enum(i) for i, bit in enumerate(bits) if bit == '1'}
-        
-        # The lock prevents a recursive loop where accessing 
-        # self.control_or_status_bits calls this method again.
-        self.cs_bit_lock = True
-        self.control_or_status_set.update(set_)
-        self.cs_bit_lock = False    
-        
-        
-class SynchronizedSet(set):
-    """Objects of this class behave like a set, but call 
-    self.upon_update every time the contents of the set are changed.
-    """
-    
-    def __init__(self, upon_update, *args, **kwargs):
-        """Initialize a new SynchronizedSet.
-        
+       
         Args:
-            upon_update: A function to be run whenever a method that 
-                can change the contents of this set is called.
-            Other arguments are passed to the set class.
+            parameters: The parameter dictionary to be used.
+            All other args are passed to Telegram.__init__()
         """
+        self.parameters = parameters
         super().__init__(*args, **kwargs)
-        self.upon_update = upon_update
-
-        update_methods = [
-            'add', 'clear', 'difference_update', 'discard', 
-            'intersection_update', 'pop', 'remove', 
-            'symmetric_difference_update', 'update'
-        ]
-        for name in update_methods:
-            method = getattr(self, name)
-            new_method = self._add_upon_update(method)
-            setattr(self, name, new_method)
-        
-    def _add_upon_update(self, method):
-        """Add a call to self.upon_update to the end of *method* and 
-        return the result.
+            
+    @property
+    def parameter_number(self):
+        """Setting parameter_number updates self._parameter and 
+        self.parameter_type.
         """
-        def new_method(*args, **kwargs):
-            method(*args, **kwargs)
-            self.upon_update()
-        return new_method
+        return self._parameter_number
+    
+    @parameter_number.setter
+    def parameter_number(self, value):
+        self._parameter_number = value
+        try:
+            self._parameter = self.parameters[value]
+            self.parameter_type = self._parameter.type_
+        except KeyError:
+            self._parameter = self.attributes['_parameter'].default
+            self.parameter_type = self.attributes['parameter_type'].default
+    
+    @Telegram.parameter_value.setter
+    def parameter_value(self, value):
+        """Changing parameter_value doesn't change parameter_type, 
+        unlike in the Telegram class.
+        """
+        self.parameter_bytes = self.parameter_type(value, 32).to_bytes()
+        
+    @property
+    def parameter_code(self):
+        """parameter_code is generated from parameter_mode."""
+        return Bin(self._mode_to_code(self.parameter_mode))
+    
+    @parameter_code.setter
+    def parameter_code(self, value):
+        """Setting parameter_code updates parameter_mode."""
+        self.parameter_mode = self._code_to_mode(value)
+                
+    @property
+    def flag_bits(self):
+        """flag_bits are generated from flag_set."""
+        return Bin(self._set_to_bits(self.flag_set))
+    
+    @flag_bits.setter
+    def flag_bits(self, value):
+        """Setting flag_bits updates flag_set.
+        
+        flag_set remains the same object, so flag_set.add() works.
+        """
+        self.flag_set.clear()
+        self.flag_set.update(self._bits_to_set(value))
+        
+    def _bits_to_set(self, bits):
+        """Convert flag_bits to flag_set."""
+        return {self.enum(i) for i, bit in enumerate(bits) if bit == '1'}
 
-                                    
+    def _set_to_bits(self, set_):
+        """Convert flag_set to flag_bits."""
+        indices = [i.value for i in set_]        
+        return ''.join(['1' if i in indices else '0' for i in range(16)])
+    
+    @staticmethod
+    def _code_to_mode(code):
+        """Convert parameter_code to parameter_mode.
+        
+        This method is properly defined in subclasses; it is included 
+        here only to make this class initializable for testing.
+        """
+        return 'none'
+    
+    def _mode_to_code(self, mode):
+        """Convert parameter_mode to parameter_code.
+        
+        This method is properly defined in subclasses; it is included 
+        here only to make this class initializable for testing.
+        """
+        return '0000'
+
+                     
 class Query(TelegramWrapper):
     """This class provides a user-friendly interface to telegrams sent 
     to the pump.
@@ -267,92 +146,73 @@ class Query(TelegramWrapper):
     
     enum = ControlBits
     
-    @property
-    def parameter_mode(self):
-        """Get or set parameter access mode. 
-        
-        Setting this parameter automatically sets
-        self.parameter_access_type to the correct access code,
-        and the getter returns a word corresponding to that code.
-        
-        Valid values are 'none', 'read', 'write' and 'invalid'. 
-        A value of 'invalid' signifies an unrecognized parameter 
-        access code.
-        """
-        code = self.parameter_access_type
+    @staticmethod
+    def _code_to_mode(code):
+        """Convert parameter_code to parameter_mode."""
         try:
             mode_ = ParameterAccess(code)
         except ValueError:
-            return 'invalid'
+            return f'invalid mode: {code}'
             
-        if mode_ in ParameterAccess.read_modes():
+        if mode_ in ParameterAccess.read_modes:
             return 'read'
         
-        if mode_ in ParameterAccess.write_modes():
+        if mode_ in ParameterAccess.write_modes:
             return 'write'
         
         return 'none'
     
-    @parameter_mode.setter
-    def parameter_mode(self, value):
-        if value == 'none':
-            self.parameter_access_type = ParameterAccess.NONE.value
-            return
+    def _mode_to_code(self, mode):
+        """Convert parameter_mode to parameter_code.
+                
+        Valid modes are 'none', 'read' and 'write'. 
+        """
         
-        if value == 'invalid':
-            self.parameter_access_type = ParameterAccess.invalid_code()
-            return
+        if mode == 'none' or not self._parameter:
+            return ParameterAccess.NONE.value            
            
-        if self.parameter_indexed:
-            modes_by_index = ParameterAccess.indexed_modes()
+        if mode == 'read':
+            modes_by_access = ParameterAccess.read_modes
+        elif mode == 'write':
+            modes_by_access = ParameterAccess.write_modes
+        else:        
+            raise ValueError(
+                f"*mode* should be 'read', 'write' or 'none', not {mode}")
+        
+        if self._parameter.indices:
+            modes_by_index = ParameterAccess.indexed_modes
         else: 
-            modes_by_index = ParameterAccess.unindexed_modes()
+            modes_by_index = ParameterAccess.unindexed_modes
             
-        if self.parameter_size == 16:
-            modes_by_size = ParameterAccess.sixteen_bit_modes()
-        elif self.parameter_size == 32:
-            modes_by_size = ParameterAccess.thirty_two_bit_modes()
-        elif self.parameter_size == 0:
-            raise ValueError(
-                f'self.parameter_mode cannot be set because '
-                'self.parameter_number (self.parameter_number) is invalid')
+        if self._parameter.bits == 16:
+            modes_by_size = ParameterAccess.sixteen_bit_modes
+        elif self._parameter.bits == 32:
+            modes_by_size = ParameterAccess.thirty_two_bit_modes
         else:
-            raise RuntimeError(
-                f'self.parameter_size should be 0, 16 or 32, not '
-                f'{self.parameter_size}')
-                        
-        if value == 'read':
-            modes_by_access = ParameterAccess.read_modes()
-        elif value == 'write':
-            modes_by_access = ParameterAccess.write_modes()
-        else:
-            if not isinstance(value, str):
-                raise TypeError(f'*value* should be a str, not {type(value)}')
-            
-            raise ValueError(
-                f"*value* should be 'read', 'write', 'none' ot 'invalid', "
-                f"not {value}")
-            
+            raise RuntimeError(f'self._parameter.bits should be 16 or 32, '
+                               f'not {self._parameter.bits}')
+                            
         mode_set = modes_by_access & modes_by_index & modes_by_size
-        
         if len(mode_set) != 1:
-            raise RuntimeError(
-                    f'len(mode_set) should be 1, not {len(mode_set)}')
+            raise AssertionError(
+                f'len(mode_set) should be 1, not {len(mode_set)}')
         
-        mode = mode_set.pop()
-        self.parameter_access_type = mode.value
+        return mode_set.pop().value
         
 
 class Reply(TelegramWrapper):
-                
-    WRITABLE_PROPERTIES = TelegramWrapper.WRITABLE_PROPERTIES + [
-        'error_code'
-    ]
-    READABLE_PROPERTIES = TelegramWrapper.READABLE_PROPERTIES + [
-        'error_code', 
-        'error_message'
-    ] 
-    enum = StatusBits       
+    """This class provides a user-friendly interface to telegrams 
+    received from the pump.
+    """
+    Attribute = TelegramWrapper.Attribute
+    attributes = TelegramWrapper.attributes.copy()
+    attributes['error_message'] = Attribute(
+                                    # name type default bits printed writable 
+                                    'error_message', str, None, None, 1, 0)
+    attributes['error_code'] = Attribute(
+                                    'error_code', Uint, 0, 32, 1, 1)
+        
+    enum = StatusBits    
     
     @property
     def error_message(self):
@@ -372,42 +232,24 @@ class Reply(TelegramWrapper):
         """Set or get the parameter error code.
         
         The parameter error code is written to the same location as 
-        the parameter value. This means that the error code will be 
-        nonsensical if the parameter value is defined and vice versa.
-        
-        Setter raises:
-            TypeError: If *value* is not a valid unsigned integer.
+        the parameter value. This means that writing the error code 
+        will replace the parameter value and vice versa.
         """
-        return self.get_parameter_value(Types.UINT)
-        
+        return self.parameter_value.to(Uint)
+    
     @error_code.setter
     def error_code(self, value):
-        
-        if not Types.is_type(value, Types.UINT):
-            raise TypeError(f'*value* ({value}) should be an unsigned integer')
-        
-        # Use the telegram setter, so that *value* will not be 
-        # converted into the type of the parameter.
-        Telegram.parameter_value.fset(self, value)
+        # __setattr__ has already converted *value* to an Uint, 
+        # since the error_code attribute has that type.
+        self.parameter_value = value.to(self.parameter_type)
     
-    @property
-    def parameter_mode(self):
-        """Get or set parameter response mode. 
-        
-        Setting this parameter automatically sets
-        self.parameter_access_type to the correct response code,
-        and the getter returns a word corresponding to that code.
-
-        Valid values are 'none', 'response', 'error', 'no write' and 
-        'invalid'. A value of 'invalid' signifies an unrecognized 
-        parameter response code.
-        """
-
-        code = self.parameter_access_type
+    @staticmethod
+    def _code_to_mode(code):
+        """Convert parameter_code to parameter_mode."""
         try:
             mode_ = ParameterResponse(code)
         except ValueError:
-            return 'invalid'
+            return f'invalid mode: {code}'
         
         if mode_ is ParameterResponse.NONE:
             return 'none'
@@ -419,53 +261,42 @@ class Reply(TelegramWrapper):
             return 'no write'
         
         return 'response'
-    
-    @parameter_mode.setter
-    def parameter_mode(self, value):
-        if value == 'none':
-            self.parameter_access_type = ParameterResponse.NONE.value
-            return
         
-        if value == 'invalid':
-            self.parameter_access_type = ParameterResponse.invalid_code()
-            return
+    def _mode_to_code(self, mode):
+        """Convert parameter_mode to parameter_code.
+                
+        Valid modes are 'none', 'response' 'error' and 'no write'. 
+        """        
+        if mode == 'none':
+            return ParameterResponse.NONE.value
+
+        if mode == 'error':
+            return ParameterResponse.ERROR.value
         
-        if value == 'error':
-            self.parameter_access_type = ParameterResponse.ERROR.value
-            return
-        
-        if value == 'no write':
-            self.parameter_access_type = ParameterResponse.NO_WRITE.value
-            return
+        if mode == 'no write':
+            return ParameterResponse.NO_WRITE.value
            
-        if value != 'response':
+        if mode != 'response':
             raise ValueError(
-                    f"*value* should be 'none', 'error', 'no write' or "
-                    f"'response', not {value}")    
+                    f"*mode* should be 'none', 'error', 'no write' or "
+                    f"'response', not {mode}")    
         
-        if self.parameter_indexed:
-            modes_by_index = ParameterResponse.indexed_modes()
+        if self._parameter.indices:
+            modes_by_index = ParameterResponse.indexed_modes
         else: 
-            modes_by_index = ParameterResponse.unindexed_modes()
+            modes_by_index = ParameterResponse.unindexed_modes
             
-        if self.parameter_size == 16:
-            modes_by_size = ParameterResponse.sixteen_bit_modes()
-        elif self.parameter_size == 32:
-            modes_by_size = ParameterResponse.thirty_two_bit_modes()
-        elif self.parameter_size == 0:
-            raise ValueError(
-                f'self.parameter_mode cannot be set because '
-                'self.parameter_number (self.parameter_number) is invalid')
+        if self._parameter.bits == 16:
+            modes_by_size = ParameterResponse.sixteen_bit_modes
+        elif self._parameter.bits == 32:
+            modes_by_size = ParameterResponse.thirty_two_bit_modes
         else:
-            raise RuntimeError(
-                f'self.parameter_size should be 0, 16 or 32, not '
-                f'{self.parameter_size}')
+            raise RuntimeError(f'self._parameter.bits should be 16 or 32, '
+                               f'not {self._parameter.bits}')
                             
-        mode_set = modes_by_index & modes_by_size
-        
+        mode_set = modes_by_index & modes_by_size        
         if len(mode_set) != 1:
             raise RuntimeError(
                     f'len(mode_set) should be 1, not {len(mode_set)}')
         
-        mode = mode_set.pop()
-        self.parameter_access_type = mode.value
+        return mode_set.pop().value

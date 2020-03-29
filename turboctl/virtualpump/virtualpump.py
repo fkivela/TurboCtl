@@ -4,8 +4,7 @@ physical pump.
 """
 import threading
 
-from ..data import PARAMETERS
-from ..telegram import Query
+from ..telegram import PARAMETERS, Query
 
 from .virtualconnection import VirtualConnection
 from .hardware_component import HardwareComponent
@@ -107,9 +106,9 @@ class ConnectionComponent(VirtualConnection):
         """
         
         try:
-            query = Query(input_)
+            query = Query.from_bytes(input_)
         except ValueError:
             return bytes()
         
         reply = self.process_query(query)
-        return reply.data
+        return reply.to_bytes()

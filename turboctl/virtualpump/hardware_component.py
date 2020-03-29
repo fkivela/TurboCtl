@@ -1,8 +1,7 @@
 import threading
 import time
 
-from ..data import StatusBits, ControlBits
-from ..telegram import str_to_int    
+from ..telegram import StatusBits, ControlBits
 
 
 class HWParameters():
@@ -104,8 +103,8 @@ class HardwareComponent():
         # The rate of pump acceleration and deceleration in Hz/s.
         self.abs_acceleration = 100
         
-        # Initialize the pump to an off state.
-        self.store()
+        # The pump starts in an off state.
+        self.is_on = False 
         self.off()
                 
         # Start a parallel thread for continuously updating the pump 
@@ -114,93 +113,22 @@ class HardwareComponent():
         self.stop_flag = threading.Event()
         self.thread.daemon = True
         self.thread.start()
-        
-    def set_errors(self, numbers, frequencies, hours):
-        """Set pump error memory.
-        
-        Args:
-            numbers: A list of error numbers.
-            frequencies: A list of pump frequencies at the times of 
-                errors.
-            hours: A list of pump operating hours at the times of 
-                errors.
-        All lists should have length between 1 and 254, and all three 
-        lengths should be equal.
-        """
-        
-        def pad(list_):
-            return list_ + (254 - len(list_))*[0]
-        
-        self.variables.error_list = pad(numbers)
-        self.error_frequency_list = pad(frequencies)
-        self.error_hour_list = pad(hours)
-        
-    def set_warnings(self, numbers):
-        """Set active pump warnings.
-        
-        Args:
-            numbers: An iterable of ints in range(16) representing the
-                numbers of active warnings.
-        """
-        string = ''.join(['1' if i in numbers else '0' for i in range(16)])                
-        self.variables.warnings = str_to_int(string)
-        
-    def store(self):
-        """Save parameter data to nonvolatile memory.
-        
-        Parameters which are changed but not saved are reset when the 
-        pump is turned off. Parameters which are not writable are 
-        not affected by this method.
-        """
-        values = {}
-        for i, p in self.parameters.items():
-            if p.writable:
-                try:
-                    values[i] = p.value.copy()
-                except AttributeError:
-                    values[i] = p.value
-                
-        self.stored_values = values
-        
-    def restore(self):
-        """Restore parameter values from nonvolatile memory.
-        
-        Current parameter values are discarded and replaced by values 
-        previously saved with the *store* method. Parameters which are 
-        not writable are not affected by this method.
-        """
-        for i, value in self.stored_values.items():
-            try:
-                self.parameters[i].value = value.copy()
-            except AttributeError:
-                self.parameters[i].value = value
-        
+                        
+    def off(self):
+        """Turn the pump off."""
+        self.is_on = False
+        self.variables.temperature = 0
+        self.variables.current = 0
+        self.variables.voltage = 0
+
+         
     def on(self):
         """Turn the pump on."""
         self.is_on = True
-        self.variables.voltage = 20
+        self.variables.temperature = 30
         self.variables.current = 10
-        self.variables.temperature = 40
-        self.variables.motor_power = 30
-        self.variables.motor_temperature = 50
-        
-    def off(self):
-        """Turn the pump off, discarding all parameter changes not 
-        saved to nonvolatile memory.
-        """
-        if self.variables.save_data:
-            self.store()
-            self.variables.save_data = 0
-        self.restore()
-        
-        self.variables.voltage = 0
-        self.variables.current = 0
-        self.variables.temperature = 0
-        self.variables.motor_power = 0
-        self.variables.motor_temperature = 0
-        
-        self.is_on = False
-        
+        self.variables.voltage = 24
+                
     def stop(self):
         """Order the parallel thread to stop."""
         self.stop_flag.set()
@@ -208,64 +136,48 @@ class HardwareComponent():
     def handle_control_bits(self, query):
         """Apply the effects of control bits in *query*.
         
-        The following control bits are recognized; all others are 
-        ignored:
-            COMMAND
-            START_STOP
-            FREQ_SETPOINT
-            RESET_ERROR
+        Currently only the COMMAND and ON control bits are recognized; 
+        all others are ignored.
         """
-
-        if not ControlBits.COMMAND in query.control_or_status_set:
-            return
         
-        if ControlBits.START_STOP in query.control_or_status_set:
-            if self.is_on:
-                self.off()
-            else:
-                self.on()
-        
-        if ControlBits.FREQ_SETPOINT in query.control_or_status_set:
-            self.variables.frequency_setpoint = query.frequency
+        if {ControlBits.COMMAND, ControlBits.ON}.issubset(
+        query.flag_set):
+            self.on()
+        else:
+            self.off()
             
-        if ControlBits.RESET_ERROR in query.control_or_status_set:
-            self.set_errors([], [], [])
-            
-    def handle_status_bits(self, reply):
+    def handle_status_bits(self, query, reply):
         """Write appropriate status bits to *reply*.
         
-        The following status bits can be written; all others are 
-        ignored:
+        The following status bits are supported:
             OPERATION
             READY
             TURNING
             ACCELERATION
             DECELERATION
-            ERROR
-            WARNING
+            PARAM_CHANNEL
+            PROCESS_CHANNEL
         """
-                                
+            
+        reply.flag_set.add(StatusBits.PARAM_CHANNEL)
+        
+        if ControlBits.COMMAND in query.flag_set:
+            reply.flag_set.add(StatusBits.PROCESS_CHANNEL)
+          
         if self.is_on:
-            reply.control_or_status_set.add(StatusBits.OPERATION)
+            reply.flag_set.add(StatusBits.OPERATION)
         else:
-            reply.control_or_status_set.add(StatusBits.READY)
+            reply.flag_set.add(StatusBits.READY)
             
         if self.variables.frequency:
-            reply.control_or_status_set.add(StatusBits.TURNING)
+            reply.flag_set.add(StatusBits.TURNING)
             
         if self.acceleration > 0:
-            reply.control_or_status_set.add(StatusBits.ACCELERATION)
+            reply.flag_set.add(StatusBits.ACCELERATION)
             
         if self.acceleration < 0:
-            reply.control_or_status_set.add(StatusBits.DECELERATION)
+            reply.flag_set.add(StatusBits.DECELERATION)
             
-        errors_present = any(self.variables.error_list)
-        if errors_present:
-            reply.control_or_status_set.add(StatusBits.ERROR)
-        
-        if self.variables.warnings:
-            reply.control_or_status_set.add(StatusBits.WARNING)
-        
     def handle_hardware(self, query, reply):
         """Write hardware data to *reply.*
         
@@ -275,7 +187,7 @@ class HardwareComponent():
         """
 
         self.handle_control_bits(query)
-        self.handle_status_bits(reply)
+        self.handle_status_bits(query, reply)
         
         reply.frequency = int(self.variables.frequency)
         # The frequency parameter can have non-integer values; 

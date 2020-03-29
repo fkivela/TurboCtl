@@ -1,5 +1,2 @@
-from turboctl import Types 
-
-print(f'typetest1: Types.UINT = {id(Types.UINT)}')
-assert t == Types.UINT
-
+from turboctl import Query, Reply
+r = Reply()
