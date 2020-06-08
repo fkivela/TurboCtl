@@ -3,3 +3,6 @@ __pycache__
 
 # Ignore all pdf files
 .pdf
+
+# Ignore the .hypothesis folder
+.hypothesis
