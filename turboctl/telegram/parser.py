@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from collections import OrderedDict
 from typing import Union, List, Dict, Tuple
 
-from .numtypes import TurboNum, Uint, Sint, Float
+from .datatypes import Data, Uint, Sint, Float
 
 @dataclass
 class Parameter:
@@ -19,11 +19,11 @@ class Parameter:
     name: str
     indices: range
         # indices=range(0) for unindexed parameters.
-    min_: TurboNum
-    max_: TurboNum
+    min_: Data
+    max_: Data
         # min and max can have a value of 'P<number>' (e.g. 'P18'), 
         # if their value equals the value of another parameter.
-    default: Union[TurboNum, List[TurboNum]]
+    default: Union[Data, List[Data]]
         # default is a list, if the parameter is indexed and the 
         # indices have different default values.
     unit: str
@@ -310,12 +310,12 @@ def _parse_number(string: str) -> Tuple[int, range]:
 
     return number, indices    
 
-def _parse_minmax(string: str) -> Union[TurboNum, str]:
+def _parse_minmax(string: str) -> Union[Data, str]:
     """Parse a data field containg the minimum or maximum parameter
         value.
     
     Returns:
-        -A TurboNum, if the value is numeric.
+        -A Data, if the value is numeric.
         -A string in the format P<number>, if *string* matches that
             format.    
     """
@@ -338,11 +338,11 @@ def _parse_minmax(string: str) -> Union[TurboNum, str]:
     else:
         raise ValueError(f'invalid min/max value: {string}')    
         
-def _parse_default(string: str) -> Union[TurboNum, List[TurboNum]]:
+def _parse_default(string: str) -> Union[Data, List[Data]]:
     """Parse the data field containg the default parameter value.
     
     Returns:
-        A TurboNum, or a list of TurboNums, if parameter 
+        A Data, or a list of Datas, if parameter 
         indices have different default values.
     """
     try:
@@ -364,7 +364,7 @@ def _parse_default(string: str) -> Union[TurboNum, List[TurboNum]]:
 def _parse_format(string: str) -> Tuple[type, int]:
     """Parse the data field containg the parameter number format.
     
-    Returns: A tuple containing the type (a subclass of TurboNum) 
+    Returns: A tuple containing the type (a subclass of Data) 
     and size (16 or 32) of the parameter.
     """
     numbers = '([0-9]+)'

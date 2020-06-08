@@ -3,6 +3,7 @@
 TODO: the following tests should be added:
     - make sure init with an invalid value produce a ValueError
     - make sure init with an invalid bits does the same
+      (important special case: Bin() with iterable)
     - make sure init works correctly if bits is not specified
 """
 
