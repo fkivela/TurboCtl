@@ -1,34 +1,58 @@
-"""This module defines the meaning of different codes and numbers used 
+"""This module defines enums for the different codes and numbers used 
 in TURBOVAC telegrams.
+
+Members of enums can be accessed with any of the following syntaxes: 
+    
+    >>> member = EnumName.MEMBER_NAME
+    >>> member = EnumName['MEMBER_NAME']
+    >>> member = EnumName(member_value)
+    >>> member = EnumName(member)
+    
+    TODO: 
+        - ParameterCode.__repr__ doesn't show up in the docs.
+        - Classes that inherit both from CustomInt and Enum don't show up in
+          the docs.
 """
 
 import enum as e
 
-class ValueAndDescription(e.Enum):
-    """A superclass for enums that contains an additional attribute 
-    (*description*) in addition to *value*.
+
+class ParameterCode(e.Enum):
+    """A superclass for parameter access and response codes.
     
     This enum doesn't have any members, since it's only meant to 
-    be subclassed.
-    
-    A member of a subclass of this enum can be returned with
-    any of the following:
-    >> member = EnumName.MEMBER_NAME
-    >> member = EnumName['MEMBER_NAME']
-    >> member = EnumName(member_value)
-    >> member = EnumName(member)
+    be subclassed. Members of subclasses have the following fields:
+                
+        ``value``
+            The code (a 4-character :class:`str`).
+        
+        ``mode``
+            A string that groups the codes together by function 
+            (e.g. ``read`` for all read modes).
+        
+        ``indexed``
+            ``True`` if this mode can be only used for indexed parameters, 
+            ``False`` if it can only be used for unindexed parameters, 
+            and ``...`` if it can be used for both.
+        
+        ``bits``
+            ``16`` or ``32`` if the mode can only be used for 16 or 32 bit 
+            parameters, and ``...`` if it can be used for both.
+        
+        ``description``: 
+            A verbal description of the meaning of the code.
     """
-    
-    def __new__(cls, value, description):
-        """__new__ is defined instead of __init__, because setting 
-        *_value_* in __init__ prevents the syntax 
-        "member = EnumName(value_of_member)" from working.
+        
+    def __new__(cls, value, mode, indexed, bits, description):
+        """``__new__`` is defined instead of ``__init__``, because setting 
+        *_value_* in ``__init__`` prevents the syntax 
+        :code:`member = EnumName(value_of_member)` from working.
         """
         obj = object.__new__(cls)
         obj._value_ = value
         obj.description = description
         return obj
-            
+    
     def __repr__(self):
         """repr(self) returns '<ParameterAccess.XYZ: 1234>' by default.
         It must be overridden so that the syntax 
@@ -38,91 +62,165 @@ class ValueAndDescription(e.Enum):
         return str(self)
     
 
-class ParameterAccess(ValueAndDescription):
+class ParameterAccess(ParameterCode):
     """Different parameter access modes."""
     
-    NONE = ('0000', 'No access')
-    R    = ('0001', 'Parameter value requested')
-    W16  = ('0010', 'Write a 16 bit value')
-    W32  = ('0011', 'Write a 32 bit value')
-    RF   = ('0110', 'Field value requested')
-    W16F = ('0111', 'Write a 16 bit field value')
-    W32F = ('1000', 'Write a 32 bit field value')
+#   Name     Value   Mode    Indexed  Bits  Description
+    NONE = ('0000', 'none',  ...,     ..., 'No access')
+    R    = ('0001', 'read',  False,   ..., 'Read a value')
+    W16  = ('0010', 'write', False,    16, 'Write a 16 bit value')
+    W32  = ('0011', 'write', False,    32, 'Write a 32 bit value')
+    RF   = ('0110', 'read',  True,    ..., 'Read a field value')
+    W16F = ('0111', 'write', True,     16, 'Write a 16 bit field value')
+    W32F = ('1000', 'write', True,     32, 'Write a 32 bit field value')            
 
-# Non-member attributes can only be assigned outside the class 
-# definition.
-PA = ParameterAccess    
-PA.read_modes = {PA.R, PA.RF}
-PA.write_modes = {PA.W16, PA.W32, PA.W16F, PA.W32F}
-PA.sixteen_bit_modes = {PA.R, PA.RF, PA.W16, PA.W16F}
-PA.thirty_two_bit_modes = {PA.R, PA.RF, PA.W32, PA.W32F}
-PA.unindexed_modes = {PA.R, PA.W16, PA.W32}
-PA.indexed_modes = {PA.RF, PA.W16F, PA.W32F}
-            
     
-class ParameterResponse(ValueAndDescription):
+class ParameterResponse(ParameterCode):
     """Different parameter response modes."""
     
-    NONE     = ('0000', 'No response')
-    S16      = ('0001', '16 bit value sent')
-    S32      = ('0010', '32 bit value sent')
-    S16F     = ('0100', '16 bit field value sent')
-    S32F     = ('0101', '32 bit field value sent')
-    ERROR    = ('0111', 'The frequency converter can not run the command')
-    NO_WRITE = ('1000', 'Write access: no permission to write')
+#   Name         Value   Mode       Indexed Bits  Description
+    NONE     = ('0000', 'none',     ...,    ..., 'No response')
+    S16      = ('0001', 'response', False,   16, '16 bit value sent')
+    S32      = ('0010', 'response', False,   32, '32 bit value sent')
+    S16F     = ('0100', 'response', True,    16, '16 bit field value sent')
+    S32F     = ('0101', 'response', True,    32, '32 bit field value sent')
+    ERROR    = ('0111', 'error',    ...,    ..., 'Cannot run command')
+    NO_WRITE = ('1000', 'no write', ...,    ..., 'No write access')
+
+
+def get_parameter_code(telegram_type, mode, indexed, bits):
+    """Return the parameter code that matches the arguments.
     
-PR = ParameterResponse
-PR.sixteen_bit_modes = {PR.S16, PR.S16F}
-PR.thirty_two_bit_modes = {PR.S32, PR.S32F}
-PR.unindexed_modes = {PR.S16, PR.S32}
-PR.indexed_modes = {PR.S16F, PR.S32F}
-
-
-class CustomInt(int):
-    """The arguments of __new__ methods in enums inheriting int are 
-    always passed to the __new__ method of the int class, which raises 
-    an error if the *description* argument is present.
-    This class solves the problem by preventing *description* from 
-    being passed to int.__new__.
+    *telegram_type* is ``'query'`` for messages to the pump and ``'reply'`` for
+    messages from the pump.
+    
+    Raises:
+         :class:`ValueError`: If the number of matching members isn't 1,
+             or if *telegram_type* is invalid.
     """
-    def __new__(cls, value, description):
+    
+    if telegram_type == 'query':
+        enum = ParameterAccess
+    elif telegram_type == 'reply':
+        enum = ParameterResponse
+    else:
+        raise ValueError(f'invalid telegram_type: {telegram_type}')
+        
+    results = []
+        
+    for member in enum:    
+        mode_match = member.mode == mode
+        index_match = member.indexed in [indexed, ...]
+        bits_match = member.bits in [bits, ...]
+        
+        if mode_match and index_match and bits_match:
+            results.append(member)
+            
+    if len(results) == 0:
+        raise ValueError('no matching codes')
+    
+    if len(results) > 1:
+        raise ValueError('several matching codes')
+        
+    return results[0]
+
+
+def get_parameter_mode(telegram_type, code):
+    """Return the parameter mode that matches the arguments.
+    
+    *telegram_type* is ``'query'`` for messages to the pump and ``'reply'`` for
+    messages from the pump.
+    """
+    
+    if telegram_type == 'query':
+        enum = ParameterAccess
+    elif telegram_type == 'reply':
+        enum = ParameterResponse
+    else:
+        raise ValueError(f'invalid telegram_type: {telegram_type}')
+        
+    member = enum(code)
+    return member.mode    
+    
+    
+class CustomInt(int):
+    """A custom superclass for enums that inherit :class:`int` while having
+    members with multiple fields.
+    """
+    
+    def __new__(cls, value, *args, **kwargs):
+        """The arguments of ``__new__`` methods in enums inheriting :class:`int` 
+        are always passed to :meth:`int.__new__`, which often raises 
+        an error if there are multiple arguments present.
+        This class solves the problem by only passing the first argument to 
+        :meth:`int.__new__`.
+        """
         return int.__new__(cls, value)
 
 
-class IntAndDescription(CustomInt, e.Enum):
-    """The same as ValueAndDescription, but members also behave like 
-    ints.
-    """    
-                
-    def __init__(self, value, description):
+# Define error classes for ParameterError members.
+class ParameterException(Exception): pass
+
+class WrongNumError(ParameterException): pass
+class CannotChangeError(ParameterException): pass
+class MinMaxError(ParameterException): pass
+class ParameterIndexError(ParameterException): pass
+class AccessError(ParameterException): pass
+class OtherError(ParameterException): pass
+class SavingError(ParameterException): pass
+
+
+class ParameterError(CustomInt, e.Enum):
+    """Different parameter error types.
+    
+    This class also inherits :class:`CustomInt`, which means its members can
+    e.g. be easily ordered. 
+    
+    Members of this enum have the following fields:
+    
+    value: The number of the error (:class:`int`).
+    exception: An exception class that can be raised.
+    description: A verbal description of the meaning of the error.
+    """
+    
+    def __init__(self, value, description, exception):
         self._value_ = value
         self.description = description
-                    
-    def __repr__(self):
-        return str(self)
-
-
-class ParameterError(IntAndDescription):
-    """Different parameter error types."""
-    
-    WRONG_NUM     = (  0, 'invalid parameter number')
-    CANNOT_CHANGE = (  1, 'parameter cannot be changed')
-    MINMAX        = (  2, 'min/max error')
-    INDEX         = (  3, 'index error')
-    ACCESS        = (  5, "access mode doesn't match parameter")
-    OTHER         = ( 18, 'other error')
-    SAVING        = (102, 'parameter is being saved to nonvolatile memory')
+        self.exception = exception
+                        
+    WRONG_NUM =     (  0, 'invalid parameter number',    WrongNumError)
+    CANNOT_CHANGE = (  1, 'parameter cannot be changed', CannotChangeError)
+    MINMAX        = (  2, 'min/max error',               MinMaxError)
+    INDEX         = (  3, 'index error',                 ParameterIndexError)
+    ACCESS        = (  5, "access mode doesn't match "
+                          "parameter",                   AccessError)
+    OTHER         = ( 18, 'other error',                 OtherError)
+    SAVING        = (102, 'parameter is being saved to '
+                          'nonvolatile memory',          SavingError)
     # Error codes 3, 5 and 102 aren't included in the manual, but were 
     # discovered while testing the pump.
-            
     
-class ControlBits(IntAndDescription):
-    """Numbers and descriptions of control bits.
+    
+class FlagBits(CustomInt, e.Enum):
+    """A superclass for control and status bits.
+    
+    This class is otherwise similar to :class:`ParameterError`, but it doesn't 
+    have any members as it's a superclass, and the members of its subclasses 
+    but lack the *exception* field. 
+    """
+
+    def __init__(self, value, description):
+        """Lorem ipsum."""
+        self._value_ = value
+        self.description = description
+
+
+class ControlBits(FlagBits):
+    """Different control bits.
     
     Unused control bits have been assigned values in order to 
-    prevent error conditions.
+    prevent errors in the program.
     """
-        
     ON            = ( 0, 'Turn or keep the pump on')
     UNUSED1       = ( 1, 'Unknown control bit: 1')
     UNUSED2       = ( 2, 'Unknown control bit: 2')
@@ -144,11 +242,11 @@ class ControlBits(IntAndDescription):
     # to be enabled, or the manual is wrong.
 
 
-class StatusBits(IntAndDescription):
-    """Numbers and descriptions of status bits.
+class StatusBits(FlagBits):
+    """Different status bits.
     
     Unused status bits have been assigned values in order to 
-    prevent error conditions.
+    prevent errors in the program.
     """
     
     READY           = ( 0, 'Ready for operation')
