@@ -1,16 +1,26 @@
 """This module defines classes for creating, representing and reading
 telegrams which are used to communicate with the pump.
 
-TODO: Add error code detection.
-Telegram initialization to docstring
-Telegram attribute types documentation
+\TODO: 
+    - Add the error code property to TelegramReader.
+    - Redirect the link to the serial module to the front page.
+    - Add a list of telegram attributes with their types.
+    - The docstring of TelegramBuilder.__init__ generates a weird indent
+    - The links to Status/ControlBits don't work'
+    
+..
+    Aliases for Sphinx.
+
+.. |Uint| replace:: :class:`~turboctl.telegram.datatypes.Uint`
+.. |Sint| replace:: :class:`~turboctl.telegram.datatypes.Sint`
+.. |Float| replace:: :class:`~turboctl.telegram.datatypes.Float`
+.. |Bin| replace:: :class:`~turboctl.telegram.datatypes.Bin`
 """
+
 from dataclasses import dataclass
 
-from turboctl.telegram.codes import (
-    ParameterAccess, ParameterResponse, ControlBits, StatusBits, 
+from turboctl.telegram.codes import (ControlBits, StatusBits, 
     get_parameter_code, get_parameter_mode)
-
 from turboctl.telegram.datatypes import (Data, Uint, Sint, Bin)
 from turboctl.telegram.parser import PARAMETERS
 
@@ -19,16 +29,20 @@ from turboctl.telegram.parser import PARAMETERS
 class Telegram:
     """A simple dataclass that represents a telegram sent to or from the pump.
     
+    This class is cumbersome to initialize directly, since the values of all 
+    attributes must be given as arguments. Instances should instead be 
+    created with the :class:`TelegramBuilder` class.
+    
     The Leybold TURBOVAC i/iX vacuum pump communicates with a computer 
     via its RS 232 or RS 485 serial port or a USB port using telegrams 
     of 24 bytes. The general structure of the telegrams follows the 
     USS protocol.
     
     Each byte consists of a start bit (0), 8 data bits, an even 
-    parity bit (1 if there are an even number of 1's in the data 
+    parity bit (1 if there are an even number of 1s in the data 
     bits, 0 otherwise) and an ending bit (1). However, only the data 
     bits are included in the bytes objects that represent telegrams;
-    the serial module automatically adds the other bits. 
+    the :mod:`serial` module automatically adds the other bits. 
     
     In the TURBOVAC manual, the data bits in a byte are indexed as 
     [7,6,5,4,3,2,1,0] (i.e. according to the power of 2 they
@@ -37,98 +51,140 @@ class Telegram:
     
     The functions and values of the different bytes in a telegram 
     are detailed below. Each list entry contains the name of the  
-    Telegram object attribute (if any) that represents 
+    :class:`Telegram` object attribute (if any) that represents 
     the value associated with the entry.
     
     Unless otherwise noted, all bytes have a default value of 0.
         
-    Byte 0: STX (start of text). 
-    Always 2.
+    **Byte 0:** STX (start of text). Always 2.
     
-    Byte 1: LGE (telegram length). 
+    **Byte 1:** LGE (telegram length). 
     Excludes bytes 0 and 1, and thus always has a value of 22.
     
-    Byte 2: ADR (address). 
+    **Byte 2:** ADR (address). 
     With a RS485 port this denotes the slave node number (0-31).
     Reading or changing this byte is not currently supported by this 
     class.
     
-    Bytes 3-4: PKE (parameter number and type of access). 
+    **Bytes 3-4:** PKE (parameter number and type of access). 
     A 16 bit block:
-        - Bits 0-3: Type of parameter access or response. 
+        
+        - Bits 0-3: 
+            Type of parameter access or response. 
             This is a 4 bit code indicating e.g. whether a parameter 
             should be read from or written to.
-            Attribute: parameter_code.
-            Valid codes are detailed in the codes module.
-        - Bit 4: 0
-        - Bits 5-15: The parameter number.
-            Attribute: parameter_number.
+            Valid codes are detailed in the :mod:`~turboctl.telegram.codes` 
+            module.
+            
+            Attribute: :attr:`parameter_code`.
+            
+        - Bit 4: 
+            Always 0.
+        
+        - Bits 5-15:
+            The number of the parameter to be accessed.
+            
+            Attribute: :attr:`parameter_number`.
     
-    Byte 5: - (reserved). Always 0.
+    **Byte 5:** - (reserved). Always 0.
     
-    Byte 6: IND (parameter index). 
+    **Byte 6:** IND (parameter index). 
     If the requested parameter is indexed, this specifies the number 
     of the requested index.
-    Attribute: parameter_index.
+    
+    Attribute: :attr:`parameter_index`.
 
-    Bytes 7-10: PWE (parameter value). 
+    **Bytes 7-10:** PWE (parameter value). 
     This block contains a parameter value that is written to or read 
     from the pump.
-    Attribute: parameter_value.
+    
+    Attribute: :attr:`parameter_value`.
 
-    Bytes 11-12: PZD1 (status and control bits).
+    **Bytes 11-12:** PZD1 (status and control bits).
     16 bits each corresponding to a single setting or command which 
     can be turned on by setting the bit to 1.
-    In a response from the pump these correspond to status 
+    In a reply from the pump these correspond to status 
     conditions affecting the pump instead of commands.
-    Attribute: flag_bits.
+    
+    Attribute: :attr:`flag_bits`.
 
-    Bytes 13-14: PZD2 (current stator frequency). 
+    **Bytes 13-14:** PZD2 (current stator frequency). 
     Stator frequency in Hz; the same as parameter 3.
     Included in all replies, and can be included in queries to define 
     a setpoint for the frequency. (This only works if the setpoint is 
     enabled through the control bits, and overrides the setpoint 
     defined in parameter 24).
-    Attribute: frequency.
+    
+    Attribute: :attr:`frequency`.
 
-    Bytes 15-16: PZD3 (current frequency converter temperature). 
+    **Bytes 15-16:** PZD3 (current frequency converter temperature). 
     Frequency converter temperature in °C, included in all replies. 
     Same as parameter 11.
-    Attribute: temperature.
     
-    Bytes 17-18: PZD4 (current motor current). 
+    Attribute: :attr:`temperature`.
+    
+    **Bytes 17-18**: PZD4 (current motor current). 
     Motor current in 0.1 A, included in all replies. 
     Same as parameter 5.
-    Attribute: current
+    
+    Attribute: :attr:`current`.
 
-    Bytes 19-20: - (reserved). Always 0.
+    **Bytes 19-20:** - (reserved). Always 0.
 
-    Bytes 21-22: PZD6 (current intermediate circuit voltage).
+    **Bytes 21-22:** PZD6 (current intermediate circuit voltage).
     Intermediate circuit voltage in 0.1 V, included in all replies.
     Same as parameter 4.
-    Attribute: voltage
+    
+    Attribute: :attr:`voltage`
 
-    Byte 23: BCC (byte block check): 
-    A checksum computed using the following algorithm: 
+    **Byte 23:** BCC (byte block check): 
+    A checksum computed using the following algorithm:
+    ::
+        
         checksum = bytes_[0]
-        for byte in bytes_[1:22]:
-            checksum = checksum XOR byte_
+        for byte in bytes_[1:23]:
+            checksum = checksum ^ byte_
+                
+    where ``^`` is the exclusive or (XOR) operator.    
     """
     
     parameter_code: Bin
+    """The parameter access or response code as a 4-bit |Bin|."""
+    
     parameter_number: Uint
+    """The parameter number as an 11-bit |Uint|."""
+    
     parameter_index: Uint
+    """The parameter index as a 8-bit |Uint|."""
+    
     parameter_value: Data
+    """The parameter value. This attribute is always a 32-bit instance of a 
+    subclass of :class:`~turboctl.telegram.datatypes.Data`, 
+    but the exact type depends on the parameter.
+    """
+    
     flag_bits: Bin
+    """The control or status bits as a 32-bit |Bin|."""
+    
     frequency: Uint
+    """The frequency as a 32-bit |Uint|."""
+    
     temperature: Sint
+    """The temperature as a 32-bit |Sint|."""
+    
     current: Uint
-    voltage: Sint
+    """The current as a 32-bit |Uint|."""
+    
+    voltage: Uint
+    """The voltage as a 32-bit |Uint|."""
+    
+    LENGTH = 24
+    """The length of a telegram in bytes."""
     
     def __bytes__(self):
         """Return the telegram as a :class:`bytes` object.
         
-        The checksum is computed automatically and added at the end.
+        The checksum is computed automatically and added to the end.
         """
         bytes_ = bytes(
             Uint(2, 8) +
@@ -151,30 +207,33 @@ class Telegram:
 
 
 class TelegramBuilder:
-    """This class can be used to easily construct instances of the
+    """This class can be used to easily construct instances of the 
     :class:`Telegram` class.
     
-    Here is an example of how to use this class:
+    Here is an example of how to use this class:     
+    ::
         
-    .. code-block:: python
-
-       telegram = (TelegramBuilder().set_parameter_mode('write')
-                                    .set_paramerer_number(1)
-                                    .set_parameter_index(2)
-                                    .set_parameter_value(3)
-                                    .build())
-       
+        telegram = (TelegramBuilder().set_parameter_mode('write')
+                                     .set_paramerer_number(1)
+                                     .set_parameter_index(2)
+                                     .set_parameter_value(3)
+                                     .build())
+        
    The above creates a telegram which writes the value 3 to parameter 1,
-   index 2. Note that this is just an example about the syntax; parameter 1
+   index 2. Note that this is just an example of the syntax; parameter 1
    isn't actually indexed.
    
-   Attributes which aren't explicitly set to a value are set to zero.
+   Attributes which aren't explicitly set to a value with a setter method are 
+   set to zero when the telegram is created.
    Trying to set an attribute to an invalid value results in a
    :class:`ValueError` or a :class:`TypeError`.
+        
+    A telegram can also be created from a :class:`bytes` object:
+    ::
+        
+        telegram = TelegramBuilder().from_bytes(bytes_).build()          
     """
     
-    LENGTH = 24
-    """The length of a telgram in bytes."""
     
     def __init__(self):
         """Initialize a new :class:`TelegramBuilder`."""
@@ -202,7 +261,7 @@ class TelegramBuilder:
     
     @classmethod
     def from_bytes(cls, bytes_):
-        """Create a new telegram from a :class:`bytes` object."""
+        """Read the contents of the telegram from a :class:`bytes` object."""
         cls._check_valid_telegram(bytes_)
 
         self = cls.__new__()
@@ -245,15 +304,15 @@ class TelegramBuilder:
         """Set the parameter access or response mode to one of the following:
             
             Access modes:
-                ``none``
-                ``read``
-                ``write``
+                - ``'none'``
+                - ``'read'``
+                - ``'write'``
                 
             Response modes:
-                ``none``
-                ``response``
-                ``error``
-                ``no write``
+                - ``'none'``
+                - ``'response'``
+                - ``'error'``
+                - ``'no write'``
                 
             The parameter access or response code is determined automatically
             based on the parameter mode and the parameter number. 
@@ -288,9 +347,10 @@ class TelegramBuilder:
     def set_flag_bits(self, bits):
         """Set the control or status bits.
         
-        *bits* should be an iterable of those :class:`codes.StatusBits` or 
-        :class:`codes.ControlBits` members that should be included in the
-        telegram.
+        *bits* should be an iterable of those 
+        :class:`~turboctl.telegram.codes.ControlBits` or 
+        :class:`~turboctl.telegram.codes.StatusBits` members that should be 
+        included in the telegram.
         """
         self.kwargs['flag_bits'] = Bin([bit.value for bit in bits], bits=16)
         return self
@@ -355,9 +415,9 @@ class TelegramBuilder:
         if self._parameter_mode:
             indexed = bool(parameter.indices)
             bits = parameter.bits
-            member = get_parameter_code(
+            code = get_parameter_code(
                 type_,  self._parameter_mode, indexed, bits)
-            self.kwargs['parameter_code'] = Bin(member.value, bits=4)
+            self.kwargs['parameter_code'] = Bin(code, bits=4)
             
         return Telegram(**self.kwargs)
 
@@ -396,7 +456,7 @@ class TelegramReader:
         
         This method is the reverse of
         :meth:`TelegramBuilder.set_parameter_mode`: it automatically converts
-        a parameter access or response code to a human readable string.
+        a parameter access or response code to a human-readable string.
         
         Raises:
             ValueError: If the parameter code of the telegram is invalid.
