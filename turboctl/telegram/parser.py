@@ -1,5 +1,23 @@
 """This module contains a parser that reads data about pump parameters, 
-error and warnings from text files.
+errors and warnings from text files.
+
+Attributes:
+    PARAMETERS:
+        The pump has multiple parameters which affect its behaviour.
+        This attribute holds a :class:`dict` of these parameters, represented 
+        as :class:`Parameter` objects, with the numbers of the parameters as 
+        the keys.
+        
+    ERRORS:
+        A :class:`dict` of different error conditions which can affect the 
+        pump, represented as :class:`ErrorOrWarning` objects, 
+        with error numbers as the keys. 
+        
+    WARNINGS:
+        Like :attr:`ERRORS`, but for warnings instead of errors.
+
+\TODO:
+    -rename \min_ and \max_ to min and max or minval and maxval
 """
 
 import re
@@ -9,7 +27,8 @@ from dataclasses import dataclass
 from collections import OrderedDict
 from typing import Union, List, Dict, Tuple
 
-from .datatypes import Data, Uint, Sint, Float
+from turboctl.telegram.datatypes import Data, Uint, Sint, Float
+
 
 @dataclass
 class Parameter:
@@ -34,8 +53,8 @@ class Parameter:
     
     @property
     def fields(self) -> OrderedDict:
-        """Return an OrderedDict with parameter attribute names as 
-        keys and their values as values.
+        """Return an :class:`~collections.OrderedDict` with parameter 
+        attribute names as keys and their values as values.
         """
         fieldnames = ['number', 'name', 'indices', 'min_', 'max_', 'default', 
                       'unit', 'writable', 'type_', 'bits', 'description']
@@ -53,17 +72,19 @@ class ErrorOrWarning:
     
     @property
     def fields(self) -> OrderedDict:
-        """Return an OrderedDict with error/warning attribute names as 
-        keys and their values as values.
+        """Return an :class:`~collections.OrderedDict` with error/warning 
+        attribute names as keys and their values as values.
         """
         fieldnames = ['number', 'name', 'possible_cause', 'remedy']
         return OrderedDict((name, getattr(self, name)) for name in fieldnames)
 
+
 # The special character used for comments:
 _COMMENT_CHAR = '#'
 
+
 def main():
-    """Define the PARAMETERS, ERRORS and WARNINGS dictionaries.
+    """Define :attr:`PARAMETERS`, :attr:`ERRORS` and :attr:`WARNINGS`.
     
     This function is automatically executed when this module is 
     imported or run as a script.
@@ -80,42 +101,55 @@ def _fullpath(filename: str) -> str:
     dirpath = os.path.dirname(__file__)
     return os.path.join(dirpath, filename)
 
-def load_parameters(path: str=None) -> Dict[int, Parameter]:
+
+def load_parameters(path=None):
     """Parse the parameter file and return a dictionary of 
     parameters.
+    
+    If *path* isn't specified, the file will be ``'parameters.txt'``, 
+    located in this directory.
     """
     default = 'parameters.txt'
     filename = path if path else _fullpath(default)
     return load_data(filename, 'parameter')
     
-def load_errors(path=None)-> Dict[int, ErrorOrWarning]:
+
+def load_errors(path=None):
     """Parse the error file and return a dictionary of 
     errors.
+    
+    If *path* isn't specified, the file will be ``'errors.txt'``, 
+    located in this directory.
     """
     default = 'errors.txt'
     filename = path if path else _fullpath(default)
     return load_data(filename, 'error')
 
-def load_warnings(path=None) -> Dict[int, ErrorOrWarning]:
+
+def load_warnings(path=None):
     """Parse the warning file and return a dictionary of 
-    errors.
+    warnings.
+    
+    If *path* isn't specified, the file will be ``'warnings.txt'``, 
+    located in this directory.
     """
     default = 'warnings.txt'
     filename = path if path else _fullpath(default)
     return load_data(filename, 'warning')
 
-def load_data(filename: str, type_: str) -> Dict[int, object]:
+
+def load_data(filename, type_):
     """Return a dictionary of parameters, errors or warnings.
     
     Args:
         filename: A text file containing parameter/error/warning data.
             The syntax used in the text file is explained in 
-            parameters.txt.
-        type_: 'parameters', 'errors' or 'warnings'.
+            ``parameters.txt``.
+        type_: ``'parameters'``, ``'errors'`` or ``'warnings'``.
             
     Returns:
-        A dictionary with numbers as keys and Parameter 
-        or ErrorOrWarning objects as values.
+        A dictionary with numbers as keys and :class:`Parameter` 
+        or :class:`ErrorOrWarning` objects as values.
             
     Raises:
         FileNotFoundError: If *filename* cannot be found.
@@ -141,13 +175,14 @@ def load_data(filename: str, type_: str) -> Dict[int, object]:
     
     return {p.number: p for p in object_list}
 
-def parse(line: str, type_: str) -> Union[Parameter, ErrorOrWarning]:
-    """Parse data from *line* and form a Parameter or 
-    ErrorOrWarning object.
+
+def parse(line, type_):
+    """Parse data from *line* and form a :class:`Parameter` or 
+    :class:`ErrorOrWarning` object.
     
     Args:
         line: A string with no line breaks.
-        type_: 'parameter', 'error' or 'warning'.
+        type_: ``'parameter'``, ``'error'`` or ``'warning'``.
     
     Raises:
         ValueError: If *line* cannot be parsed.
@@ -172,7 +207,8 @@ def parse(line: str, type_: str) -> Union[Parameter, ErrorOrWarning]:
     except ValueError as e:
         raise ValueError('invalid values: ' + str(e)) from e
 
-def _separate_fields(line: str) -> List[str]:
+
+def _separate_fields(line):
     """Separate the data fields contained in *line*.
     
     Args:
@@ -212,8 +248,8 @@ def _separate_fields(line: str) -> List[str]:
     field = start + one_or_many_words + end
     return re.findall(field, line)
 
-def _form_object(fields: List[str], type_: str) -> Union[Parameter, 
-                                                         ErrorOrWarning]:
+
+def _form_object(fields, type_):
     """Return a Parameter or ErrorOrWarning object.
     
     Args:
@@ -233,7 +269,8 @@ def _form_object(fields: List[str], type_: str) -> Union[Parameter,
     raise ValueError(
         f"*type_* should be 'parameter', 'error' or 'warning', not {type_}")
 
-def _form_parameter(fields: List[str]) -> Parameter:
+
+def _form_parameter(fields):
     """Construct a Parameter object from given data fields.
         
     Raises:
@@ -254,7 +291,8 @@ def _form_parameter(fields: List[str]) -> Parameter:
     return Parameter(number, name, indices, min_, max_, default, unit, 
                      writable, type_, size, description)
     
-def _form_error_or_warning(fields: List[str]) -> ErrorOrWarning:
+
+def _form_error_or_warning(fields):
     """Construct an ErrorOrWarning object from given data fields.
         
     Raises:
@@ -269,6 +307,7 @@ def _form_error_or_warning(fields: List[str]) -> ErrorOrWarning:
     
     return ErrorOrWarning(number, name, possible_cause, remedy)
         
+
 def _parse_number(string: str) -> Tuple[int, range]:
     """Parse the data field containg the parameter/error/warning 
     number and possible indices.
@@ -310,6 +349,7 @@ def _parse_number(string: str) -> Tuple[int, range]:
 
     return number, indices    
 
+
 def _parse_minmax(string: str) -> Union[Data, str]:
     """Parse a data field containg the minimum or maximum parameter
         value.
@@ -338,11 +378,12 @@ def _parse_minmax(string: str) -> Union[Data, str]:
     else:
         raise ValueError(f'invalid min/max value: {string}')    
         
-def _parse_default(string: str) -> Union[Data, List[Data]]:
+        
+def _parse_default(string):
     """Parse the data field containg the default parameter value.
     
     Returns:
-        A Data, or a list of Datas, if parameter 
+        A Data subclass instance, or a list of such instances if parameter 
         indices have different default values.
     """
     try:
@@ -360,6 +401,7 @@ def _parse_default(string: str) -> Union[Data, List[Data]]:
         return value
     
     raise ValueError(f'invalid default value: {string}')
+
 
 def _parse_format(string: str) -> Tuple[type, int]:
     """Parse the data field containg the parameter number format.
@@ -400,6 +442,7 @@ def _parse_format(string: str) -> Tuple[type, int]:
         
     return type_, size
 
+
 def _parse_writable(string: str) -> bool:
     """Parse the data field indicating whether the parameter can be 
     written to.
@@ -411,15 +454,18 @@ def _parse_writable(string: str) -> bool:
     else:
         raise ValueError(f'invalid r/w string: {string}')
 
+
 def _remove_comments(line: str) -> str:
     """Removes everything after a comment symbol from *line*."""
     return line.split(_COMMENT_CHAR)[0]
-                      
+            
+          
 def _is_empty(line: str) -> bool:
     """Returns True, if *line* consists only of whitespace."""
     empty_regex = '^\s*$' # \s = whitespace character
     return bool(re.match(empty_regex, line))
-                      
+              
+        
 def _remove_quotes(string: str) -> str:
     """If *string* is enclosed in double quotes, this function removes 
     them.
@@ -431,7 +477,8 @@ def _remove_quotes(string: str) -> str:
         return string[1:-1]
     else:
         return string
-    
+
+
 def _add_linebreaks(string: str) -> str:
     """Replaces occurrences of r'\n' in *string* with '\n'.
     
@@ -452,5 +499,6 @@ def _add_linebreaks(string: str) -> str:
     # Here r'\\n' is interpreted by the re module as a single 
     # backslash and the letter n.
     return re.sub(r'\\n', '\n', string)
-            
+           
+ 
 main()

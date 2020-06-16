@@ -5,4 +5,5 @@ Modules
    
     datatypes.rst
     codes.rst
+    parser.rst
     telegram.rst

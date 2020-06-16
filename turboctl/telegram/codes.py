@@ -12,6 +12,9 @@ Members of enums can be accessed with any of the following syntaxes:
         - ParameterCode.__repr__ doesn't show up in the docs.
         - Classes that inherit both from CustomInt and Enum don't show up in
           the docs.
+        - Explain the meaning of these enums a bit (e.g. parameter errors 
+          represent error codes that are sent when a parameter can't be 
+          accessed).
 """
 
 import enum as e
