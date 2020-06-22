@@ -9,17 +9,19 @@ in telegrams.
 .. |n_bytes| replace:: :attr:`n_bytes <Data.n_bytes>`
 .. |BYTESIZE| replace:: :const:`BYTESIZE`
 """
-import collections.abc
 import math
 import re
 import struct
-from typing import Optional, Iterable
+from typing import Optional
 
 from turboctl.singledispatchmethod import singledispatchmethod 
 
 
 __all__ = ['BYTESIZE', 'maxuint', 'maxsint', 'minsint',
            'Data', 'Uint', 'Sint', 'Float', 'Bin']
+# These variables are "public" and are shown in the docs.
+# The others are "private" (equivalent to prefixing them with '_').
+
 
 BYTESIZE = 8
 """The number of bits in a byte."""
@@ -161,8 +163,6 @@ class Data():
         class_ = type(self)
         string = Bin(self).value[key]
         return class_(Bin(string))
-    
-    # TODO: bytes etc. as abstract methods?
     
     
 class Uint(Data):
@@ -321,7 +321,7 @@ class Float(Data):
         
         Raises:
             ValueError:
-                If *bits* is not ``32``, or *value* doesn't contain
+                If *bits* is not ``32``, or *value* can't be expressed in
                 32 bits of data.
         """
         raise TypeError(f'invalid type for *value*: {type(value)}')
@@ -329,8 +329,10 @@ class Float(Data):
     @__init__.register
     def _from_float(self, value: float, bits: int=4*BYTESIZE):
         check_float(value, bits)
-        self._value = value
-        self._bits = bits        
+        # Values that are too close to 0 to be expressed as a float are
+        # rounded to 0.
+        self._value = struct.unpack('>f', struct.pack('>f', value))[0]
+        self._bits = bits
 
     @__init__.register
     def _from_data(self, value: Data):
@@ -386,33 +388,20 @@ class Bin(Data):
         ::
             
             Bin(value: str, bits: Optional[int]=None)
-            Bin(value: Iterable[int], bits: Optional[int]=None)
             Bin(value: Data)
             Bin(value: bytes)
             
-        The method works like :meth:`Uint.__init__`,
-        with the following exceptions:
-            
-        - If *value* is specified directly, it must be a
-          :class:`str` instead of an :class:`int`.
-          In this case, *value* should be composed solely of
-          the characters ``'1'`` and ``'0'``, or be an empty string. 
-          If *bits* is ``None``, it will be set to the length of
-          *value*. Otherwise, *value* is padded with zeroes to a length
-          of *bits*.
-          Giving *bits* a value that is smaller than the length of
-          *value* will raise a :class:`ValueError`.
+        The method works like :meth:`Uint.__init__`, with the exception that 
+        if *value* is specified directly, it must be a :class:`str` instead 
+        of an :class:`int`.
+        In this case, *value* should be composed solely of
+        the characters ``'1'`` and ``'0'``, or be an empty string. 
+        If *bits* is ``None``, it will be set to the length of
+        *value*. Otherwise, *value* is padded with zeroes to a length
+        of *bits*.
         
-        - *value* can also be given as an iterable containing the
-          indices of all the bits that should have a value of ``1``.
-          The indices should all be non-negative integers.
-          *bits* determines the total number of indices; if *bits* is
-          ``None``, the largest index will be the largest number in
-          *value*.
-        
-          Example:
-              >>> Bin([1, 5])
-              Bin('010001', bits=6)
+        Giving *bits* a value that is smaller than the length of
+        *value* will raise a :class:`ValueError`.
         """
         raise TypeError(f'invalid type for *value*: {type(value)}')
         
@@ -423,15 +412,7 @@ class Bin(Data):
         if bits == None:
             bits = len(self.value)
         self._bits = bits
-        
-    # singledispatch doesn't wotk with typing objects.
-    @__init__.register(collections.abc.Iterable)
-    def _from_iterable(self, value: Iterable[int], bits: Optional[int]=None):
-        if bits is None:
-            bits = max(value) + 1
-        s = ''.join(['1' if i in value else '0' for i in range(bits)])
-        self._from_str(s, bits)
-        
+                
     @__init__.register
     def _from_data(self, value: Data):
         bytes_ = bytes(value)
@@ -538,13 +519,13 @@ def check_bin(value, bits=None):
     if bits != len(value):
         raise ValueError(
             f'bits != len(value); bits={bits}, value={repr(value)}')
-    
+
     regex=f'\A[01]{{{bits}}}\Z'
     if not re.match(regex, value):
         raise ValueError(
             f'{repr(value)} is not a {bits} bit binary string')
-            
-            
+
+
 def bin_str(i: int, bits: int) -> str:
     """Return a *bits* bit binary representation of i.
     

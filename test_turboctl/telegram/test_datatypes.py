@@ -1,11 +1,4 @@
-"""Unit tests for the datatypes module.
-
-TODO: the following tests should be added:
-    - make sure init with an invalid value produce a ValueError
-    - make sure init with an invalid bits does the same
-      (important special case: Bin() with iterable)
-    - make sure init works correctly if bits is not specified
-"""
+"""Unit tests for the datatypes module."""
 
 import math
 import unittest
@@ -14,6 +7,7 @@ from hypothesis import given, assume, strategies as st
 
 from turboctl.telegram.datatypes import (
     maxuint, maxsint, minsint, Uint, Sint, Float, Bin)
+
 
 # Testing with large numbers provides no benefits and slows the tests
 # down considerably.
@@ -24,7 +18,6 @@ MIN_SINT = minsint(MAX_BITS)
 
 
 ### Hypothesis strategies ###
-
 
 @st.composite
 def values_and_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
@@ -49,14 +42,39 @@ def values_and_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
     return value, bits
 
 @st.composite
-def iterables_and_bits(draw, min_bits=0, max_bits=MAX_BITS):
-    """Generate tuples of valid arguments for initializing Bin
-    objects from iterables.
+def classes_values_and_invalid_bits(draw, min_bits=0, max_bits=MAX_BITS):
+    """Generate tuples of a consisting of a Data subclass, a *values* argument 
+    and an invalid *bits* argument. 
+    *bits* will be a non-negative int, but *value* will be too 
+    large or too small to be stored by that number of bits.
     """
-    bits = draw(st.integers(min_value=min_bits, max_value=max_bits))
-    iterable = draw(st.iterables(st.integers(min_value=0, max_value=bits)))
-    return iterable, bits
+    class_ = draw(data_types())
+    bits = draw(st.integers(min_value=min_bits, max_value=max_bits))    
+    
+    if class_ == Uint:
+        # + 2 to make sure max_value > min_value.
+        value = draw(st.integers(min_value=maxuint(bits) + 1, 
+                                 max_value=MAX_UINT + 2))
+    
+    elif class_ == Sint:
+        too_small = st.integers(min_value=MIN_SINT - 2,
+                                max_value=minsint(bits) - 1)
+        too_large = st.integers(min_value=maxsint(bits) + 1,
+                                max_value=MAX_SINT + 2)
+        value = draw(st.one_of(too_small, too_large))
 
+    elif class_ == Float:
+        # Bits values other than 32 are always invalid.
+        bits_below_32 = st.integers(min_value=0, max_value=31)
+        bits_above_32 = st.integers(min_value=33, max_value=MAX_BITS)
+        bits = draw(st.one_of(bits_below_32, bits_above_32))
+        value = draw(st.floats(width=32))
+    
+    elif class_ == Bin:
+        length = st.integers(min_value=bits + 1, max_value=MAX_BITS + 2)
+        value = draw(st.from_regex(f'\A[01]{{{length}}}\Z'))
+
+    return class_, value, bits
 
 @st.composite
 def data_types(draw, classes=(Uint, Sint, Float, Bin)):
@@ -262,7 +280,7 @@ class TestInit(unittest.TestCase):
     
     @given(values_and_bits(Uint))
     def test_uint_from_int_sets_attributes_correctly(self, i_and_bits):
-        i, bits = i_and_bits
+        i, bits = i_and_bits        
         uint = Uint(i, bits)
         self.assertEqual(uint.value, i)
         self.assertEqual(uint.bits, bits)
@@ -277,6 +295,8 @@ class TestInit(unittest.TestCase):
     @given(values_and_bits(Float))
     def test_float_from_float_sets_attributes_correctly(self, x_and_bits):
         x, bits = x_and_bits
+        
+        # Bits specified.
         float_ = Float(x, bits)
         
         if math.isnan(x):
@@ -284,29 +304,84 @@ class TestInit(unittest.TestCase):
         else:
             self.assertEqual(float_.value, x)
         
-        self.assertEqual(float_.bits, bits)
+        self.assertEqual(float_.bits, 32)
+        
+    def test_float_sets_small_value_to_0(self):
+        self.assertEqual(Float(1E-50).value, 0)
+        self.assertEqual(Float(-1E-50).value, 0)
         
     @given(values_and_bits(Bin))
     def test_bin_from_str_sets_attributes_correctly(self, str_and_bits):
         s, bits = str_and_bits
-        bin_ = Bin(s, bits)
         
+        # Bits specified.
+        bin_ = Bin(s, bits)
         self.assertEqual(bin_.value, s)        
         self.assertEqual(bin_.bits, bits)
         
-    @given(iterables_and_bits())
-    def test_bin_from_iterable_sets_attributes_correctly(self, it_and_bits):
-        it, bits = it_and_bits
-        # Some iterables (i.e. generators) can only be iterated once, 
-        # so we need to save the contents to a list.
-        list_ = list(it)
-        bin_ = Bin(list_, bits)
+        # Bits not specified.
+        bin_ = Bin(s)
+        self.assertEqual(bin_.value, s)        
+        self.assertEqual(bin_.bits, len(s))
         
-        for i, c in enumerate(bin_.value):
-            self.assertEqual(c, '1' if i in list_ else '0')
-  
-        self.assertEqual(bin_.bits, bits)
+    def test_bits_default_value(self):
+        self.assertEqual(Uint(1).bits, 8)
+        self.assertEqual(Sint(-1).bits, 8)
+        self.assertEqual(Float(1.0).bits, 32)
+        # Bin doesn't have a default bit number.
         
         
+class TestErrors(unittest.TestCase):
+    
+    ### Invalid value ###
+    
+    def test_Uint_with_negative_value_raises_ValueError(self):
+        with self.assertRaises(ValueError):
+            Uint(-123)
+            
+    # Sint should work with all int values.
+    
+    def test_Float_with_too_large_value_raises_ValueError(self):
+        with self.assertRaises(ValueError):
+            Float(1E50)
+        with self.assertRaises(ValueError):
+            Float(-1E50)
+                        
+    def test_Bin_from_invalid_str_raises_ValueError(self):
+        with self.assertRaises(ValueError):
+            Bin('10201')
+        
+    ### Invalid bits ###
+    
+    @given(classes_values_and_invalid_bits())
+    def test_invalid_bits_raises_ValueError(self, class_value_and_bits):
+        class_, value, bits = class_value_and_bits
+        with self.assertRaises(ValueError):
+            class_(value, bits)
+            
+    @given(classes_values_and_invalid_bits(),
+           st.integers(min_value=-MAX_BITS, max_value=-1))
+    def test_negative_bits_raises_ValueError(self, class_value_and_bits, 
+                                             negative_bits):     
+        class_, value, _ = class_value_and_bits
+        with self.assertRaises(ValueError):
+            class_(value, negative_bits)       
+            
+    ### Bits specified when it shouldn't be ###
+    
+    @given(data_objects())
+    def test_bits_arg_raises_TypeError_when_initializing_from_data_obj(self, 
+                                                                       obj):
+        class_ = type(obj)
+        with self.assertRaises(TypeError):
+            class_(obj, obj.bits)
+            
+    @given(data_objects())
+    def test_bits_arg_raises_TypeError_when_initializing_from_bytes(self, obj):
+        class_ = type(obj)
+        with self.assertRaises(TypeError):
+            class_(bytes(obj), obj.bits)
+
+
 if __name__ == '__main__':
     unittest.main()
