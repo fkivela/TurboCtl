@@ -38,16 +38,16 @@ class Parameter:
     name: str
     indices: range
         # indices=range(0) for unindexed parameters.
-    min_: Data
-    max_: Data
-        # min and max can have a value of 'P<number>' (e.g. 'P18'), 
+    min_value: Data
+    max_value: Data
+        # min_value and max_vaue can have a value of 'P<number>' (e.g. 'P18'), 
         # if their value equals the value of another parameter.
     default: Union[Data, List[Data]]
         # default is a list, if the parameter is indexed and the 
         # indices have different default values.
     unit: str
     writable: bool
-    type_: type
+    datatype: type
     bits: int
     description: str
     
@@ -56,8 +56,9 @@ class Parameter:
         """Return an :class:`~collections.OrderedDict` with parameter 
         attribute names as keys and their values as values.
         """
-        fieldnames = ['number', 'name', 'indices', 'min_', 'max_', 'default', 
-                      'unit', 'writable', 'type_', 'bits', 'description']
+        fieldnames = ['number', 'name', 'indices', 'min_value', 'max_value', 
+                      'default', 'unit', 'writable', 'datatype', 'bits', 
+                      'description']
         return OrderedDict((name, getattr(self, name)) for name in fieldnames)
     
     
@@ -280,16 +281,16 @@ def _form_parameter(fields):
     
     number, indices = _parse_number(  fields[0])
     name            =                 fields[1]
-    min_            = _parse_minmax(  fields[2])
-    max_            = _parse_minmax(  fields[3])
+    min_value       = _parse_minmax(  fields[2])
+    max_value       = _parse_minmax(  fields[3])
     default         = _parse_default( fields[4])
     unit            =                 fields[5]
     writable        = _parse_writable(fields[6])
-    type_, size     = _parse_format(  fields[7])
+    datatype, bits  = _parse_format(  fields[7])
     description     =                 fields[8]
     
-    return Parameter(number, name, indices, min_, max_, default, unit, 
-                     writable, type_, size, description)
+    return Parameter(number, name, indices, min_value, max_value, default, 
+                     unit, writable, datatype, bits, description)
     
 
 def _form_error_or_warning(fields):
@@ -299,7 +300,6 @@ def _form_error_or_warning(fields):
         ValueError: If any of the data fields cannot be parsed into 
             values of the correct type.
     """  
-    
     number, _      = _parse_number(fields[0])
     name           =               fields[1]
     possible_cause =               fields[2]
@@ -407,7 +407,7 @@ def _parse_format(string: str) -> Tuple[type, int]:
     """Parse the data field containg the parameter number format.
     
     Returns: A tuple containing the type (a subclass of Data) 
-    and size (16 or 32) of the parameter.
+    and bits (16 or 32) of the parameter.
     """
     numbers = '([0-9]+)'
     letters = '([a-z]+)'
@@ -423,7 +423,7 @@ def _parse_format(string: str) -> Tuple[type, int]:
         raise ValueError(f'invalid format: {string}')
     
     type_part = parts[0]
-    size_part = parts[1]
+    bits_part = parts[1]
     
     if type_part == 'u':
         type_ = Uint
@@ -435,12 +435,12 @@ def _parse_format(string: str) -> Tuple[type, int]:
         raise ValueError(f'invalid type: {string}')
     
     try:
-        size = int(size_part)
+        bits = int(bits_part)
         
     except ValueError:
-        raise ValueError(f'invalid size: {string}')
+        raise ValueError(f'invalid bits: {string}')
         
-    return type_, size
+    return type_, bits
 
 
 def _parse_writable(string: str) -> bool:

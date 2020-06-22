@@ -2,51 +2,55 @@
 
 import unittest
 
-from turboctl import (Parameter, ErrorOrWarning, PARAMETERS, ERRORS, WARNINGS, 
-                      parse, Types)
+from turboctl.telegram.datatypes import Uint, Sint, Float, Bin
+from turboctl.telegram.parser import (
+    Parameter, ErrorOrWarning, PARAMETERS, ERRORS, WARNINGS, parse)
 
 # Attributes of the Parameter class:
-# number, name, indices, min, max, default, 
-# unit, writable, type, size, description
-# Attributes of the ErrorOrWarning class:
-# number, name, possible_cause, remedy
+# number, name, indices, min, max, default, unit, writable, datatype, bits, 
+# description
+
+# Attributes of the ErrorOrWarning class: number, name, possible_cause, remedy
 
 def dummy_parameter(number=1, 
                     name='Test parameter',  
                     indices=range(0), 
-                    min_=0, 
-                    max_=65535, 
+                    min_value=0, 
+                    max_value=65535, 
                     default=0, 
                     unit='', 
                     writable=True, 
-                    type_=Types.UINT, 
-                    size=16, 
+                    datatype=Uint, 
+                    bits=16, 
                     description='Test description.'):
-    
+    """Create a Parameter object where all fields take default values unless 
+    otherwise specified in the arguments.
+    """
     return Parameter(number=number,
                      name=name,
                      indices=indices, 
-                     min=min_, 
-                     max=max_, 
+                     min_value=min_value, 
+                     max_value=max_value, 
                      default=default, 
                      unit=unit, 
                      writable=writable, 
-                     type=type_,
-                     size=size,
+                     datatype=datatype,
+                     bits=bits,
                      description=description)
     
 def dummy_parameter_from_line(number='1', 
-                    name='"Test parameter"',
-                    min_='0', 
-                    max_='65535', 
-                    default='0', 
-                    unit='""', 
-                    rw='r/w', 
-                    format_='u16',
-                    description='"Test description."'):
+                              name='"Test parameter"',
+                              min_value='0', 
+                              max_value='65535', 
+                              default='0', 
+                              unit='""', 
+                              rw='r/w', 
+                              format_='u16',
+                              description='"Test description."'):
+    """Create a parameter object by parsing a line of text."""
     
-    string = ' '.join([number, name, min_, max_, default, unit, rw, format_, 
-                       description])
+    string = ' '.join([number, name, min_value, max_value, default, unit, rw, 
+                       format_, description])
     return parse(string, 'parameter')
     
 
@@ -89,22 +93,24 @@ class TestParsing(unittest.TestCase):
   
 
     def test_min_max_int(self):
-        parameter = dummy_parameter_from_line(min_='-10', max_='100')
-        self.assertEqual(parameter.min, -10)
-        self.assertEqual(parameter.max, 100)
+        parameter = dummy_parameter_from_line(min_value='-10', max_value='100')
+        self.assertEqual(parameter.min_value, -10)
+        self.assertEqual(parameter.max_value, 100)
         
     def test_min_max_float(self):
-        parameter = dummy_parameter_from_line(min_='-1.23e-4', max_='4.56e7')
-        self.assertEqual(parameter.min, -1.23e-4)
-        self.assertEqual(parameter.max, 4.56e7)
+        parameter = dummy_parameter_from_line(
+            min_value='-1.23e-4', max_value='4.56e7')
+        self.assertEqual(parameter.min_value, -1.23e-4)
+        self.assertEqual(parameter.max_value, 4.56e7)
         
     def test_min_max_reference(self):
-        parameter = dummy_parameter_from_line(min_='P1', max_='P2')
-        self.assertEqual(parameter.min, 'P1')
-        self.assertEqual(parameter.max, 'P2')
+        parameter = dummy_parameter_from_line(
+            min_value='P1', max_value='P2')
+        self.assertEqual(parameter.min_value, 'P1')
+        self.assertEqual(parameter.max_value, 'P2')
         
         with self.assertRaises(ValueError):
-            dummy_parameter_from_line(min_='PX')
+            dummy_parameter_from_line(min_value='PX')
             
     def test_default_int(self):
         parameter = dummy_parameter_from_line(default='10')
@@ -155,7 +161,7 @@ class TestParsing(unittest.TestCase):
         for f in formats:
             with self.subTest(i=f):
                 parameter = dummy_parameter_from_line(format_=f)
-                self.assertEqual(parameter.type, Types.UINT)
+                self.assertEqual(parameter.datatype, Uint)
     
     def test_sint(self):
         formats = ['s16', 's32']
@@ -163,30 +169,30 @@ class TestParsing(unittest.TestCase):
         for f in formats:
             with self.subTest(i=f):
                 parameter = dummy_parameter_from_line(format_=f)
-                self.assertEqual(parameter.type, Types.SINT)
+                self.assertEqual(parameter.datatype, Sint)
         
     def test_float(self):
         f = 'real32'
         parameter = dummy_parameter_from_line(format_=f)
-        self.assertEqual(parameter.type, Types.FLOAT)
+        self.assertEqual(parameter.datatype, Float)
             
-    def test_size_16(self):
+    def test_16_bits(self):
         formats = ['u16', 's16']
         
         for f in formats:
             with self.subTest(i=f):
                 parameter = dummy_parameter_from_line(format_=f)
-                self.assertEqual(parameter.size, 16)
+                self.assertEqual(parameter.bits, 16)
         
-    def test_size_32(self):
+    def test_32_bits(self):
         formats = ['u32', 's32', 'real32']
         
         for f in formats:
             with self.subTest(i=f):
                 parameter = dummy_parameter_from_line(format_=f)
-                self.assertEqual(parameter.size, 32)
+                self.assertEqual(parameter.bits, 32)
                 
-    def test_invalid_size_fails(self):
+    def test_invalid_bits_fails(self):
         formats = ['16', 'x16', 'u']
         
         for f in formats:
@@ -208,6 +214,9 @@ class TestParsing(unittest.TestCase):
         
         
 class TestActualParameters(unittest.TestCase):
+    """Make sure the parameters defined in parameters.txt aren't blatantly 
+    incorrect.
+    """
     
     def test_keys_equal_numbers(self):
         for num, parameter in PARAMETERS.items():
@@ -238,7 +247,7 @@ class TestActualParameters(unittest.TestCase):
     def test_all_mins_are_numbers_or_references(self):
         
         for parameter in PARAMETERS.values():        
-            value = parameter.min
+            value = parameter.min_value
             
             # Convert a string value 'P<number>' to an integer:
             try:
@@ -252,7 +261,7 @@ class TestActualParameters(unittest.TestCase):
     def test_all_maxes_are_numbers_or_references(self):
         
         for parameter in PARAMETERS.values():
-            value = parameter.max
+            value = parameter.max_value
             
             # Convert a string value 'P<number>' to an integer:
             try:
@@ -289,14 +298,14 @@ class TestActualParameters(unittest.TestCase):
         for parameter in PARAMETERS.values():
             self.assertIsInstance(parameter.writable, bool)
 
-    def test_all_types_are_uint_sint_or_float(self):
+    def test_all_datatypes_are_uint_sint_or_float(self):
         for parameter in PARAMETERS.values():
             self.assertTrue(
-                    parameter.type in (Types.UINT, Types.SINT, Types.FLOAT))
+                    parameter.datatype in (Uint, Sint, Float))
 
-    def test_all_sizes_are_16_or_32(self):
+    def test_all_bits_are_16_or_32(self):
         for parameter in PARAMETERS.values():
-            self.assertTrue(parameter.size in (16, 32))
+            self.assertTrue(parameter.bits in (16, 32))
 
     def test_all_descriptions_are_strings(self):
         for parameter in PARAMETERS.values():
