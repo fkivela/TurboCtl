@@ -53,6 +53,9 @@ class ParameterCode(e.Enum):
         # showing up in the docs.
         obj = object.__new__(cls)
         obj._value_ = value
+        obj.mode = mode
+        obj.indexed = indexed
+        obj.bits = bits
         obj.description = description
         return obj
     
@@ -94,7 +97,8 @@ class ParameterResponse(ParameterCode):
 
 
 def get_parameter_code(telegram_type, mode, indexed, bits):
-    """Return the parameter code that matches the arguments.
+    """Return the parameter code (as an enum member) that matches the 
+    arguments.
     
     *telegram_type* is ``'query'`` for messages to the pump and ``'reply'`` for
     messages from the pump.
@@ -226,14 +230,14 @@ class ParameterError(CustomInt, e.Enum):
         self.description = description
         self.exception = exception
                         
-    WRONG_NUM =     (  0, 'invalid parameter number',    WrongNumError)
-    CANNOT_CHANGE = (  1, 'parameter cannot be changed', CannotChangeError)
-    MINMAX        = (  2, 'min/max error',               MinMaxError)
-    INDEX         = (  3, 'index error',                 ParameterIndexError)
-    ACCESS        = (  5, "access mode doesn't match "
+    WRONG_NUM =     (  0, 'Invalid parameter number',    WrongNumError)
+    CANNOT_CHANGE = (  1, 'Parameter cannot be changed', CannotChangeError)
+    MINMAX        = (  2, 'Min/max error',               MinMaxError)
+    INDEX         = (  3, 'Index error',                 ParameterIndexError)
+    ACCESS        = (  5, "Access mode doesn't match "
                           "parameter",                   AccessError)
-    OTHER         = ( 18, 'other error',                 OtherError)
-    SAVING        = (102, 'parameter is being saved to '
+    OTHER         = ( 18, 'Other error',                 OtherError)
+    SAVING        = (102, 'Parameter is being saved to '
                           'nonvolatile memory',          SavingError)
     # Error codes 3, 5 and 102 aren't included in the manual, but were 
     # discovered while testing the pump.
