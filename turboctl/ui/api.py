@@ -5,7 +5,7 @@ from typing import Callable
 
 import serial
 
-from turboctl.telegram import Query, Reply, ControlBits, serial_kwargs
+from turboctl.telegram import Telegram, TelegramBuilder, TelegramReader, ControlBits, serial_kwargs
 
 
 @dataclass
@@ -62,9 +62,14 @@ class API():
            
     def send(self, telegram):
         self._connection.write(bytes(telegram))
-        answer_bytes = self.connection.read(Reply.LENGTH)
-        return Reply.from_bytes(answer_bytes)
-    
+        answer_bytes = self.connection.read(Telegram.LENGTH)
+        reply = TelegramBuilder.from_bytes(answer_bytes)
+        
+        if reply.error:
+            raise RuntimeError('TODO')
+        
+        return TelegramReader(reply) 
+        
     def get_control_bits(self):
         if self.status.pump_on:
             return {ControlBits.COMMAND, ControlBits.ON}
@@ -72,7 +77,10 @@ class API():
             return {}
     
     def status(self):
-        query = Query(control_bits=self.get_control_bits())
+        query = (TelegramBuilder()
+                 .set_control_bits(self.get_control_bits())
+                 .build()
+        )
         reply = self.send(query)
         return {'frequency': reply.frequency,
                 'temperature': reply.temperature,
@@ -80,21 +88,23 @@ class API():
                 'voltage': reply.voltage}
                 
     def read_parameter(self, number, index=0):
-        query = Query(
-            parameter_number=number,
-            parameter_index=index,
-            parameter_mode='read',
-            control_bits = self.get_control_bits()
+        query = (TelegramBuilder()
+                 .set_parameter_number(number)
+                 .set_parameter_index(index)
+                 .set_parameter_mode('read')
+                 .set_control_bits(self.get_control_bits())
+                 .build()
         )
-        reply = self.send(query)
+        reply = self.send(query)        
         return reply.parameter_value
     
     def write_parameter(self, value, number, index=0):
-        query = Query(
-            parameter_number=number,
-            parameter_index=index,
-            parameter_mode='write',
-            control_bits=self.get_control_bits()
+        query = (TelegramBuilder()
+                 .set_parameter_number(number)
+                 .set_parameter_index(index)
+                 .set_parameter_mode('read')
+                 .set_control_bits(self.get_control_bits())
+                 .build()
         )
-        reply = self.send_and_receive(query)
+        reply = self.send(query)
         return reply.parameter_value
