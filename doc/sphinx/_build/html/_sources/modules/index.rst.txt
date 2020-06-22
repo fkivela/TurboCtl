@@ -3,4 +3,7 @@ Modules
 
 .. toctree::
    
-   datatypes.rst
+    datatypes.rst
+    codes.rst
+    parser.rst
+    telegram.rst

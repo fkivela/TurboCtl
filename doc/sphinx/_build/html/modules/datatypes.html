@@ -1,19 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>datatypes &#8212; TurboCtl  documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="codes" href="codes.html" />
     <link rel="prev" title="Modules" href="index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -35,15 +36,15 @@
 <span id="datatypes"></span><h1><a class="reference internal" href="#module-turboctl.telegram.datatypes" title="turboctl.telegram.datatypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a><a class="headerlink" href="#module-turboctl.telegram.datatypes" title="Permalink to this headline">¶</a></h1>
 <p>This module defines classes representing different data types used
 in telegrams.</p>
-<dl class="data">
+<dl class="py data">
 <dt id="turboctl.telegram.datatypes.BYTESIZE">
 <code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">BYTESIZE</code><em class="property"> = 8</em><a class="headerlink" href="#turboctl.telegram.datatypes.BYTESIZE" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of bits in a byte.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="turboctl.telegram.datatypes.maxuint">
-<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">maxuint</code><span class="sig-paren">(</span><em class="sig-param">bits</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.maxuint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">maxuint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.maxuint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the largest unsigned integer that can be expressed with
 <em>bits</em> bits.</p>
 <p>If <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code> is returned.</p>
@@ -54,9 +55,9 @@ in telegrams.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="turboctl.telegram.datatypes.maxsint">
-<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">maxsint</code><span class="sig-paren">(</span><em class="sig-param">bits</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.maxsint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">maxsint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.maxsint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the largest (i.e. most positive) signed integer that can
 be expressed with <em>bits</em> bits.</p>
 <p>If <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code> is returned.</p>
@@ -67,9 +68,9 @@ be expressed with <em>bits</em> bits.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="turboctl.telegram.datatypes.minsint">
-<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">minsint</code><span class="sig-paren">(</span><em class="sig-param">bits</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.minsint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">minsint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.minsint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the smallest (i.e. most negative) signed integer that can
 be expressed with <em>bits</em> bits.</p>
 <p>If <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code> is returned.</p>
@@ -80,37 +81,37 @@ be expressed with <em>bits</em> bits.</p>
 </dl>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="turboctl.telegram.datatypes.Data">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Data</code><a class="headerlink" href="#turboctl.telegram.datatypes.Data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A superclass for all telegram data types.</p>
 <p>This class is not meant to be initialized, since it lacks an
 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.value">
 <em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#turboctl.telegram.datatypes.Data.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>The value represented by this data object.
 This is a read-only property.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.bits">
 <em class="property">property </em><code class="sig-name descname">bits</code><a class="headerlink" href="#turboctl.telegram.datatypes.Data.bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>How many bits of data this object represents.
 This is a read-only property.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.n_bytes">
 <em class="property">property </em><code class="sig-name descname">n_bytes</code><a class="headerlink" href="#turboctl.telegram.datatypes.Data.n_bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>How many bytes are needed to store the data in the object;
 equal to <a class="reference internal" href="#turboctl.telegram.datatypes.Data.bits" title="turboctl.telegram.datatypes.Data.bits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bits</span></code></a> divided by <a class="reference internal" href="#turboctl.telegram.datatypes.BYTESIZE" title="turboctl.telegram.datatypes.BYTESIZE"><code class="xref py py-const docutils literal notranslate"><span class="pre">BYTESIZE</span></code></a> and rounded up.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.__add__">
-<code class="sig-name descname">__add__</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__add__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__add__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__add__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <em>self</em> + <em>other</em>.</p>
 <p>Appends the binary data in <em>other</em> to the end of <em>self</em> and
 returns an object of the same class as <em>self</em> with the
@@ -118,9 +119,9 @@ combined binary data.</p>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">Bin('010')</span> <span class="pre">+</span> <span class="pre">Bin('001')</span> <span class="pre">=</span> <span class="pre">Bin('010001')</span></code></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.__eq__">
-<code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__eq__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__eq__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">self</span> <span class="pre">==</span> <span class="pre">other</span></code>.</p>
 <p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code>, if <em>self</em> and <em>other</em> have the same type,
 <a class="reference internal" href="#turboctl.telegram.datatypes.Data.value" title="turboctl.telegram.datatypes.Data.value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></a> and <a class="reference internal" href="#turboctl.telegram.datatypes.Data.bits" title="turboctl.telegram.datatypes.Data.bits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bits</span></code></a>, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.
@@ -128,7 +129,7 @@ Two objects with a value of <code class="docutils literal notranslate"><span cla
 and bits match.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.__repr__">
 <code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">repr(self)</span></code>.</p>
@@ -136,16 +137,16 @@ and bits match.</p>
 <code class="docutils literal notranslate"><span class="pre">'ClassName(&lt;value&gt;,</span> <span class="pre">bits=&lt;bits&gt;).'</span></code></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Data.__getitem__">
-<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__getitem__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Data.__getitem__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">self[key]</span></code>.</p>
 <p>This method uses <em>key</em> to get an index or a slice
 of the binary data in <em>self</em>,
 and returns an object of the same class as <em>self</em> containing
 the binary data in the index or slice.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Bin</span><span class="p">(</span><span class="s1">&#39;010001&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Bin</span><span class="p">(</span><span class="s1">&#39;010001&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">Bin(&#39;010&#39;, bits=3)</span>
 </pre></div>
 </div>
@@ -153,14 +154,14 @@ the binary data in the index or slice.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="turboctl.telegram.datatypes.Uint">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Uint</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: int = 8</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Uint" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Uint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Uint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.datatypes.Data</span></code></a></p>
 <p>A data type for unsigned integers.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Uint.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: int = 8</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Uint.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Uint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 <p>This method may be called with any of the following signatures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Sint</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
@@ -188,7 +189,7 @@ bytes, <a class="reference internal" href="#turboctl.telegram.datatypes.Data.bit
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Uint.__bytes__">
 <code class="sig-name descname">__bytes__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Uint.__bytes__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">bytes(self)</span></code>.</p>
@@ -198,22 +199,22 @@ bytes, <a class="reference internal" href="#turboctl.telegram.datatypes.Data.bit
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="turboctl.telegram.datatypes.Sint">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Sint</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: int = 8</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Sint" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Sint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Sint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.datatypes.Data</span></code></a></p>
 <p>A data type for signed integers formed with the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Two%27s_complement">two’s complement</a> method.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Sint.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: int = 8</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Sint.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Sint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>.</p>
 <p>This method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>,
 except that the range of valid <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> values it
 accepts is different.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Sint.__bytes__">
 <code class="sig-name descname">__bytes__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Sint.__bytes__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">bytes(self)</span></code>.</p>
@@ -222,15 +223,15 @@ accepts is different.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="turboctl.telegram.datatypes.Float">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Float</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits=32</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Float</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.datatypes.Data</span></code></a></p>
 <p>A data type for
 <a class="reference external" href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format#IEEE_754_single-precision_binary_floating-point_format:_binary32">IEEE 754 single-precision</a>  floating point numbers.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Float.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits=32</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>.</p>
 <p>This method may be called with any of the following signatures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Float</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
@@ -252,75 +253,67 @@ bits of data.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If <em>bits</em> is not <code class="docutils literal notranslate"><span class="pre">32</span></code>, or <em>value</em> doesn’t contain
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If <em>bits</em> is not <code class="docutils literal notranslate"><span class="pre">32</span></code>, or <em>value</em> can’t be expressed in
     32 bits of data.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Float.__bytes__">
 <code class="sig-name descname">__bytes__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__bytes__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">bytes(self)</span></code>.</p>
 <p>See <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__bytes__" title="turboctl.telegram.datatypes.Uint.__bytes__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__bytes__()</span></code></a> for details.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Float.__add__">
-<code class="sig-name descname">__add__</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__add__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__add__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__add__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <em>self</em> + <em>other</em>.</p>
 <p>This method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Data.__add__" title="turboctl.telegram.datatypes.Data.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Data.__add__()</span></code></a>, except that the
 returned object is a <a class="reference internal" href="#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a> instead of a <a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>,
 because <a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> objects cannot have more than 32 bits.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="turboctl.telegram.datatypes.Float.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Float.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">self[key]</span></code>.</p>
+<p>This method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Data.__getitem__" title="turboctl.telegram.datatypes.Data.__getitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Data.__getitem__()</span></code></a>,
+except that the returned object is a <a class="reference internal" href="#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a> instead of a
+<a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>,
+because <a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> objects cannot have less than 32 bits.</p>
 </dd></dl>
 
-<dl class="class">
+</dd></dl>
+
+<dl class="py class">
 <dt id="turboctl.telegram.datatypes.Bin">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Bin</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: Optional[int] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Bin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.datatypes.</code><code class="sig-name descname">Bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Bin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.datatypes.Data</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Bin.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">bits: Optional[int] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Bin.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Bin.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a>.</p>
 <p>This method may be called with any of the following signatures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">bits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Data</span><span class="p">)</span>
 <span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>,
-with the following exceptions:</p>
-<ul>
-<li><p>If <em>value</em> is specified directly, it must be a
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.
+<p>The method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>, with the exception that
+if <em>value</em> is specified directly, it must be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead
+of an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.
 In this case, <em>value</em> should be composed solely of
 the characters <code class="docutils literal notranslate"><span class="pre">'1'</span></code> and <code class="docutils literal notranslate"><span class="pre">'0'</span></code>, or be an empty string.
 If <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will be set to the length of
 <em>value</em>. Otherwise, <em>value</em> is padded with zeroes to a length
-of <em>bits</em>.
-Giving <em>bits</em> a value that is smaller than the length of
-<em>value</em> will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p></li>
-<li><p><em>value</em> can also be given as an iterable containing the
-indices of all the bits that should have a value of <code class="docutils literal notranslate"><span class="pre">1</span></code>.
-The indices should all be non-negative integers.
-<em>bits</em> determines the total number of indices; if <em>bits</em> is
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, the largest index will be the largest number in
-<em>value</em>.</p>
-<dl>
-<dt>Example:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Bin</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-<span class="go">Bin(&#39;010001&#39;, bits=6)</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-</ul>
+of <em>bits</em>.</p>
+<p>Giving <em>bits</em> a value that is smaller than the length of
+<em>value</em> will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="turboctl.telegram.datatypes.Bin.__bytes__">
 <code class="sig-name descname">__bytes__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.datatypes.Bin.__bytes__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">bytes(self)</span></code>.</p>
@@ -351,6 +344,9 @@ The indices should all be non-negative integers.
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -361,6 +357,7 @@ The indices should all be non-negative integers.
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">Modules</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Modules</a></li>
+      <li>Next: <a href="codes.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -374,7 +371,7 @@ The indices should all be non-negative integers.
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -391,7 +388,7 @@ The indices should all be non-negative integers.
       &copy;2019, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

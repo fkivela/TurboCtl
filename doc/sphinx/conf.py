@@ -41,15 +41,14 @@ autoclass_content = 'class'
 # instead of in alphabetical order.
 autodoc_member_order = 'bysource'
 
-# :special-members: prints __weakref__ by default; this disables that.
 autodoc_default_options = {
 	# Print members (i.e. attributes, methods, classes etc.) when documenting a module or an object.
 	'members': True,
 	# Print special members such as __init__ and __repr__.
 	'special-members': True,
-	# Print members in the same order as they ae in the source files.
+	# Print members in the same order as they as in the source files.
 	'member-order': 'bysource',
-	# Don't print __weakref__.
+	# :special-members: prints __weakref__ by default; this disables that.
     'exclude-members': '__weakref__',
 }
 
