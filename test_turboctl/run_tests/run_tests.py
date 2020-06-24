@@ -7,35 +7,26 @@ import tabulate
 # from being tested. 
 MODS_BY_PKG = {}
 
-MODS_BY_PKG['data'] = [
-    'test_codes',
-    'test_parser',
-    'test_types',
-    ]
-
 MODS_BY_PKG['telegram'] = [
-    'test_byteholder',
-    'test_conversions', 
-    'test_query',
-    'test_reply',
-    'test_telegram_wrapper',
+    'test_codes',
+    'test_datatypes',
+    'test_parser',
     'test_telegram',
-    'test_typedbytes',
     ]
 
-MODS_BY_PKG['ui'] = [
-    'test_abstractui',
-    'test_command_parser',
-    'test_correct_error_message',
-    'test_output',
-    'test_table',
-    'test_tui',
-    ]
+# MODS_BY_PKG['ui'] = [
+#     'test_abstractui',
+#     'test_command_parser',
+#     'test_correct_error_message',
+#     'test_output',
+#     'test_table',
+#     'test_tui',
+#     ]
 
-MODS_BY_PKG['virtualpump'] = [
-    'test_virtualconnection',
-    #'test_virtualpump', 
-    ]
+# MODS_BY_PKG['virtualpump'] = [
+#     'test_virtualconnection',
+#     #'test_virtualpump', 
+#     ]
 
 # Uncommenting this module adds 1 successful test, 2 failures, 
 # 3 errors and 4 skipped tests. 

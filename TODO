@@ -1,69 +1,18 @@
-Aikataulu:
-To: numtypes loppuun, sen dokumentointi, sphinx-dokkarit alkuun, sama telegramille
-Pe: telegram_wrapper ja api kuntoon
-Ma ja Ti: UI kuntoon
-Ke ja To: Virtualpump kuntoon ja testaus
-
-
 State of packages and modules: Code Tests Comments
 
-telegram                OK -- OK
-- update test_telegram_wrapper (cs_set setter changed)
-- change value errors to type errors in conversions
-data                    OK OK OK
-virtualpump             OK -- OK
-- virtualconnection       OK OK OK
-- parameter_component     OK -- OK
-- virtualpump             OK -- OK
-- hardware_component      OK -- OK
+telegram                OK OK OK
+virtualpump             -- -- --
 ui                      -- -- --
-- abstract_ui module:     OK OK OK
-- command_parser          OK -- OK
-  - test UIArgumentNumberError
-- correct_error_message   OK OK OK
-- output module           OK OK OK
-- table                   OK OK OK
-- tui module              -- -- OK
-- ui_errors               OK NA OK
-bin                     OK OK OK
-test_turboctl           OK OK OK
+bin                     -- -- --
+test_turboctl           -- -- --   
     
-    
-    
-# TurboCtl
-__main__ module
-    
-    
-TODO:    
+TODO:
+-
 
-Priority 1 (current)
-- Comment and test all modules
-- Add output to the setpoint command
-
-Priority 2 (soon)
-- Add a __main__ module
-- Test the program with the real pump
-- Double-check control and status bits etc.
-- Check units in the TUI (0.1 V vs V etc.)
-- Improve the TUI help message
-
-Priority 3 (when I have time)
-- Try generic functions (functools.singledispatch)
-- Try mock objects (unittest.mock)
+Might be useful:
 - Change setup methods to setupclass methods in some tests in order 
   to make them faster
-- Replace type(x) with type(x).__name__ in error and UI messages
-- Use the _ignore_ class property to define enum properties
-- Replace XOR with ^ in Telegram
-- Rename ParameterError to avoid confusion with the parameter error classes
-- Add a license
-- Add a README
-- Replace 'instance of enum' with 'member'
-
-Priority 4 (maybe never)
-- Add a config file
-- Add functionality for changing the telegram address
-
+- Try mock objects (unittest.mock)
 
 Things that have to be tested with the real pump:
 - If a parameter number is specified but there is no parameter access, 
