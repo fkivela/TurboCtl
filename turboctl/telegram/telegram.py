@@ -1,12 +1,5 @@
 """This module defines classes for creating, representing and reading
 telegrams which are used to communicate with the pump.
-
-\TODO: 
-    - Add the error code property to TelegramReader.
-    - Redirect the link to the serial module to the front page.
-    - Add a list of telegram attributes with their types.
-    - The docstring of TelegramBuilder.__init__ generates a weird indent
-    - The links to Status/ControlBits don't work'
     
 ..
     Aliases for Sphinx.
@@ -20,7 +13,7 @@ telegrams which are used to communicate with the pump.
 from dataclasses import dataclass
 
 from turboctl.telegram.codes import (ControlBits, StatusBits, 
-    get_parameter_code, get_parameter_mode)
+    get_parameter_code, get_parameter_mode, ParameterError)
 from turboctl.telegram.datatypes import (Data, Uint, Sint, Bin)
 from turboctl.telegram.parser import PARAMETERS
 
@@ -42,7 +35,8 @@ class Telegram:
     parity bit (1 if there are an even number of 1s in the data 
     bits, 0 otherwise) and an ending bit (1). However, only the data 
     bits are included in the bytes objects that represent telegrams;
-    the :mod:`serial` module automatically adds the other bits. 
+    the `serial <https://pyserial.readthedocs.io/en/latest/>`_ 
+    module automatically adds the other bits. 
     
     In the TURBOVAC manual, the data bits in a byte are indexed as 
     [7,6,5,4,3,2,1,0] (i.e. according to the power of 2 they
@@ -96,7 +90,8 @@ class Telegram:
 
     **Bytes 7-10:** PWE (parameter value). 
     This block contains a parameter value that is written to or read 
-    from the pump.
+    from the pump. If the pump tries to access a parameter but fails, the 
+    reply will contain an error code in this block.
     
     Attribute: :attr:`parameter_value`.
 
@@ -147,6 +142,8 @@ class Telegram:
                 
     where ``^`` is the exclusive or (XOR) operator.    
     """
+    # :mod:`serial` links to a weird place in pySerial's documentation, so a
+    # manual hyperlonk to the front page was used instead.
     
     parameter_code: Bin
     """The parameter access or response code as a 4-bit |Bin|."""
@@ -201,9 +198,9 @@ class Telegram:
             self.temperature +
             self.current + 
             Uint(0, 16) +
-            self.data.voltage
+            self.voltage
         )
-        return bytes_ + self._get_checksum(bytes_)
+        return bytes_ + bytes([checksum(bytes_)])
 
 
 class TelegramBuilder:
@@ -219,22 +216,21 @@ class TelegramBuilder:
                                      .set_parameter_value(3)
                                      .build())
         
-   The above creates a telegram which writes the value 3 to parameter 1,
-   index 2. Note that this is just an example of the syntax; parameter 1
-   isn't actually indexed.
+    The above creates a telegram which writes the value 3 to parameter 1,
+    index 2. Note that this is just an example of the syntax; parameter 1
+    isn't actually indexed.
    
-   Attributes which aren't explicitly set to a value with a setter method are 
-   set to zero when the telegram is created.
-   Trying to set an attribute to an invalid value results in a
-   :class:`ValueError` or a :class:`TypeError`.
+    Attributes which aren't explicitly set to a value with a setter method are 
+    set to zero when the telegram is created.
+    Trying to set an attribute to an invalid value results in a
+    :class:`ValueError` or a :class:`TypeError`.
         
     A telegram can also be created from a :class:`bytes` object:
     ::
         
         telegram = TelegramBuilder().from_bytes(bytes_).build()          
     """
-    
-    
+
     def __init__(self):
         """Initialize a new :class:`TelegramBuilder`."""
         
@@ -257,28 +253,60 @@ class TelegramBuilder:
         # created. 
         self._parameter_value = None
         self._parameter_mode = None
-        
-    
+
     @classmethod
     def from_bytes(cls, bytes_):
-        """Read the contents of the telegram from a :class:`bytes` object."""
+        """Read the contents of the telegram from a :class:`bytes` object.
+        
+        The type of :attr:`parameter_value <Telegram.parameter_value>`
+        depends on :attr:`parameter_number <Telegram.parameter_number>`,
+        and is assigned automatically. If *bytes_* contains a parameter 
+        number that doesn't exist, a :class:`ValueError` is raised.
+        
+        If the parameter isn't accessed (i.e. the parameter mode is set to 
+        ``'none'`` or code to ``'0000'``), invalid parameter numbers, such as
+        the default value of 0, are permitted.
+        In that case, the parameter type is set to
+        :class:`~turboctl.telegram.datatypes.Uint`.
+        
+        Raises:
+            ValueError: If *bytes_* doesn't represent a valid telegram.
+        """
         cls._check_valid_telegram(bytes_)
 
-        self = cls.__new__()
+        self = cls.__new__(cls)
+        
+        self._parameter_value = None
+        self._parameter_mode = None
+        
         code_and_number_bits = Bin(bytes_[3:5])    
-        self.kwargs = {
+        self._kwargs = {
             'parameter_code':       Bin(code_and_number_bits[0:4]),
             'parameter_number':     Uint(code_and_number_bits[5:16]),
             'parameter_index':      Uint(bytes_[6]),
-            # parameter_value is uint by default.
-            # Use TelegramReader to read it as the correct data type. 
-            'parameter_value':      Uint(bytes_[7:11]),
-            'flag_bits':            Bin(bytes_[11:13][::-1]),
+            'flag_bits':            Bin(bytes_[11:13])[::-1],
             'frequency':            Uint(bytes_[13:15]),
             'temperature':          Sint(bytes_[15:17]),
             'current':              Uint(bytes_[17:19]),
             'voltage':              Uint(bytes_[21:23])        
         }
+        
+        # Setting parameter_value is a bit more complicated:
+        
+        if self._kwargs['parameter_code'] == Bin('0000'):
+            # If the parameter isn't accessed, the parameter number can be an
+            # otherwise invalid one (e.g. 0, the deafult value).
+            # In this case, the type is set to Uint.
+            datatype = Uint
+        else:
+            # The type of parameter_value depends on the parameter.
+            number = self._kwargs['parameter_number'].value
+            try:
+                datatype = PARAMETERS[number].datatype
+            except KeyError:
+                raise ValueError(f'invalid parameter number: {number}')
+            
+        self._kwargs['parameter_value'] = datatype(bytes_[7:11])
         return self
         
     @classmethod
@@ -328,12 +356,12 @@ class TelegramBuilder:
         """
         if not value in PARAMETERS:
             raise ValueError('parameter does not exist')
-        self.kwargs['parameter_number'] = Uint(value, 11)
+        self._kwargs['parameter_number'] = Uint(value, 11)
         return self
         
     def set_parameter_index(self, value: int):
         """Set the parameter index."""
-        self.kwargs['parameter_index'] = Uint(value, bits=8)
+        self._kwargs['parameter_index'] = Uint(value, bits=8)
         return self
     
     def set_parameter_value(self, value):
@@ -352,12 +380,16 @@ class TelegramBuilder:
         :class:`~turboctl.telegram.codes.StatusBits` members that should be 
         included in the telegram.
         """
-        self.kwargs['flag_bits'] = Bin([bit.value for bit in bits], bits=16)
+        bitlist = 16 * ['0']
+        for bit in bits:
+            bitlist[bit.value] = '1'
+        string = ''.join(bitlist)
+        self._kwargs['flag_bits'] = Bin(string, bits=16)
         return self
     
     def set_frequency(self, value: int):
         """Set the frequency."""
-        self.kwargs['frequency'] = Uint(value, bits=8)
+        self._kwargs['frequency'] = Uint(value, bits=16)
         return self
     
     def set_temperature(self, value: int):
@@ -365,17 +397,17 @@ class TelegramBuilder:
         
         Note that *value* can also be negative.
         """
-        self.kwargs['temperature'] = Sint(value, bits=8)
+        self._kwargs['temperature'] = Sint(value, bits=16)
         return self
     
     def set_current(self, value):
         """Set the current."""
-        self.kwargs['current'] = Uint(value, bits=8)
+        self._kwargs['current'] = Uint(value, bits=16)
         return self
     
     def set_voltage(self, value):
         """Set the voltage."""
-        self.kwargs['voltage'] = Uint(value, bits=8)
+        self._kwargs['voltage'] = Uint(value, bits=16)
         return self
         
     def build(self, type_='query'):
@@ -399,7 +431,7 @@ class TelegramBuilder:
         # data type, since all data types represent 0 in the same way.
         if self._parameter_value or self._parameter_mode:
             try:
-                parameter_number = self.kwargs['parameter_number'].value
+                parameter_number = self._kwargs['parameter_number'].value
                 parameter = PARAMETERS[parameter_number]
             except KeyError:
                 raise ValueError(
@@ -407,8 +439,9 @@ class TelegramBuilder:
         
         # The type of parameter_value depends on the parameter.
         if self._parameter_value:
-            datatype = parameter.type_
-            self.kwargs['parameter_value'] = datatype(self._parameter_value)
+            datatype = parameter.datatype
+            self._kwargs['parameter_value'] = datatype(self._parameter_value, 
+                                                       bits=32)
             
         # The right parameter code is selected automatically based on
         # parameter_mode and the parameter.
@@ -416,18 +449,25 @@ class TelegramBuilder:
             indexed = bool(parameter.indices)
             bits = parameter.bits
             code = get_parameter_code(
-                type_,  self._parameter_mode, indexed, bits)
-            self.kwargs['parameter_code'] = Bin(code, bits=4)
+                type_,  self._parameter_mode, indexed, bits).value
+            self._kwargs['parameter_code'] = Bin(code, bits=4)
             
-        return Telegram(**self.kwargs)
+        return Telegram(**self._kwargs)
 
 
 class TelegramReader:
     """This class can be used to read the data of a telegram in a more
     user-friendly way. This means the returned values are Python built-ins 
     instead of the custom datatypes used by the :class:`Telegram` class, and 
-    *parameter_code* and *parameter_value* are automatically converted to 
-    human-readable values.    
+    *parameter_code* is automatically converted to a human-readable value.
+        
+    Attributes:        
+        type:
+            ``'query'`` for telegrams to the pump, ``'reply'`` for telegrams
+            from the pump.
+            
+        telegram:
+            The :class:`Telegram` object that is read.
     """
     
     def __init__(self, telegram, type_='reply'):
@@ -470,6 +510,27 @@ class TelegramReader:
         return self.telegram.parameter_number.value
     
     @property
+    def parameter_error(self):
+        """Return the parameter error.
+        
+        Returns:
+            A member of the :class:`~turboctl.telegram.codes.ParameterError` 
+            enum, or ``None``, if :attr:`parameter_mode` isn't ``'error'``.
+            
+        Raises:
+            ValueError: If the error number isn't valid.
+        """
+        
+        if self.parameter_mode != 'error':
+            return None
+        
+        number = Uint(self.telegram.parameter_value).value
+        try:
+            return ParameterError(number)
+        except KeyError:
+            raise ValueError(f'invalid parameter error number: {number}')
+    
+    @property
     def parameter_index(self):
         """Return the parameter index."""
         return self.telegram.parameter_index.value
@@ -477,18 +538,19 @@ class TelegramReader:
     @property
     def parameter_value(self):
         """Return the parameter value."""
-        return self.telegram.parameter_index.value
+        return self.telegram.parameter_value.value
     
     @property
     def flag_bits(self):
-        """Return the control or status bits as an iterable those
-        :class:`codes.StatusBits` or :class:`codes.ControlBits` members that 
-        are set to 1 in the telegram.
+        """Return the control or status bits as a list of those
+        :class:`~turboctl.telegram.codes.StatusBits` or
+        :class:`~turboctl.telegram.codes.ControlBits` members that are set to 
+        1 in the telegram.
         """
         bits = self.telegram.flag_bits.value
         enum = ControlBits if self.type == 'query' else StatusBits
         return [enum(i) for i, char in enumerate(bits) if char == '1']
-        
+    
     @property
     def frequency(self):
         """Return the frequency."""
@@ -510,8 +572,7 @@ class TelegramReader:
         return self.telegram.voltage.value
     
 
-@staticmethod
-def checksum(bytes_):        
+def checksum(bytes_: bytes) -> int:    
     """Compute a checksum for a telegram."""
     checksum = 0
     for i in bytes_:

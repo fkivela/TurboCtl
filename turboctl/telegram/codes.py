@@ -48,7 +48,7 @@ class ParameterCode(e.Enum):
     def __new__(cls, value, mode, indexed, bits, description):
         # __new__ is defined instead of __init__, because setting 
         # _value_ in __init__ prevents the syntax 
-        # :code:`member = EnumName(value_of_member)` from working.
+        # 'member = EnumName(value_of_member)' from working.
         # This is a comment instead of a docstring to prevent this from 
         # showing up in the docs.
         obj = object.__new__(cls)
