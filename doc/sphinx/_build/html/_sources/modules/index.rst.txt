@@ -7,3 +7,4 @@ Modules
     codes.rst
     parser.rst
     telegram.rst
+    api.rst
