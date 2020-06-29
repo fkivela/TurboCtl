@@ -7,7 +7,12 @@ bin                     -- -- --
 test_turboctl           -- -- --   
     
 TODO:
--
+- Make all functions that send commands to the pump return both the query and
+  the reply (as TelegramReader objects)
+- Add a __str__ method to TelgramReader. It should print the contants of the
+  telegram in a human-readable form that can be used for debugging.
+- Make TelegramReader.parameter_mode return the description string of the
+  parameter enum member. codes.get_parameter_mode can be removed.
 
 Might be useful:
 - Change setup methods to setupclass methods in some tests in order 

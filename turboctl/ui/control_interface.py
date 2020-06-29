@@ -127,7 +127,10 @@ class ControlInterface():
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):
-        """Called upon exiting a ``with`` block; calls :meth:`close`."""
+        """Called upon exiting a ``with`` block; calls :meth:`close`.
+        
+        The arguments are ignored.
+        """
         self.halt()
 
     def close(self):
@@ -192,5 +195,5 @@ class ControlInterface():
             ValueError:
                 If *number* or *index* have invalid values.
         """
-        return api.write_parameter(self._connection, number, index, value,
+        return api.write_parameter(self._connection, value, number, index,
                                    pump_on=self.status.pump_on)
