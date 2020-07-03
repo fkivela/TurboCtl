@@ -103,8 +103,8 @@ class Telegram:
     
     Attribute: :attr:`flag_bits`.
 
-    **Bytes 13-14:** PZD2 (current stator frequency). 
-    Stator frequency in Hz; the same as parameter 3.
+    **Bytes 13-14:** PZD2 (current rotor frequency). 
+    Rotor frequency in Hz; the same as parameter 3.
     Included in all replies, and can be included in queries to define 
     a setpoint for the frequency. (This only works if the setpoint is 
     enabled through the control bits, and overrides the setpoint 
@@ -142,6 +142,10 @@ class Telegram:
                 
     where ``^`` is the exclusive or (XOR) operator.    
     """
+    # The manual uses "stator frequency (=P3)" instead of "rotor frequency",
+    # but the entry for parameter 3 uses the word "rotor", which seems to be
+    # the correct version since the rotor is the moving part.
+    
     # :mod:`serial` links to a weird place in pySerial's documentation, so a
     # manual hyperlonk to the front page was used instead.
     
