@@ -151,15 +151,22 @@ class ControlInterface():
 
     def pump_on(self):
         """Turn the pump on."""
-        return api.status(self._connection, pump_on=True)
+        reply = api.status(self._connection, pump_on=True)
+        self._update_status(reply)
+        self.api.pump_on = True
+        return reply
     
     def pump_off(self):
         """Turn the pump off."""
-        return api.status(self._connection, pump_on=False)
+        reply = api.status(self._connection, pump_on=False)
+        self._update_status(reply)
+        return reply
 
     def status(self):
         """Ask pump status by sending an empty telegram."""
-        return api.status(self._connection, pump_on=self.status.pump_on)
+        reply =  api.status(self._connection, pump_on=self.status.pump_on)
+        self._update_status(reply)
+        return reply
                 
     def read_parameter(self, number, index=0):
         """Read the value of an index of a parameter.
@@ -175,8 +182,10 @@ class ControlInterface():
             ValueError:
                 If *number* or *index* have invalid values.
         """
-        return api.read_parameter(self._connection, number, index, 
-                                  pump_on=self.status.pump_on)
+        reply =  api.read_parameter(self._connection, number, index, 
+                                    pump_on=self.status.pump_on)
+        self._update_status(reply)
+        return reply
     
     def write_parameter(self, value, number, index=0):
         """Write a value to an index of a parameter.
@@ -195,5 +204,18 @@ class ControlInterface():
             ValueError:
                 If *number* or *index* have invalid values.
         """
-        return api.write_parameter(self._connection, value, number, index,
-                                   pump_on=self.status.pump_on)
+        reply = api.write_parameter(self._connection, value, number, index,
+                                    pump_on=self.status.pump_on)
+        self._update_status(reply)
+        return reply
+    
+    def _update_status(self, reply):
+        """Update self.status based on the reply from the pump
+        (a TelegramReader object).
+        """
+        self.api.frequency = reply.frequency
+        self.api.temperature = reply.temperature
+        # The pump reports current and voltage in 0.1 A/V.
+        self.api.current = reply.current / 10
+        self.api.voltage = reply.voltage / 10
+        self.api.status_bits = reply.status_bits

@@ -26,7 +26,9 @@ TODO:
 - Pump errors could be tested by adding a raise_error method to virtualpump.
   E.g. vpump.raise_error(type='power_failure').
 - Everything that can be private should probably be private.
-
+- Sphinxify ui.table.
+- Make sure the user understands that API.pump_on doesn't necassarily actually
+  reflect the status of the pump. 
 
 Might be useful:
 - Change setup methods to setupclass methods in some tests in order 

@@ -1,0 +1,2 @@
+# Run turboctl with given command line arguments.
+python $(dirname $0)/turboctl $@
