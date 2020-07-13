@@ -3,7 +3,8 @@
 
 import unittest
 
-from turboctl.telegram.codes import ControlBits, ParameterError
+from turboctl.telegram.codes import (ParameterResponse, ParameterError,
+                                     ControlBits)
 from turboctl.telegram.datatypes import Uint, Sint, Float, Bin
 from turboctl.telegram.telegram import (Telegram, TelegramBuilder, 
                                         TelegramReader, checksum)
@@ -92,102 +93,7 @@ class TestTelegram(Base):
 
 
 class TestTelegramBuilder(Base):
-    
-    ### from_bytes ###
-    
-    def test_from_bytes(self):
-        t = TelegramBuilder.from_bytes(self.bytes).build()
-        self.assertEqual(t, self.telegram)
-        
-    def _test_from_bytes_with_value(self, param_number, param_value):
-        # test_from_bytes, but telegram.parameter_number and 
-        # telegram.parameter_value are replaced with *param_number* and
-        # *param_value*.
-        
-        parameter_bytes = bytes(Bin('00010') + Uint(param_number, 11))
-        value_bytes = bytes(param_value)
-        
-        # Replace parameter_number and parameter_value in self.bytes.
-        self.bytes = (self.bytes[:3] + parameter_bytes + self.bytes[5:7]
-                      + value_bytes + self.bytes[11:])
-        
-        # Update the checksum.
-        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
-        
-        t = TelegramBuilder.from_bytes(self.bytes).build()
-        self.assertEqual(t.parameter_value, param_value)
-        
-    def test_from_bytes_sint(self):
-        number = 1
-        value = Sint(-1234, 32)        
-        self._test_from_bytes_with_value(number, value)
-        
-    def test_from_bytes_float(self):        
-        number = 2
-        value = Float(1234.5678)
-        self._test_from_bytes_with_value(number, value)        
-        
-    def test_from_bytes_bin(self):        
-        number = 3
-        value = Bin(4 * '10010110')
-        self._test_from_bytes_with_value(number, value)        
-        
-    def test_from_bytes_no_parameter_access(self):
-        
-        # parameter_number is 0 (an invalid value), but this should be ok
-        # since the parameter isn't accessed.
-        parameter_bytes = bytes(2)
-        value_bytes = bytes(Sint(-1, 32))
-        
-        # Replace parameter_number and parameter_value in self.bytes.
-        self.bytes = (self.bytes[:3] + parameter_bytes + self.bytes[5:7]
-                      + value_bytes + self.bytes[11:])
-        
-        # Update the checksum.
-        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
-        
-        t = TelegramBuilder.from_bytes(self.bytes).build()
-        # The value will be interpreted as an Uint instead of a Sint,
-        # since the type of the parameter wasn't checked.
-        self.assertEqual(t.parameter_value, Uint(2**32 - 1, 32))
-        
-    def test_from_bytes_invalid_parameter_number(self):
-        
-        # parameter_number is 0, which should raise an error, since the
-        # parameter is now accessed.
-        parameter_bytes = bytes(Bin('0001000000000000'))
-        value_bytes = bytes(Uint(0, 32))
-        
-        # Replace parameter_number and parameter_value in self.bytes.
-        self.bytes = (self.bytes[:3] + parameter_bytes + self.bytes[5:7]
-                      + value_bytes + self.bytes[11:])
-        
-        # Update the checksum.
-        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
-        
-        with self.assertRaises(ValueError):
-            TelegramBuilder.from_bytes(self.bytes).build()
-            
-    def test_from_bytes_with_invalid_byte_0_fails(self):
-        bytes2 = bytes([0]) + self.bytes[1:]
-        with self.assertRaises(ValueError):
-            TelegramBuilder().from_bytes(bytes2)
-    
-    def test_from_bytes_with_invalid_byte_1_fails(self):
-        bytes2 = self.bytes[0:1] + bytes([0]) + self.bytes[2:]
-        with self.assertRaises(ValueError):
-            TelegramBuilder().from_bytes(bytes2)
-            
-    def test_from_bytes_with_invalid_length_fails(self):
-        bytes2 = self.bytes + bytes([0]) 
-        with self.assertRaises(ValueError):
-            TelegramBuilder().from_bytes(bytes2)
-            
-    def test_from_bytes_with_invalid_checksum_fails(self):
-        bytes2 = self.bytes[:-1] + bytes([0])
-        with self.assertRaises(ValueError):
-            TelegramBuilder().from_bytes(bytes2)
-            
+                
     ### Setters ###
             
     def test_setters(self):
@@ -234,6 +140,32 @@ class TestTelegramBuilder(Base):
         with self.assertRaises(ValueError):
             TelegramBuilder().build('qery')
             
+    ### from_bytes ###
+    
+    def test_from_bytes(self):
+        t = TelegramBuilder.from_bytes(self.bytes).build()
+        self.assertEqual(t, self.telegram)
+            
+    def test_from_bytes_with_invalid_byte_0_fails(self):
+        bytes2 = bytes([0]) + self.bytes[1:]
+        with self.assertRaises(ValueError):
+            TelegramBuilder().from_bytes(bytes2)
+    
+    def test_from_bytes_with_invalid_byte_1_fails(self):
+        bytes2 = self.bytes[0:1] + bytes([0]) + self.bytes[2:]
+        with self.assertRaises(ValueError):
+            TelegramBuilder().from_bytes(bytes2)
+            
+    def test_from_bytes_with_invalid_length_fails(self):
+        bytes2 = self.bytes + bytes([0]) 
+        with self.assertRaises(ValueError):
+            TelegramBuilder().from_bytes(bytes2)
+            
+    def test_from_bytes_with_invalid_checksum_fails(self):
+        bytes2 = self.bytes[:-1] + bytes([0])
+        with self.assertRaises(ValueError):
+            TelegramBuilder().from_bytes(bytes2)
+            
     ### Parameter value ###
     
     def test_parameter_value_sint(self):
@@ -242,7 +174,7 @@ class TestTelegramBuilder(Base):
             .set_parameter_mode('write')
             .set_parameter_value(-1234)
             .build())
-
+        
         self.assertEqual(t.parameter_value, Sint(-1234, 32))
         
     def test_parameter_value_float(self):
@@ -263,7 +195,7 @@ class TestTelegramBuilder(Base):
 
         self.assertEqual(t.parameter_value, Bin(4 * '10010110'))
         
-    def test_parameter_value_wrong_type_fails(self):
+    def test_parameter_value_invalid_value_fails(self):
         tb = (TelegramBuilder()
             .set_parameter_number(1234)
             .set_parameter_mode('write')
@@ -271,6 +203,66 @@ class TestTelegramBuilder(Base):
         )
         with self.assertRaises(ValueError):
             tb.build()
+        
+    def test_parameter_value_wrong_type_fails(self):
+        tb = (TelegramBuilder()
+            .set_parameter_number(3)
+            .set_parameter_mode('write')
+            .set_parameter_value(1234)
+        )
+        with self.assertRaises(TypeError):
+            tb.build()
+            
+    def test_parameter_value_with_no_parameter_access(self):
+        """Make sure the parameter type is always Uint when there is no
+        parameter access.
+        """
+        for mode in ['none', 'error']:
+            with self.subTest(i=mode):
+        
+                t =  (TelegramBuilder()
+                     .set_parameter_number(3)
+                     .set_parameter_mode('none')
+                     .set_parameter_value(1234)
+                     .build())
+                self.assertEqual(t.parameter_value, Uint(1234, 32))
+            
+    ### Parameter value from bytes
+    
+    # The most basic case has already been tested in test_from_bytes.
+            
+    def _test_value_from_bytes(self, param_number, param_value):
+        # test_from_bytes, but telegram.parameter_number and 
+        # telegram.parameter_value are replaced with *param_number* and
+        # *param_value*.
+        
+        parameter_bytes = bytes(Bin('00010') + Uint(param_number, 11))
+        value_bytes = bytes(param_value)
+        
+        # Replace parameter_number and parameter_value in self.bytes.
+        self.bytes = (self.bytes[:3] + parameter_bytes + self.bytes[5:7]
+                      + value_bytes + self.bytes[11:])
+        
+        # Update the checksum.
+        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
+        
+        t = TelegramBuilder.from_bytes(self.bytes).build()
+        self.assertEqual(t.parameter_value, param_value)
+        
+    def test_sint_from_bytes(self):
+        number = 1
+        value = Sint(-1234, 32)        
+        self._test_value_from_bytes(number, value)
+        
+    def test_float_from_bytes(self):        
+        number = 2
+        value = Float(1234.5678)
+        self._test_value_from_bytes(number, value)        
+        
+    def test_bin_from_bytes(self):        
+        number = 3
+        value = Bin(4 * '10010110')
+        self._test_value_from_bytes(number, value)        
             
     ### Parameter code ###
     
@@ -292,6 +284,62 @@ class TestTelegramBuilder(Base):
         tb.set_parameter_mode('response')
         t = tb.build('reply')
         self.assertEqual(t.parameter_code, Bin('0101'))
+        
+    ### Parameter code from bytes ###
+        
+    def _set_parameter_access_and_value(self, code, number, value):
+        """Update the parameter code, number and value in self.bytes.
+        
+        The checksum is updated automatically.
+        
+        Args:
+            code: A string.
+            number: An int.
+            value: A Data subclass instance.
+        """
+        # Change the 4 code bits but keep the other bits in the parameter
+        # block the same.
+        parameter_block = bytes(Bin(code) + Bin('0') + Uint(number, 11))
+
+        # Replace the parameter code/number and value blocks.
+        self.bytes = (self.bytes[:3] + parameter_block + self.bytes[5:7]
+                      + bytes(value) + self.bytes[11:])
+        
+        # Update the checksum.
+        self.bytes = (
+            self.bytes[:-1] + bytes([checksum(self.bytes[:-1])]))
+    
+    def test_from_bytes_no_parameter_access(self):
+        """Make sure invalid parameter numbers are accepted if the parameter
+        mode is 'none' or 'error'.
+        """
+        no_access_code = ParameterResponse.NONE.value
+        error_code = ParameterResponse.ERROR.value
+        
+        for code in [no_access_code, error_code]:
+            with self.subTest(i=code):
+                
+                # parameter_number is 0 (an invalid value), but this should be
+                # ok since the parameter isn't accessed.
+                self._set_parameter_access_and_value(code, 0, Sint(-1, 32))
+                                
+                # The 'error' mode only works here if the telegram is a reply.
+                t = TelegramBuilder.from_bytes(self.bytes).build('reply')
+
+                # The value will be interpreted as an Uint instead of a Sint,
+                # since the type of the parameter wasn't checked.
+                self.assertEqual(t.parameter_value, Uint(2**32 - 1, 32))
+        
+    def test_from_bytes_invalid_parameter_number(self):
+        """Make sure invalid parameter numbers are not accepted if the
+        parameter mode is not 'none' or 'error'.
+        """
+        # parameter_number is 0, which should raise an error, since the
+        # parameter is now accessed.        
+        self._set_parameter_access_and_value('0001', 0, Uint(0, 32))
+        
+        with self.assertRaises(ValueError):
+            TelegramBuilder.from_bytes(self.bytes).build()
 
 
 class TestTelegramReader(Base):
@@ -377,7 +425,41 @@ class TestTelegramReader(Base):
         tr = TelegramReader(t)
         with self.assertRaises(ValueError):
             tr.parameter_error
-
+            
+    ### Magic methods ###
+    
+    def test_repr(self):
+        # Replace the default status bits since there are so many.
+        self.telegram.flag_bits = Bin('1010000000000000')        
         
+        tr = TelegramReader(self.telegram)
+        string = f"TelegramReader(telegram={str(self.telegram)}, type='reply')"
+        
+        self.assertEqual(repr(tr), string)
+    
+    def test_str(self):
+        self.telegram.flag_bits = Bin('1010000000000000')        
+        tr = TelegramReader(self.telegram)
+        
+        string = f"""
+TelegramReader(
+    telegram={str(self.telegram)},
+    type='reply',
+    parameter_mode='response',
+    parameter_number=1234,
+    parameter_index=56,
+    parameter_value=5432,
+    parameter_error=None,
+    flag_bits=[<StatusBits.READY: 0>, <StatusBits.OPERATION: 2>],
+    frequency=1221,
+    temperature=2332,
+    current=3443,
+    voltage=4554
+)
+"""[1:-1]
+
+        self.assertEqual(str(tr), string)
+
+
 if __name__ == '__main__':
     unittest.main()

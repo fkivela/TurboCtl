@@ -256,8 +256,14 @@ class TelegramBuilder:
         # parameter_value and parameter_mode are special cases.
         # These variables store the values given by the user, and the final
         # values used as arguments are only determined when the telegram is
-        # created. 
+        # created.
+        
+        # __init__ and set_parameter_value set this to a int or a float,
+        # and from_bytes to a bytes object.
         self._parameter_value = 0
+        
+        # __init__ and set_parameter_mode set this to a string, and from_bytes
+        # to a Bin object.
         self._parameter_mode = 'none'
 
     @classmethod
@@ -424,7 +430,8 @@ class TelegramBuilder:
         error_code = ParameterResponse.ERROR.value
         
         # self._parameter_mode is a string if this object was created with
-        # __init__(), and Bin if it was created with from_bytes().
+        # __init__() or if set_parameter_mode was called, and Bin if this
+        # object was created with from_bytes().
         mode_is_none = self._parameter_mode in ['none', Bin(none_code)]
         mode_is_error = (type_ == 'reply' and
                       self._parameter_mode in ['error', Bin(error_code)])
@@ -442,11 +449,16 @@ class TelegramBuilder:
             except KeyError:
                 raise ValueError(f'invalid parameter number: {number}') 
 
-            code = get_parameter_code(
-                type_,  self._parameter_mode,
-                bool(parameter.indices), parameter.bits
-            ).value
-            self._kwargs['parameter_code'] = Bin(code, bits=4)
+            if isinstance(self._parameter_mode, Bin):
+                # If this object was created from a Bin object,
+                # self._parameter_mode will be a bytes object.
+                self._kwargs['parameter_code'] = self._parameter_mode
+            else:
+                code = get_parameter_code(
+                    type_,  self._parameter_mode,
+                    bool(parameter.indices), parameter.bits
+                ).value
+                self._kwargs['parameter_code'] = Bin(code)
 
         # Determine parameter value.
         
@@ -546,7 +558,7 @@ class TelegramReader:
             f'    parameter_index={self.parameter_index},\n'
             f'    parameter_value={self.parameter_value},\n'
             f'    parameter_error={self.parameter_error},\n'
-            f'    flag_bits={self.flag_bits},\n'            
+            f'    flag_bits={self.flag_bits},\n'
             f'    frequency={self.frequency},\n'
             f'    temperature={self.temperature},\n'
             f'    current={self.current},\n'

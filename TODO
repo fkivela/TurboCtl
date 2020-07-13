@@ -8,12 +8,6 @@ test_turboctl           -- -- --
     
     
 TODO:
-- Add a __str__ method to TelgramReader. It should print the contants of the
-  telegram in a human-readable form that can be used for debugging. (DONE, but tests are not)
-- Test the new TelegramBuilder.build() method. 
-- TelegramBuilder should have a set_error_code method or another way of setting
-  the error code. It should also accept invalid parameter numbers, if
-  error_mode is 'none' or 'error'. (DONE, can be set via set_parameter_value but needs testing)
 - ParameterException objects need a 'MEMBER' attribute, which links to the
   corresponding ParameterError member. (DONE, but needs docs and testing)
 - Document the parameters.txt format better?
