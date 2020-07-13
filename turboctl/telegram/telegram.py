@@ -12,8 +12,10 @@ telegrams which are used to communicate with the pump.
 
 from dataclasses import dataclass
 
-from turboctl.telegram.codes import (ControlBits, StatusBits, 
-    get_parameter_code, get_parameter_mode, ParameterError)
+from turboctl.telegram.codes import (
+    ControlBits, StatusBits, get_parameter_code, get_parameter_mode,
+    ParameterResponse, ParameterError
+)
 from turboctl.telegram.datatypes import (Data, Uint, Sint, Bin)
 from turboctl.telegram.parser import PARAMETERS
 
@@ -255,8 +257,8 @@ class TelegramBuilder:
         # These variables store the values given by the user, and the final
         # values used as arguments are only determined when the telegram is
         # created. 
-        self._parameter_value = None
-        self._parameter_mode = None
+        self._parameter_value = 0
+        self._parameter_mode = 'none'
 
     @classmethod
     def from_bytes(cls, bytes_):
@@ -280,12 +282,8 @@ class TelegramBuilder:
 
         self = cls.__new__(cls)
         
-        self._parameter_value = None
-        self._parameter_mode = None
-        
         code_and_number_bits = Bin(bytes_[3:5])    
         self._kwargs = {
-            'parameter_code':       Bin(code_and_number_bits[0:4]),
             'parameter_number':     Uint(code_and_number_bits[5:16]),
             'parameter_index':      Uint(bytes_[6]),
             'flag_bits':            Bin(bytes_[11:13])[::-1],
@@ -295,22 +293,9 @@ class TelegramBuilder:
             'voltage':              Uint(bytes_[21:23])        
         }
         
-        # Setting parameter_value is a bit more complicated:
-        
-        if self._kwargs['parameter_code'] == Bin('0000'):
-            # If the parameter isn't accessed, the parameter number can be an
-            # otherwise invalid one (e.g. 0, the deafult value).
-            # In this case, the type is set to Uint.
-            datatype = Uint
-        else:
-            # The type of parameter_value depends on the parameter.
-            number = self._kwargs['parameter_number'].value
-            try:
-                datatype = PARAMETERS[number].datatype
-            except KeyError:
-                raise ValueError(f'invalid parameter number: {number}')
-            
-        self._kwargs['parameter_value'] = datatype(bytes_[7:11])
+        self._parameter_value = bytes_[7:11]
+        self._parameter_mode = Bin(code_and_number_bits[0:4])
+
         return self
         
     @classmethod
@@ -358,8 +343,6 @@ class TelegramBuilder:
         Raises:
             ValueError: If there isn't a parameter with the specified number.
         """
-        if not value in PARAMETERS:
-            raise ValueError('parameter does not exist')
         self._kwargs['parameter_number'] = Uint(value, 11)
         return self
         
@@ -372,6 +355,10 @@ class TelegramBuilder:
         """Set the parameter value.
         
         The type of *value* depends on the type of the parameter.
+        This method can also be used to set the error code; if
+        :meth:`set_parameter_mode` is called to set the parameter mode to
+        ``'error'``, the parameter value is always interpreted as an |Uint|
+        error code regardless of parameter number or type.
         """
         self._parameter_value = value
         return self
@@ -431,30 +418,55 @@ class TelegramBuilder:
         if type_ not in ['query', 'reply']:
             raise ValueError(f'invalid type_: {type_}')
         
-        # If _parameter_value is 0, there is no need to find the correct
-        # data type, since all data types represent 0 in the same way.
-        if self._parameter_value or self._parameter_mode:
-            try:
-                parameter_number = self._kwargs['parameter_number'].value
-                parameter = PARAMETERS[parameter_number]
-            except KeyError:
-                raise ValueError(
-                    f'invalid parameter number: {parameter_number}')
+        # Determine parameter access code.
         
-        # The type of parameter_value depends on the parameter.
-        if self._parameter_value:
-            datatype = parameter.datatype
-            self._kwargs['parameter_value'] = datatype(self._parameter_value, 
-                                                       bits=32)
-            
-        # The right parameter code is selected automatically based on
-        # parameter_mode and the parameter.
-        if self._parameter_mode:
-            indexed = bool(parameter.indices)
-            bits = parameter.bits
+        none_code = '0000'
+        error_code = ParameterResponse.ERROR.value
+        
+        # self._parameter_mode is a string if this object was created with
+        # __init__(), and Bin if it was created with from_bytes().
+        mode_is_none = self._parameter_mode in ['none', Bin(none_code)]
+        mode_is_error = (type_ == 'reply' and
+                      self._parameter_mode in ['error', Bin(error_code)])
+        
+        if mode_is_none:
+            self._kwargs['parameter_code'] = Bin(none_code)
+        elif mode_is_error:
+            self._kwargs['parameter_code'] = Bin(error_code)
+        else:
+            # parameter_number must be valid if the access mode isn't 'none'
+            # or 'error'.
+            number = self._kwargs['parameter_number'].value
+            try:
+                parameter = PARAMETERS[number]
+            except KeyError:
+                raise ValueError(f'invalid parameter number: {number}') 
+
             code = get_parameter_code(
-                type_,  self._parameter_mode, indexed, bits).value
+                type_,  self._parameter_mode,
+                bool(parameter.indices), parameter.bits
+            ).value
             self._kwargs['parameter_code'] = Bin(code, bits=4)
+
+        # Determine parameter value.
+        
+        if mode_is_none or mode_is_error:
+            # If the mode is 'none', there is no parameter access and the
+            # datatype doesn't matter.
+            # If the mode is 'error', the parameter value is replaced by an
+            # Uint error code.
+            datatype = Uint
+        else:
+            datatype = parameter.datatype
+                
+        if isinstance(self._parameter_value, bytes):
+            # If this object was created from a bytes object,
+            # self._parameter_value will be a bytes object and bits cannot be
+            # specified.
+            self._kwargs['parameter_value'] = datatype(self._parameter_value)
+        else:
+            self._kwargs['parameter_value'] = datatype(self._parameter_value,
+                                                       bits=32)
             
         return Telegram(**self._kwargs)
 
@@ -494,6 +506,54 @@ class TelegramReader:
         self.type = type_
         self.telegram = telegram
         
+    def __repr__(self):
+        """Return an exact string respresentation of this object.
+        
+        The returned string can be evaluated to create a copy of this object.
+        The format is ``ClassName(telegram=<telegram>, type=<type>)``.
+        """
+        return type(self).__name__ + (
+            f'(telegram={self.telegram}, type={repr(self.type)})')
+
+        
+    def __str__(self):
+        """Return an easily readable string representation of this object.
+        
+        The returned string shows the values of both the attributes and the
+        read-only properties of this object, and cannot thus be passed to
+        :func:`eval` without an raising error. 
+        
+        The format is
+        
+        .. highlight:: none
+        
+        ::
+        
+            ClassName(
+                telegram=<telegram>,
+                type=<type>,
+                parameter_mode=<parameter_mode>,
+                ...
+            )
+            
+        .. highlight:: default
+        """
+        return type(self).__name__ + ('(\n'
+            f'    telegram={self.telegram},\n'
+            f'    type={repr(self.type)},\n'
+            f'    parameter_mode={repr(self.parameter_mode)},\n'
+            f'    parameter_number={self.parameter_number},\n'
+            f'    parameter_index={self.parameter_index},\n'
+            f'    parameter_value={self.parameter_value},\n'
+            f'    parameter_error={self.parameter_error},\n'
+            f'    flag_bits={self.flag_bits},\n'            
+            f'    frequency={self.frequency},\n'
+            f'    temperature={self.temperature},\n'
+            f'    current={self.current},\n'
+            f'    voltage={self.voltage}\n'
+            ')'
+        )
+
     @property
     def parameter_mode(self):
         """Return the parameter mode.
@@ -512,6 +572,16 @@ class TelegramReader:
     def parameter_number(self):
         """Return the parameter number."""
         return self.telegram.parameter_number.value
+        
+    @property
+    def parameter_index(self):
+        """Return the parameter index."""
+        return self.telegram.parameter_index.value
+    
+    @property
+    def parameter_value(self):
+        """Return the parameter value."""
+        return self.telegram.parameter_value.value
     
     @property
     def parameter_error(self):
@@ -533,16 +603,6 @@ class TelegramReader:
             return ParameterError(number)
         except KeyError:
             raise ValueError(f'invalid parameter error number: {number}')
-    
-    @property
-    def parameter_index(self):
-        """Return the parameter index."""
-        return self.telegram.parameter_index.value
-    
-    @property
-    def parameter_value(self):
-        """Return the parameter value."""
-        return self.telegram.parameter_value.value
     
     @property
     def flag_bits(self):

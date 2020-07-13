@@ -15,9 +15,6 @@ Attributes:
         
     WARNINGS:
         Like :attr:`ERRORS`, but for warnings instead of errors.
-
-\TODO:
-    -rename \min_ and \max_ to min and max or minval and maxval
 """
 
 import re
@@ -25,7 +22,7 @@ import ast
 import os.path
 from dataclasses import dataclass
 from collections import OrderedDict
-from typing import Union, List, Dict, Tuple
+from typing import Union, List
 
 from turboctl.telegram.datatypes import Data, Uint, Sint, Float
 
@@ -35,26 +32,63 @@ class Parameter:
     """A class for representing pump parameters."""
     
     number: int
+    """The number of the parameter."""
+    
     name: str
+    """The name of the parameter."""
+    
     indices: range
-        # indices=range(0) for unindexed parameters.
-    min_value: Data
-    max_value: Data
-        # min_value and max_vaue can have a value of 'P<number>' (e.g. 'P18'), 
-        # if their value equals the value of another parameter.
+    """A :class:`range` object describing the indices of the parameter; e.g.
+    ``range(5)`` would mean the parameter has indices numbered 0 to 4.
+    This is ``range(0)`` for unindexed parameters.
+    """
+
+    min_value: Union[Data, str]
+    """The minimum value of the parameter.
+    
+    The minumum value of some parameters depends on the current value of
+    another parameter. In that case, :attr:`min_value` is set to
+    ``'P<number>'``; e.g. 'P18' means the value of parameter 18.
+    """
+    
+    max_value: Union[Data, str]
+    """The maximum value of the parameter.
+    
+    The maximum value of some parameters depends on the current value of
+    another parameter. In that case, :attr:`max_value` is set to
+    ``'P<number>'``; e.g. 'P18' means the value of parameter 18.
+    """
+    
     default: Union[Data, List[Data]]
-        # default is a list, if the parameter is indexed and the 
-        # indices have different default values.
+    """The default value of the parameter.
+    
+    If the parameter is indexed and different indices have different default
+    values, :attr:`default` will be a :class:`list` of default values
+    corresponding to the different indices.
+    """
+
     unit: str
+    """The unit of the parameter; e.g. ``'°C'`` for degrees Celsius."""
+    
     writable: bool
+    """Signifies whether the value of the parameter can be changed."""
+    
     datatype: type
+    """The type of the value of the parameter; a
+    :class:`~turboctl.telegram.datatypes.Data` subclass
+    (but not :class:`~turboctl.telegram.datatypes.Bin`).
+    """
+    
     bits: int
+    """The size of the parameter in bits; ``16`` or ``32``."""
+    
     description: str
+    """A string describing the parameter."""
     
     @property
-    def fields(self) -> OrderedDict:
-        """Return an :class:`~collections.OrderedDict` with parameter 
-        attribute names as keys and their values as values.
+    def fields(self):
+        """Return an :class:`~collections.OrderedDict` with the attribute
+        names of this objects as keys and their values as values.
         """
         fieldnames = ['number', 'name', 'indices', 'min_value', 'max_value', 
                       'default', 'unit', 'writable', 'datatype', 'bits', 
@@ -64,17 +98,24 @@ class Parameter:
     
 @dataclass
 class ErrorOrWarning:
-    """Class for representing pump errors and warnings."""
+    """A class for representing pump errors and warnings."""
     
     number: int
+    """The number of the error or warning."""
+    
     name: str
+    """The name of the error or warning."""
+    
     possible_cause: str
+    """A string describing the possible cause(s) of the error or warning."""
+    
     remedy: str
+    """A string describing possible remedies for the error or warning."""
     
     @property
-    def fields(self) -> OrderedDict:
-        """Return an :class:`~collections.OrderedDict` with error/warning 
-        attribute names as keys and their values as values.
+    def fields(self):
+        """Return an :class:`~collections.OrderedDict` with the attribute
+        names of this object as keys and their values as values.
         """
         fieldnames = ['number', 'name', 'possible_cause', 'remedy']
         return OrderedDict((name, getattr(self, name)) for name in fieldnames)
@@ -95,7 +136,7 @@ def main():
     ERRORS = load_errors()
     WARNINGS = load_warnings()
 
-def _fullpath(filename: str) -> str:
+def _fullpath(filename):
     """Return of the full path of *filename*. 
     *filename* should be a file in the same directory as this module.
     """
@@ -107,39 +148,57 @@ def load_parameters(path=None):
     """Parse the parameter file and return a dictionary of 
     parameters.
     
-    If *path* isn't specified, the file will be ``'parameters.txt'``, 
-    located in this directory.
+    This function is automatically called by :func:`main`, but it can also be
+    called separately in order to create another set of parameters for testing
+    purposes.  
+    
+    Args:
+        path: A text file containing parameter/error/warning data.
+            If *path* isn't specified, the file will be ``'parameters.txt'``,
+            located in the same directory as this module.
+            The syntax used to define the parameters is explained in
+            ``parameters.txt``.
+            
+    Returns:
+        A :class:`dict` with numbers as keys and :class:`Parameter` objects as
+        values.
+            
+    Raises:
+        FileNotFoundError: If *filename* cannot be found.
+        RuntimeError: If a line in *filename* cannot be parsed.
     """
     default = 'parameters.txt'
     filename = path if path else _fullpath(default)
-    return load_data(filename, 'parameter')
+    return _load_data(filename, 'parameter')
     
 
 def load_errors(path=None):
     """Parse the error file and return a dictionary of 
     errors.
     
-    If *path* isn't specified, the file will be ``'errors.txt'``, 
-    located in this directory.
+    This works like :func:`load_parameters`, but the default file is
+    ``'errors.txt'``, and the returned :class:`dict` contains
+    :class:`ErrorOrWarning` objects.
     """
     default = 'errors.txt'
     filename = path if path else _fullpath(default)
-    return load_data(filename, 'error')
+    return _load_data(filename, 'error')
 
 
 def load_warnings(path=None):
     """Parse the warning file and return a dictionary of 
     warnings.
     
-    If *path* isn't specified, the file will be ``'warnings.txt'``, 
-    located in this directory.
+    This works like :func:`load_parameters`, but the default file is
+    ``'warnings.txt'``, and the returned :class:`dict` contains
+    :class:`ErrorOrWarning` objects.
     """
     default = 'warnings.txt'
     filename = path if path else _fullpath(default)
-    return load_data(filename, 'warning')
+    return _load_data(filename, 'warning')
 
 
-def load_data(filename, type_):
+def _load_data(filename, type_):
     """Return a dictionary of parameters, errors or warnings.
     
     Args:
@@ -165,7 +224,7 @@ def load_data(filename, type_):
     object_list = []
     for i, line in enumerate(lines):
         try:
-            parsed = parse(line, type_)
+            parsed = _parse(line, type_)
         except ValueError as e:
             raise RuntimeError(
                 f'Line {i+1} of {filename} could not be parsed: ' + str(e))
@@ -177,17 +236,19 @@ def load_data(filename, type_):
     return {p.number: p for p in object_list}
 
 
-def parse(line, type_):
-    """Parse data from *line* and form a :class:`Parameter` or 
-    :class:`ErrorOrWarning` object.
+def _parse(line, type_):
+    """Parse data from *line* and form a Parameter or ErrorOrWarning object.
     
     Args:
         line: A string with no line breaks.
-        type_: ``'parameter'``, ``'error'`` or ``'warning'``.
+        type_: 'parameter', 'error' or 'warning'.
     
     Raises:
         ValueError: If *line* cannot be parsed.
     """
+    # This method is private since it's only used internally by this module,
+    # but it cannot be removed/renamed without changing the tests, since a
+    # lot of them use this.
     
     line = _remove_comments(line)
     
@@ -281,13 +342,14 @@ def _form_parameter(fields):
     
     number, indices = _parse_number(  fields[0])
     name            =                 fields[1]
-    min_value       = _parse_minmax(  fields[2])
-    max_value       = _parse_minmax(  fields[3])
-    default         = _parse_default( fields[4])
     unit            =                 fields[5]
     writable        = _parse_writable(fields[6])
     datatype, bits  = _parse_format(  fields[7])
     description     =                 fields[8]
+        
+    min_value       = _parse_minmax(  fields[2], datatype, bits)
+    max_value       = _parse_minmax(  fields[3], datatype, bits)
+    default         = _parse_default( fields[4], datatype, bits)
     
     return Parameter(number, name, indices, min_value, max_value, default, 
                      unit, writable, datatype, bits, description)
@@ -308,11 +370,13 @@ def _form_error_or_warning(fields):
     return ErrorOrWarning(number, name, possible_cause, remedy)
         
 
-def _parse_number(string: str) -> Tuple[int, range]:
+def _parse_number(string):
     """Parse the data field containg the parameter/error/warning 
     number and possible indices.
     
-    indices=range(0) for unindexed parameters and errors or warnings.
+    Returns:
+        A tuple of the number (an int) and the indices (a range object;
+        range(0) for unindexed parameters/errors/warnings).
     """
     any_number = '([0-9]+)'
     no_capture = '?:'
@@ -350,26 +414,27 @@ def _parse_number(string: str) -> Tuple[int, range]:
     return number, indices    
 
 
-def _parse_minmax(string: str) -> Union[Data, str]:
+def _parse_minmax(string, datatype, bits):
     """Parse a data field containg the minimum or maximum parameter
-        value.
+    value.
+    
+    Args:
+        string: The field to be parsed.
+        datatype: The datatype (a Data subclass) of the parameter.
+        bits: The size of the parameter in bits.
     
     Returns:
-        -A Data, if the value is numeric.
+        -An object of type *datatype*, if the value is numeric.
         -A string in the format P<number>, if *string* matches that
             format.    
     """
-    
+    # Try to parse the string as an int or a float first.
     try:
-        return int(string)
+        return _parse_value(string, datatype, bits)
     except ValueError:
         pass
     
-    try:
-        return float(string)
-    except ValueError:
-        pass
-    
+    # If that doesn't work, try to interpret the string as a reference.     
     any_number = '([0-9]+)'
     P_number = f'^P{any_number}$'
     
@@ -379,31 +444,48 @@ def _parse_minmax(string: str) -> Union[Data, str]:
         raise ValueError(f'invalid min/max value: {string}')    
         
         
-def _parse_default(string):
+def _parse_default(string, datatype, bits):
     """Parse the data field containg the default parameter value.
     
+    Args:
+        string: The field to be parsed.
+        datatype: The datatype (a Data subclass) of the parameter.
+        bits: The size of the parameter in bits.
+    
     Returns:
-        A Data subclass instance, or a list of such instances if parameter 
-        indices have different default values.
+        An object of type *datatype*. If different parameter indices have
+        different default values, a list of such objects is returned instead.
     """
+    # Try to parse the string as an int or a float first.
     try:
-        value = ast.literal_eval(string) # Unlike eval(), this is safe.
+        return _parse_value(string, datatype, bits)
+    except ValueError:
+        pass
+    
+    # If that doesn't work, try to interpret the string as a list of
+    # ints/floats.     
+    try:
+        value_list = ast.literal_eval(string) # Unlike eval(), this is safe.
+        # By converting i to a string first we can use _parse_value to
+        # e.g. parse '0' into a Float, even though Float(0) raises an error. 
+        return [_parse_value(str(i), datatype, bits) for i in value_list]
     except (SyntaxError, ValueError):
         raise ValueError(f'invalid default value: {string}')
-
-    if type(value) in (int, float):
-        return value
     
-    is_ints = all([isinstance(i, int) for i in value])
-    is_floats = all([isinstance(i, float) for i in value])
     
-    if isinstance(value, list) and (is_ints or is_floats):
-        return value
+def _parse_value(string, datatype, bits):
+    """Parse *string* to an int or a float and the convert that into a *bits*
+    bit instance of *datatype*.
     
-    raise ValueError(f'invalid default value: {string}')
+    Raises:
+        ValueError: If *string* isn't a valid int or a float.'
+    """
+    builtin_type = float if datatype == Float else int
+    value = builtin_type(string)
+    return datatype(value, bits)
 
 
-def _parse_format(string: str) -> Tuple[type, int]:
+def _parse_format(string):
     """Parse the data field containg the parameter number format.
     
     Returns: A tuple containing the type (a subclass of Data) 
@@ -443,9 +525,9 @@ def _parse_format(string: str) -> Tuple[type, int]:
     return type_, bits
 
 
-def _parse_writable(string: str) -> bool:
+def _parse_writable(string):
     """Parse the data field indicating whether the parameter can be 
-    written to.
+    written to an return a boolean (True for writable, False otherwise).
     """    
     if string == 'r/w':
         return True
@@ -455,18 +537,18 @@ def _parse_writable(string: str) -> bool:
         raise ValueError(f'invalid r/w string: {string}')
 
 
-def _remove_comments(line: str) -> str:
+def _remove_comments(line):
     """Removes everything after a comment symbol from *line*."""
     return line.split(_COMMENT_CHAR)[0]
             
           
-def _is_empty(line: str) -> bool:
-    """Returns True, if *line* consists only of whitespace."""
+def _is_empty(line):
+    """Returns True if *line* consists only of whitespace."""
     empty_regex = '^\s*$' # \s = whitespace character
     return bool(re.match(empty_regex, line))
               
         
-def _remove_quotes(string: str) -> str:
+def _remove_quotes(string):
     """If *string* is enclosed in double quotes, this function removes 
     them.
     
@@ -479,7 +561,7 @@ def _remove_quotes(string: str) -> str:
         return string
 
 
-def _add_linebreaks(string: str) -> str:
+def _add_linebreaks(string):
     """Replaces occurrences of r'\n' in *string* with '\n'.
     
     Line breaks can be manually inserted inside data fields in a 

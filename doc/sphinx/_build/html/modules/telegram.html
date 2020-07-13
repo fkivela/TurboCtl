@@ -14,6 +14,7 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="api" href="api.html" />
     <link rel="prev" title="parser" href="parser.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -111,8 +112,8 @@ can be turned on by setting the bit to 1.
 In a reply from the pump these correspond to status
 conditions affecting the pump instead of commands.</p>
 <p>Attribute: <a class="reference internal" href="#turboctl.telegram.telegram.Telegram.flag_bits" title="turboctl.telegram.telegram.Telegram.flag_bits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">flag_bits</span></code></a>.</p>
-<p><strong>Bytes 13-14:</strong> PZD2 (current stator frequency).
-Stator frequency in Hz; the same as parameter 3.
+<p><strong>Bytes 13-14:</strong> PZD2 (current rotor frequency).
+Rotor frequency in Hz; the same as parameter 3.
 Included in all replies, and can be included in queries to define
 a setpoint for the frequency. (This only works if the setpoint is
 enabled through the control bits, and overrides the setpoint
@@ -304,7 +305,11 @@ based on the parameter mode and the parameter number.</p>
 <dt id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_value">
 <code class="sig-name descname">set_parameter_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameter value.</p>
-<p>The type of <em>value</em> depends on the type of the parameter.</p>
+<p>The type of <em>value</em> depends on the type of the parameter.
+This method can also be used to set the error code; if
+<a class="reference internal" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode" title="turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_parameter_mode()</span></code></a> is called to set the parameter mode to
+<code class="docutils literal notranslate"><span class="pre">'error'</span></code>, the parameter value is always interpreted as an <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>
+error code regardless of parameter number or type.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -399,6 +404,32 @@ from the pump.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="turboctl.telegram.telegram.TelegramReader.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an exact string respresentation of this object.</p>
+<p>The returned string can be evaluated to create a copy of this object.
+The format is <code class="docutils literal notranslate"><span class="pre">ClassName(telegram=&lt;telegram&gt;,</span> <span class="pre">type=&lt;type&gt;)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.telegram.telegram.TelegramReader.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an easily readable string representation of this object.</p>
+<p>The returned string shows the values of both the attributes and the
+read-only properties of this object, and cannot thus be passed to
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#eval" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> without an raising error.</p>
+<p>The format is</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ClassName(
+    telegram=&lt;telegram&gt;,
+    type=&lt;type&gt;,
+    parameter_mode=&lt;parameter_mode&gt;,
+    ...
+)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt id="turboctl.telegram.telegram.TelegramReader.parameter_mode">
 <em class="property">property </em><code class="sig-name descname">parameter_mode</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter mode.</p>
@@ -419,6 +450,18 @@ a parameter access or response code to a human-readable string.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="turboctl.telegram.telegram.TelegramReader.parameter_index">
+<em class="property">property </em><code class="sig-name descname">parameter_index</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parameter index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.telegram.telegram.TelegramReader.parameter_value">
+<em class="property">property </em><code class="sig-name descname">parameter_value</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parameter value.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="turboctl.telegram.telegram.TelegramReader.parameter_error">
 <em class="property">property </em><code class="sig-name descname">parameter_error</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter error.</p>
@@ -431,18 +474,6 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If the error number isn’t valid.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_index">
-<em class="property">property </em><code class="sig-name descname">parameter_index</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the parameter index.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_value">
-<em class="property">property </em><code class="sig-name descname">parameter_value</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the parameter value.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -511,6 +542,7 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
 <li class="toctree-l2"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -521,6 +553,7 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">Modules</a><ul>
       <li>Previous: <a href="parser.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+      <li>Next: <a href="api.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
   </ul></li>
   </ul></li>
 </ul>

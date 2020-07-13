@@ -6,20 +6,17 @@ ui                      -- -- --
 bin                     -- -- --
 test_turboctl           -- -- --   
     
+    
 TODO:
 - Add a __str__ method to TelgramReader. It should print the contants of the
-  telegram in a human-readable form that can be used for debugging.
-- Add a property to TelegramReader.parameter_mode that returns the description
-  string of the parameter enum member. parameter_mode is still used by
-  VirtualPump, so it cannot be removed.
+  telegram in a human-readable form that can be used for debugging. (DONE, but tests are not)
+- Test the new TelegramBuilder.build() method. 
 - TelegramBuilder should have a set_error_code method or another way of setting
   the error code. It should also accept invalid parameter numbers, if
-  error_mode is 'none' or 'error'.
+  error_mode is 'none' or 'error'. (DONE, can be set via set_parameter_value but needs testing)
 - ParameterException objects need a 'MEMBER' attribute, which links to the
-  corresponding ParameterError member.
-- The min_value, max_value and default fields of Parameter should take values
-  as Data subclasses, not builtins. Default should always be a list, even if
-  the parameter is unindexed.
+  corresponding ParameterError member. (DONE, but needs docs and testing)
+- Document the parameters.txt format better?
 - Parameters should be an attribute and an optional initializer argument
   for TelegramBuilder and TelegramReader.
 - Document individual enum members in codes.py?
@@ -27,7 +24,7 @@ TODO:
   E.g. vpump.raise_error(type='power_failure').
 - Everything that can be private should probably be private.
 - Sphinxify ui.table.
-- Make sure the user understands that API.pump_on doesn't necassarily actually
+- Make sure the user understands that API.pump_on deosn't necassarily actually
   reflect the status of the pump. 
 
 Might be useful:
@@ -59,3 +56,4 @@ Things that have to be tested with the real pump:
   wrong with a telegram, which error is returned?
 - Do volatile values disappear when the pump is turned off, or only when power is cut off.
 - Does parameter 227 (warnings) work analogously compared to parameter 171 (error list).
+- Can parameters be given a value of 0 even if their minimum value is reported as 1.401E-42?

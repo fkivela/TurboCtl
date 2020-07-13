@@ -2,9 +2,9 @@
 
 import unittest
 
-from turboctl.telegram.datatypes import Uint, Sint, Float, Bin
+from turboctl.telegram.datatypes import Uint, Sint, Float
 from turboctl.telegram.parser import (
-    Parameter, ErrorOrWarning, PARAMETERS, ERRORS, WARNINGS, parse)
+    Parameter, ErrorOrWarning, PARAMETERS, ERRORS, WARNINGS, _parse as parse)
 
 # Attributes of the Parameter class:
 # number, name, indices, min, max, default, unit, writable, datatype, bits, 
@@ -15,9 +15,9 @@ from turboctl.telegram.parser import (
 def dummy_parameter(number=1, 
                     name='Test parameter',  
                     indices=range(0), 
-                    min_value=0, 
-                    max_value=65535, 
-                    default=0, 
+                    min_value=Uint(0, 16), 
+                    max_value=Uint(65535, 16),
+                    default=Uint(0, 16), 
                     unit='', 
                     writable=True, 
                     datatype=Uint, 
@@ -41,7 +41,8 @@ def dummy_parameter(number=1,
 def dummy_parameter_from_line(number='1', 
                               name='"Test parameter"',
                               min_value='0', 
-                              max_value='65535', 
+                              # This max_value is small enough for Sints.
+                              max_value='32767',
                               default='0', 
                               unit='""', 
                               rw='r/w', 
@@ -91,17 +92,17 @@ class TestParsing(unittest.TestCase):
         parameter = dummy_parameter_from_line(number='1[1:5]')
         self.assertEqual(parameter.indices, range(1,6))
   
-
     def test_min_max_int(self):
-        parameter = dummy_parameter_from_line(min_value='-10', max_value='100')
-        self.assertEqual(parameter.min_value, -10)
-        self.assertEqual(parameter.max_value, 100)
+        parameter = dummy_parameter_from_line(
+            min_value='-10', max_value='100', format_='s16')
+        self.assertEqual(parameter.min_value, Sint(-10, 16))
+        self.assertEqual(parameter.max_value, Sint(100, 16))
         
     def test_min_max_float(self):
         parameter = dummy_parameter_from_line(
-            min_value='-1.23e-4', max_value='4.56e7')
-        self.assertEqual(parameter.min_value, -1.23e-4)
-        self.assertEqual(parameter.max_value, 4.56e7)
+            min_value='-1.23e-4', max_value='4.56e7', format_='real32')
+        self.assertEqual(parameter.min_value, Float(-1.23e-4))
+        self.assertEqual(parameter.max_value, Float(4.56e7))
         
     def test_min_max_reference(self):
         parameter = dummy_parameter_from_line(
@@ -114,23 +115,27 @@ class TestParsing(unittest.TestCase):
             
     def test_default_int(self):
         parameter = dummy_parameter_from_line(default='10')
-        self.assertEqual(parameter.default, 10)
+        self.assertEqual(parameter.default, Uint(10, 16))
         
-        parameter = dummy_parameter_from_line(default='-10')
-        self.assertEqual(parameter.default, -10)
+        parameter = dummy_parameter_from_line(
+            default='-10', format_='s16')
+        self.assertEqual(parameter.default, Sint(-10, 16))
         
     def test_default_float(self):
-        parameter = dummy_parameter_from_line(default='1.2e3')
-        self.assertEqual(parameter.default, 1.2e3)
+        parameter = dummy_parameter_from_line(
+            default='1.2e3', format_='real32')
+        self.assertEqual(parameter.default, Float(1.2e3))
 
     def test_indexed_default_with_a_single_value(self):
         parameter = dummy_parameter_from_line(number='1[1:3]', default='3')
-        self.assertEqual(parameter.default, 3)
+        self.assertEqual(parameter.default, Uint(3, 16))
         
     def test_indexed_default_with_multiple_values(self):
         parameter = dummy_parameter_from_line(
             number='1[1:3]', default='[3,2,1]')
-        self.assertEqual(parameter.default, [3,2,1])
+        
+        self.assertEqual(
+            parameter.default, [Uint(3, 16), Uint(2, 16), Uint(1, 16)])
         
     def test_unit(self):
         parameter = dummy_parameter_from_line(unit='"0.1 °C"')
@@ -244,51 +249,51 @@ class TestActualParameters(unittest.TestCase):
         for parameter in PARAMETERS.values():
             self.assertIsInstance(parameter.indices, range)
             
-    def test_all_mins_are_numbers_or_references(self):
+    def test_all_mins_are_data_or_references(self):
         
         for parameter in PARAMETERS.values():        
             value = parameter.min_value
             
-            # Convert a string value 'P<number>' to an integer:
+            # Convert a string value 'P<number>' to an Uint:
             try:
                 if value[0] == 'P':
-                    value = int(value[1:])
+                    value = Uint(int(value[1:]))
             except (TypeError, ValueError):
                 pass
             
-            self.assertIsInstance(value, (int, float))  
+            self.assertIsInstance(value, (Uint, Sint, Float))
             
-    def test_all_maxes_are_numbers_or_references(self):
+    def test_all_maxes_are_data_or_references(self):
         
         for parameter in PARAMETERS.values():
             value = parameter.max_value
             
-            # Convert a string value 'P<number>' to an integer:
+            # Convert a string value 'P<number>' to an Uint:
             try:
                 if value[0] == 'P':
-                    value = int(value[1:])
+                    value = Uint(int(value[1:]))
             except (TypeError, ValueError):
                 pass
             
-            self.assertIsInstance(value, (int, float))  
+            self.assertIsInstance(value, (Uint, Sint, Float))  
 
-    def test_all_defaults_are_numbers_or_list_of_numbers(self):
+    def test_all_defaults_are_data_or_list_of_data(self):
         
         for parameter in PARAMETERS.values():
             
             value = parameter.default
-            value_is_number = isinstance(value, (int, float))
-            value_is_list =  isinstance(value, list)
+            value_is_data = type(value) in (Uint, Sint, Float)
+            value_is_list =  type(value) == list
             try:
-                values_are_numbers = all([isinstance(i, (int, float)) 
-                                          for i in value])
+                values_are_data = all([type(i) in (Uint, Sint, Float) 
+                                       for i in value])
             except TypeError:
-                # Ints and floats aren't iterable and will raise this
+                # Data instances aren't iterable and will raise this
                 # error.
                 pass
                             
             self.assertTrue(
-                    value_is_number or (value_is_list and values_are_numbers)) 
+                    value_is_data or (value_is_list and values_are_data)) 
             
     def test_all_units_are_strings(self):
         for parameter in PARAMETERS.values():

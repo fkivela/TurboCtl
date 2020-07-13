@@ -41,13 +41,13 @@ class ParameterComponent():
         
         if query.parameter_mode != 'none':
             try:
-                reply.set_parameter_value(self._access_parameter(query))
                 reply.set_parameter_mode('response')
+                reply.set_parameter_value(self._access_parameter(query))
             except ParameterException as error:
                 # TODO: Find out how CannotChangeError is used?
                 # Should it return 'error' with an error code, or 'no write'.        
                 reply.set_parameter_mode('error')
-                reply.set_error_code(error.MEMBER)
+                reply.set_parameter_value(error.member)
             
         return reply
 

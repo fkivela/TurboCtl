@@ -156,6 +156,19 @@ def get_parameter_mode(telegram_type, code):
 class ParameterException(Exception):
     """A superclass for exceptions that represent different error conditions 
     that are raised when the pump cannot access a parameter."""
+    
+    @property
+    def member(self):
+        class_ = type(self)
+        results = []
+        for member in ParameterError:
+            if member.exception == class_:
+                results.append(member)
+                
+        if size(results) != 1:
+            raise RuntimeError(f'error class matches {size(results)} members')
+            
+        return results[0]
 
 
 class WrongNumError(ParameterException):
