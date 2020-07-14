@@ -15,8 +15,8 @@ All functions in this module share the following common arguments:
 If a command cannot be sent due to an error in the connection, a
 :class:`serial.SerialException` will be raised.
 
-The functions return the a :class:`~turboctl.telegram.telegram.TelegramReader`
-instance created from the reply telegram sent by the pump.
+The functions return both the query sent to the pump and the reply received
+back as :class:`~turboctl.telegram.telegram.TelegramReader` instances.
 """
 
 from turboctl.telegram.codes import ControlBits
@@ -36,7 +36,7 @@ def send(connection, telegram):
     connection.write(bytes(telegram))
     reply_bytes = connection.read(Telegram.LENGTH)
     reply = TelegramBuilder.from_bytes(reply_bytes).build()
-    return TelegramReader(reply)
+    return TelegramReader(telegram), TelegramReader(reply)
 
     
 def status(connection, pump_on=True):

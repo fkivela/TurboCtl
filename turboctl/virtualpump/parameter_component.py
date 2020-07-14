@@ -150,9 +150,20 @@ class ExtendedParameter(Parameter):
 
         self.parameters = extended_parameters
         self.min_value = self._get_true_value(parameter.min_value)
-        self.max_value = self._get_true_value(parameter.max_value)        
-        self.default = self._get_true_value(parameter.default)
-        self.value = self.default_value
+        self.max_value = self._get_true_value(parameter.max_value) 
+        
+        if type(parameter.default) == list:
+            # parameter.default is a list -> indices have different values.
+            self.value = parameter.default
+        else:
+            # parameter.default is a single value -> all indices have the same
+            # value.
+            if parameter.indices:
+                # Indexed parameter.
+                self.value = [parameter.default for i in parameter.indices]
+            else:
+                # Unindexed parameter: parameter.indices = range(0).
+                self.value = [parameter.default]
         
     def _get_true_value(self, value):
         """Returns the numerical value  of *value*.
@@ -179,20 +190,12 @@ class ExtendedParameter(Parameter):
             return self.parameters[num].value
         
         raise ValueError(f'invalid *value*: {value}')
-        
+                
     def __str__(self):
-        """Returns 'ExtendedParameter(attribute1=value1, ...)'.
-        
-        The string includes the values of read-only properties.
-        """
-        fields = [
-            'number', 'name', 'indices', 'indexed', 'min', 'max', 'default', 
-            'min_value', 'max_value', 'default_value', 'value', 'unit', 
-            'writable', 'datatype', 'size', 'description']
-        
-        strings = [f'{f}={repr(getattr(self, f))}' for f in fields]
-        string = ', '.join(strings)
-        return f'{type(self).__name__}({string})'
+        """Returns 'ExtendedParameter(attribute1=value1, ...)'."""
+        # Copy Parameter.__str__ and just add the value field at the end.
+        # str(super) doesn't work here.
+        return super().__str__()[:-1] + f', value={self.value})'
 
 
 class ExtendedParameters(dict):
@@ -207,7 +210,8 @@ class ExtendedParameters(dict):
         an order that no errors will be raised because of references to
         uninitialized parameters.
         """
-        extended_parameters = {}
+        super().__init__()        
+
         max_iters = 5
         # The min and max values of some parameters depend on the 
         # values of other parameters, and so some parameters cannot be 
@@ -219,12 +223,10 @@ class ExtendedParameters(dict):
         # dependency chains that need more iterations.
         for i in range(max_iters):
             for num, p in parameters.items():
-                if num not in extended_parameters.keys():
+                if num not in self.keys():
                     try:
-                        extended_parameters[num] = ExtendedParameter(p, self)
+                        self[num] = ExtendedParameter(p, self)
                     # A KeyError is raised if a parameter's dependency 
                     # has not been initialized.
                     except KeyError:
                         pass
-                    
-        super().__init__(extended_parameters)

@@ -4,7 +4,7 @@ physical pump.
 """
 import threading
 
-from turboclt.telegram.parser import PARAMETERS
+from turboctl.telegram.parser import PARAMETERS
 from turboctl.telegram.telegram import TelegramBuilder, TelegramReader
 from turboctl.virtualpump.virtualconnection import VirtualConnection
 from turboctl.virtualpump.hardware_component import HardwareComponent

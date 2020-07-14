@@ -153,7 +153,7 @@ class CommandLineUI:
 
         The arguments are ignored.
         """
-        self.api.halt()
+        self.control_interface.close()
 
     def run(self):
         """Start the UI.
@@ -198,7 +198,7 @@ class CommandLineUI:
 
     def cmd_status(self):
         """Get the status of the pump."""
-        query, reply = self.control_interface.status()
+        query, reply = self.control_interface.get_status()
 
         descriptions = (member.description for member in reply.flag_bits)        
         lines = (self.indent + s for s in descriptions)
@@ -215,8 +215,8 @@ class CommandLineUI:
             f'Voltage: {0.1 * reply.voltage:.1f} V'
         )
         
-        string = textwrap.indent(self.indent,
-                                 condition_str + '\n' + hardware_str)
+        string = textwrap.indent(condition_str + '\n' + hardware_str,
+                                 self.indent)
         
         self.print('Pump status:\n' + string)
         return query, reply
@@ -434,7 +434,7 @@ class CommandLineUI:
             # that is sent or received.
             # For methods that don't send telegrams, *out* will be None.
             if out and self.debug:
-                self.print(self.debug_string(*out))
+                self.print('\n' + self._debug_string(*out))
                 
         except (ValueError, TypeError) as error:
 
@@ -447,21 +447,16 @@ class CommandLineUI:
                 self.print('Error: invalid argument type or number of '
                            'arguments')
                 
-    def _debug_string(self, out):
+    def _debug_string(self, query, reply):
         """Return a string displaying the contents of both the query and the
         reply.
-        """
-        query, reply = out
-        
-        # Add empty lines before and after the string for readability.
+        """        
         return (
-            '\n'
-            + 'Sent a telegram with the following contents:\n'
-            + textwrap.indent(self.indent, str(query)) + '\n'
+            'Sent a telegram with the following contents:\n'
+            + textwrap.indent(str(query), self.indent) + '\n'
             + '\n'
             + 'Received a telegram with the following contents:\n'
-            + textwrap.indent(self.indent, str(reply)) + '\n'
-            + '\n'
+            + textwrap.indent(str(reply), self.indent)
         )
 
     def _get_method(self, command):

@@ -56,21 +56,9 @@ class HardwareComponent():
             ``'PROCESS_CHANNEL'``: When the COMMAND control bit is supplied.
 
     Attributes:
-        parameters:
-            The same dict of
-            :class:`~turboctl.virtualpump.parameter_component
-            .ExtendedParameter` objects as used by
-            :class:`turboctl.virtualpump.parameter_component
-            .ParameterComponent`. This is needed, since some hardware
-            components affect the values of parameters.
-            
         variables:
             A :class:`Variables` instance that contains the parameters that
             can be modified by this object.
-            
-        thread:
-            A parallel thread (a :class:`threading.Thread` object) which runs
-            the hardware simulation.
             
         step:
             The timestep of iteration; the parallel thread waits this amount
@@ -79,13 +67,15 @@ class HardwareComponent():
         abs_acceleration:
             How fast the pump accelerates or decelerates, in Hz / second.
             
+        frequency:
+            The exact frequency of the pump as a :class:`float.`
+            This is needed to correctly simulate gradual changes in the
+            frequency, because the frequency parameter only saves integer
+            values.
+            
         is_on:
             A :class:`boolean` flag to keep track of whether the pump is on
             or off.
-            
-        stop_flag:
-            A :class:`threading.Event` that can be used to stop the parallel
-            thread.
     """
     
     def __init__(self, parameters, lock):
@@ -93,7 +83,12 @@ class HardwareComponent():
         
         Args:
             parameters:
-                The value for :attr:`parameters`.
+                The same :class:`dict` of
+                :class:`~turboctl.virtualpump.parameter_component
+                .ExtendedParameter` objects as used by
+                :class:`turboctl.virtualpump.parameter_component
+                .ParameterComponent`. This is needed, since some hardware
+                components affect the values of parameters.
                 
             lock: The same :class:`threading.Lock` object as used by 
                 :meth:`turboctl.virtualconnection.connection_component
@@ -104,6 +99,7 @@ class HardwareComponent():
         
         self.step = 0.1
         self.abs_acceleration = 100
+        self.frequency = 0.0
         
         # The pump starts in an off state.
         self.is_on = False 
@@ -112,10 +108,10 @@ class HardwareComponent():
                 
         # Start a parallel thread for continuously updating the pump 
         # frequency.
-        self.thread = threading.Thread(target=self._run, args=[lock])
-        self.stop_flag = threading.Event()
-        self.thread.daemon = True
-        self.thread.start()
+        thread = threading.Thread(target=self._run, args=[lock])
+        self._stop_flag = threading.Event()
+        thread.daemon = True
+        thread.start()
                                 
     def handle_hardware(self, query, reply):
         """Write hardware data to *reply.*
@@ -134,13 +130,10 @@ class HardwareComponent():
         self._handle_control_bits(query)
         self._handle_status_bits(query, reply)
         
-        reply.frequency = round(self.variables.frequency)
-        # The frequency parameter can have non-integer values; 
-        # they are automatically rounded to ints when they are 
-        # written to a Reply object.
-        reply.temperature = self.variables.temperature
-        reply.current = self.variables.current
-        reply.voltage = self.variables.voltage
+        (reply.set_frequency(self.variables.frequency)
+              .set_temperature(self.variables.temperature)
+              .set_current(self.variables.current)
+              .set_voltage(self.variables.voltage))
         
     def _handle_control_bits(self, query):
         """Apply the effects of control bits in *query*.
@@ -182,17 +175,17 @@ class HardwareComponent():
         if self.variables.frequency:
             bitlist.append(StatusBits.TURNING)
             
-        if self.acceleration > 0:
+        if self._acceleration > 0:
             bitlist.append(StatusBits.ACCELERATION)
             
-        if self.acceleration < 0:
+        if self._acceleration < 0:
             bitlist.append(StatusBits.DECELERATION)
             
         reply.set_flag_bits(bitlist)
             
     def stop(self):
         """Order the parallel thread to stop."""
-        self.stop_flag.set()        
+        self._stop_flag.set()        
         
     def on(self):
         """Turn the pump on and update parameters accordingly."""
@@ -214,9 +207,9 @@ class HardwareComponent():
         
         Deceleration is represented by a negative acceleration.
         """
-        if self.variables.frequency < self.frequency_goal:
+        if self.frequency < self._frequency_goal:
             return self.abs_acceleration
-        elif self.variables.frequency > self.frequency_goal:
+        elif self.frequency > self._frequency_goal:
             return -self.abs_acceleration
         else:
             return 0
@@ -230,22 +223,25 @@ class HardwareComponent():
     
     def _change_frequency(self):
         """Enact the frequency change during a single time-step."""
-        change = self.step * self.acceleration            
-        difference = self.frequency_goal - self.variables.frequency
+        change = self.step * self._acceleration
+        difference = self._frequency_goal - self.frequency
         
+        # Make sure the change never takes the frequency to the other side of
+        # the frequency goal.
         if abs(change) > abs(difference):
             change = difference
-
-        self.variables.frequency += change
+            
+        self.frequency += change
+        self.variables.frequency = int(self.frequency)
                 
     def _run(self, lock):
         """Run the parallel thread by continuously updating the 
         frequency.
         """
-        while not self.stop_flag.is_set():
-            time.sleep(self.step)        
+        while not self._stop_flag.is_set():
+            time.sleep(self.step)
             lock.acquire()
-            self.change_frequency()
+            self._change_frequency()
             lock.release()
 
 
@@ -372,15 +368,14 @@ class HWParameters():
                 which needs to include at least all the parameters which are
                 attributes for this class.
         """
-        self.frequency_setpoint = parameters[24]
         self.frequency = parameters[3]
         self.voltage = parameters[4]
         self.current = parameters[5]
-        self.temperature = parameters[11]
         self.motor_power = parameters[6]
         self.motor_temperature = parameters[7]
         self.save_data = parameters[8]
-            
+        self.temperature = parameters[11]
+        self.frequency_setpoint = parameters[24]
         self.error_counter = parameters[40]
         self.overload_error_counter = parameters[41]
         self.power_failure_error_counter = parameters[43]
@@ -390,7 +385,7 @@ class HWParameters():
         self.operating_hours = parameters[184]
         self.warnings = parameters[227]
 
-        
+
 class Variables():
     """This class encapsulates :class:`HWParameters` in order to allow the
     simpler syntax
@@ -423,13 +418,20 @@ class Variables():
         is accessed normally without delegation.
         For all other attributes, the value of the parameter in
         :attr:`parameters` with the name *name* is set to *value*.
+        
+        *value* should be given as a Python builtin and will automatically be
+        converted to a :class:`~turboctl.telegram.datatypes.Data` subclass
+        instance. However, note that the type of *value* should match the type
+        of the parameter; e.g. a :class:`float` cannot be converted into an
+        :class:`turboctl.telegram.datatypes.Uint`.
         """
         if name == 'parameters':
             self.__dict__[name] = value
             return
         
         parameter = getattr(self.parameters, name)
-        parameter.value = value
+        # Even the values of unindexed parameters are lists.
+        parameter.value[0] = parameter.datatype(value, parameter.bits)
         
     def __getattr__(self, name):
         """Return the the value of the attribute *name*.
@@ -438,9 +440,10 @@ class Variables():
         is accessed normally without delegation.
         For all other attributes, the value of the parameter in
         :attr:`parameters` with the name *name* * is returned.
+        This is automatically converted to a Python builtin.
         """
         if name == 'parameters':
             return self.__dict__[name]
         
         parameter = getattr(self.parameters, name)
-        return parameter.value
+        return parameter.value[0].value

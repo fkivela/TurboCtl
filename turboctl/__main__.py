@@ -74,7 +74,7 @@ def main():
         try:
             # This raises a NameError if the script raises an error
             # before command_line_ui is defined.
-            command_line_ui.api.halt()
+            command_line_ui.control_interface.close()
         except NameError:
             pass
 
@@ -137,7 +137,7 @@ def get_ui(command_line_ui):
         def callback(status):
             text = status_format.status_screen(status)
             advanced_ui.display.set_text(text)
-        command_line_ui.api.status.callback = callback
+        command_line_ui.control_interface.status.callback = callback
         ui = advanced_ui
 
     return ui

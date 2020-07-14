@@ -2,7 +2,6 @@
 import textwrap as tx
 import tabulate
 
-from ..telegram import TurboNum
         
 tabulate.PRESERVE_WHITESPACE = True
         
@@ -105,10 +104,6 @@ def _format_field(name, value, width):
         *width* wthout them. If *value* already contains line breaks, 
         these are preserved.
     """
-    
-    if isinstance(value, type) and issubclass(value, TurboNum):
-        value = value.description
-        
     if isinstance(value, range):
         value = f'{value.start}...{value.stop-1}' if value else '-'            
         

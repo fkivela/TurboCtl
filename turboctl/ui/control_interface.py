@@ -70,6 +70,10 @@ class ControlInterface():
     """This class represents a connection to the pump and can be used to send
     commands to it.
     
+    All methods that send commands to the pump return both the query sent to
+    the pump and the reply received back as
+    :class:`~turboctl.telegram.telegram.TelegramReader` instances.
+    
     Attributes:
         status (Status):
             An object that stores the current state of the pump.
@@ -146,27 +150,29 @@ class ControlInterface():
         based on the response.
         """
         while not self._stop_flag.is_set():
-            self.status()
+            self.get_status()
             time.sleep(self.timestep)
 
     def pump_on(self):
         """Turn the pump on."""
-        reply = api.status(self._connection, pump_on=True)
+        query, reply = api.status(self._connection, pump_on=True)
         self._update_status(reply)
         self.api.pump_on = True
-        return reply
+        return query, reply
     
     def pump_off(self):
         """Turn the pump off."""
-        reply = api.status(self._connection, pump_on=False)
+        query, reply = api.status(self._connection, pump_on=False)
         self._update_status(reply)
-        return reply
+        return query, reply
 
-    def status(self):
+    def get_status(self):
         """Ask pump status by sending an empty telegram."""
-        reply =  api.status(self._connection, pump_on=self.status.pump_on)
+        # This is named "get_status" instead of "status", since "status" is
+        # already an attribute.
+        query, reply = api.status(self._connection, pump_on=self.status.pump_on)
         self._update_status(reply)
-        return reply
+        return query, reply
                 
     def read_parameter(self, number, index=0):
         """Read the value of an index of a parameter.
@@ -182,10 +188,10 @@ class ControlInterface():
             ValueError:
                 If *number* or *index* have invalid values.
         """
-        reply =  api.read_parameter(self._connection, number, index, 
-                                    pump_on=self.status.pump_on)
+        query, reply = api.read_parameter(self._connection, number, index, 
+                                          pump_on=self.status.pump_on)
         self._update_status(reply)
-        return reply
+        return query, reply
     
     def write_parameter(self, value, number, index=0):
         """Write a value to an index of a parameter.
@@ -204,18 +210,18 @@ class ControlInterface():
             ValueError:
                 If *number* or *index* have invalid values.
         """
-        reply = api.write_parameter(self._connection, value, number, index,
-                                    pump_on=self.status.pump_on)
+        query, reply = api.write_parameter(self._connection, value, number,
+                                           index, pump_on=self.status.pump_on)
         self._update_status(reply)
-        return reply
+        return query, reply
     
     def _update_status(self, reply):
         """Update self.status based on the reply from the pump
         (a TelegramReader object).
         """
-        self.api.frequency = reply.frequency
-        self.api.temperature = reply.temperature
+        self.status.frequency = reply.frequency
+        self.status.temperature = reply.temperature
         # The pump reports current and voltage in 0.1 A/V.
-        self.api.current = reply.current / 10
-        self.api.voltage = reply.voltage / 10
-        self.api.status_bits = reply.status_bits
+        self.status.current = reply.current / 10
+        self.status.voltage = reply.voltage / 10
+        self.status.status_bits = reply.flag_bits
