@@ -31,18 +31,30 @@ author = 'Feliks Kivelä'
 # Autodoc: Generate documentation from docstrings automatically.
 # Napoleon: Support for Google-style docstrings.
 # Intersphinx: Link to the documentaion of other sphinx projects.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx'
+]
 
-# Use the class docstring (instead of the __init__ docstring) for class descriptions.
+# Use the class docstring (instead of the __init__ docstring) for class
+# descriptions.
 # This seems to be the default value, but is specified just in case.
 autoclass_content = 'class'
 
-# Document classes, functions etc. in the same order as they are defined in the source code,
-# instead of in alphabetical order.
+# Document classes, functions etc. in the same order as they are defined in the
+# source code, instead of alphabetical order.
 autodoc_member_order = 'bysource'
 
+# This allows function signatures to be specified on the first line of the
+# docstring.
+# This is very useful for preventing sphinx from expanding DEFAULT in
+# "func(arg=DEFAULT)".
+autodoc_docstring_signature = True
+
 autodoc_default_options = {
-	# Print members (i.e. attributes, methods, classes etc.) when documenting a module or an object.
+	# Print members (i.e. attributes, methods, classes etc.) when documenting
+	# a module or an object.
 	'members': True,
 	# Print special members such as __init__ and __repr__.
 	'special-members': True,
