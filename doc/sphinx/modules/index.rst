@@ -1,10 +1,11 @@
-Modules
-=======
+turboctl
+=========
+
+The turboctl package contains three subpackages: telegram, ui and virtualpump.
 
 .. toctree::
-   
-    datatypes.rst
-    codes.rst
-    parser.rst
-    telegram.rst
-    api.rst
+    
+    telegram/index.rst
+    ui/index.rst
+    virtualpump/index.rst
+    

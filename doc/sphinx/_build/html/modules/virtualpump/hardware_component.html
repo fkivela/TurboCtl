@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>hardware_component &#8212; TurboCtl  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualconnection" href="virtualconnection.html" />
+    <link rel="prev" title="parameter_component" href="parameter_component.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-turboctl.virtualpump.hardware_component">
+<span id="hardware-component"></span><h1><a class="reference internal" href="#module-turboctl.virtualpump.hardware_component" title="turboctl.virtualpump.hardware_component"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hardware_component</span></code></a><a class="headerlink" href="#module-turboctl.virtualpump.hardware_component" title="Permalink to this headline">¶</a></h1>
+<p>This module handles the simulation of pump hardware in a
+:class:~`turboctl.virtualpump.virtualpump.VirtualPump`.</p>
+<p>TODO: Parameter values should be Data objects.</p>
+<dl class="py class">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent">
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.hardware_component.</code><code class="sig-name descname">HardwareComponent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">lock</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the part of a
+<a class="reference internal" href="virtualpump.html#turboctl.virtualpump.virtualpump.VirtualPump" title="turboctl.virtualpump.virtualpump.VirtualPump"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualPump</span></code></a>
+that handles hardware data and command/status words.</p>
+<p>This class simulates the following pump properties:</p>
+<blockquote>
+<div><ul>
+<li><p>The pump can be turned on and off.</p></li>
+<li><p>Temperature, current and voltage are 0 when the pump is off, and
+have constant positive values when the pump is on. This is reflected
+both in the reply telegrams and the values of corresponding
+parameters.</p></li>
+<li><p>When the pump is on, the pump frequency moves towards the setpoint at
+a constant rate. When the pump is off, the frequency moves towards 0
+at the same rate.</p></li>
+<li><p>The frequency setpoint is always read from the corresponding
+parameter, and cannot currently be set with the frequency field of
+a telegram.</p></li>
+<li><p>Currently this class only recognizes the ‘COMMAND’ and ‘ON’
+control bits (see <a class="reference internal" href="../telegram/codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a>);
+all others are ignored.</p></li>
+<li><p>The following status bits
+(see <a class="reference internal" href="../telegram/codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a>)
+are applied to the reply telegram:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">'OPERATION'</span></code>: When the pump is on.
+<code class="docutils literal notranslate"><span class="pre">'READY'</span></code>: When the pump is off.
+<code class="docutils literal notranslate"><span class="pre">'TURNING'</span></code>: When the pump frequency is not 0.
+<code class="docutils literal notranslate"><span class="pre">'ACCELERATION'</span></code>: When the pump acceleration is above 0.
+<code class="docutils literal notranslate"><span class="pre">'DECELERATION'</span></code>: When the pump acceleration is below 0.
+<code class="docutils literal notranslate"><span class="pre">'PARAM_CHANNEL'</span></code>: Always.
+<code class="docutils literal notranslate"><span class="pre">'PROCESS_CHANNEL'</span></code>: When the COMMAND control bit is supplied.</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.variables">
+<code class="sig-name descname">variables</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#turboctl.virtualpump.hardware_component.Variables" title="turboctl.virtualpump.hardware_component.Variables"><code class="xref py py-class docutils literal notranslate"><span class="pre">Variables</span></code></a> instance that contains the parameters that
+can be modified by this object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.step">
+<code class="sig-name descname">step</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>The timestep of iteration; the parallel thread waits this amount
+in seconds between iterations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.abs_acceleration">
+<code class="sig-name descname">abs_acceleration</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.abs_acceleration" title="Permalink to this definition">¶</a></dt>
+<dd><p>How fast the pump accelerates or decelerates, in Hz / second.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.frequency">
+<code class="sig-name descname">frequency</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exact frequency of the pump as a <code class="xref py py-class docutils literal notranslate"><span class="pre">float.</span></code>
+This is needed to correctly simulate gradual changes in the
+frequency, because the frequency parameter only saves integer
+values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.is_on">
+<code class="sig-name descname">is_on</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.is_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">boolean</span></code> flag to keep track of whether the pump is on
+or off.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.TEMPERATURE">
+<code class="sig-name descname">TEMPERATURE</code><em class="property"> = 30</em><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.TEMPERATURE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pump reports this constant temperature when it’s on.
+The unit is °C.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.CURRENT">
+<code class="sig-name descname">CURRENT</code><em class="property"> = 10</em><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.CURRENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pump reports this constant temperature when it’s on.
+The unit is 0.1 A.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.VOLTAGE">
+<code class="sig-name descname">VOLTAGE</code><em class="property"> = 240</em><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.VOLTAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pump reports this constant temperature when it’s on.
+The unit is 0.1 V.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">lock</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent" title="turboctl.virtualpump.hardware_component.HardwareComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">HardwareComponent</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code> objects as used by
+<code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.virtualpump.parameter_component</span>
+<span class="pre">.ParameterComponent</span></code>. This is needed, since some hardware
+components affect the values of parameters.</p></li>
+<li><p><strong>lock</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object as used by
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">turboctl.virtualconnection.connection_component</span>
+<span class="pre">.ConnectionComponent.process_query()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.handle_hardware">
+<code class="sig-name descname">handle_hardware</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span></em>, <em class="sig-param"><span class="n">reply</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.handle_hardware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write hardware data to <em>reply.</em></p>
+<p>Apply the hardware-related commands specified by <em>query</em>,
+change pump attributes accordingly, and write hardware data and
+status bits to <em>reply</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>class</strong> (<em>query</em>) – <cite>~turboctl.telegram.telegram.TelegramReader</cite>):
+The telegram sent to the pump.</p></li>
+<li><p><strong>reply</strong> (<a class="reference internal" href="../telegram/telegram.html#turboctl.telegram.telegram.TelegramBuilder" title="turboctl.telegram.telegram.TelegramBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TelegramBuilder</span></code></a>) – This will be used to build the telegram sent from the pump.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order the parallel thread to stop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.on">
+<code class="sig-name descname">on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the pump on and update parameters accordingly.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HardwareComponent.off">
+<code class="sig-name descname">off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the pump off and update parameters accordingly.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters">
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.hardware_component.</code><code class="sig-name descname">HWParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>A small class to group together and give names to parameters
+related to pump hardware.</p>
+<p>Each of the attributes of this class is an <code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code>
+object that corresponds to the hardware variable described by the
+attribute name.</p>
+<p>Note that most of the parameters corresponding to the attributes of this
+class aren’t currently modified by <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent" title="turboctl.virtualpump.hardware_component.HardwareComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">HardwareComponent</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.frequency">
+<code class="sig-name descname">frequency</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 3. Current rotor frequency in Hz.
+This value is included in every reply telegram.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.voltage">
+<code class="sig-name descname">voltage</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.voltage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 4. Current intermediate circuit voltage in 0.1 V.
+This value is included in every reply telegram.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.current">
+<code class="sig-name descname">current</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 5. Current motor current in 0.1 A.
+This value is included in every reply telegram.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.motor_power">
+<code class="sig-name descname">motor_power</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.motor_power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 6. Current motor input power in 0.1 W.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.motor_temperature">
+<code class="sig-name descname">motor_temperature</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.motor_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 7. Current motor temperature in 0.1 °C.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.save_data">
+<code class="sig-name descname">save_data</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.save_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 8. Writing any value to this parameter saves all
+changed parameter values into nonvolatile memory. Otherwise all
+changes are lost when power to the pump is cut off.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.temperature">
+<code class="sig-name descname">temperature</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 11. Current frequency convertertemperature in °C.
+This value is included in every reply telegram.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.frequency_setpoint">
+<code class="sig-name descname">frequency_setpoint</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.frequency_setpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 24. Setpoint for the rotor frequency in Hz.
+The pump tries to keep the frequency at this number.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.error_counter">
+<code class="sig-name descname">error_counter</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.error_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 40. Counts the total number of error conditions that
+have occurred to the pump.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.overload_error_counter">
+<code class="sig-name descname">overload_error_counter</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.overload_error_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 41. Counts the number of error conditions caused by an
+overload. An overload error is represented by the error code 106.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.power_failure_error_counter">
+<code class="sig-name descname">power_failure_error_counter</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.power_failure_error_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 43. Counts the number of error conditions caused by a
+disturbance in power supply. A power supply error is reprsented
+by the error code 603.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.error_list">
+<code class="sig-name descname">error_list</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.error_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 171. This parameter has 254 indices, each of which
+stores an error code. The most recent error is located at index 0
+and the oldest at index 253.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>, 254 indices.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.error_frequency_list">
+<code class="sig-name descname">error_frequency_list</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.error_frequency_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 174. The indices of this parameter contain the frequency
+of the pump at the time of the corresponding error in
+<a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters.error_list" title="turboctl.virtualpump.hardware_component.HWParameters.error_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error_list</span></code></a>.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>, 254 indices.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.error_hour_list">
+<code class="sig-name descname">error_hour_list</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.error_hour_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 176. This parameter works analogously to
+:attr`error_frequency_list`:, but contains the number of
+operational hours of the pump instead of the frequency.</p>
+<p>Type: 32-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>, 254 indices.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.operating_hours">
+<code class="sig-name descname">operating_hours</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.operating_hours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 184. Counts the total number of operational hours for
+the pump.</p>
+<p>Type: 32-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>, 254 indices.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.warning_list">
+<code class="sig-name descname">warning_list</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.warning_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter 227. Works analogously to <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters.error_list" title="turboctl.virtualpump.hardware_component.HWParameters.error_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error_list</span></code></a>, but lists
+warnings instead of errors.</p>
+<p>Type: 16-bit <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>, 254 indices.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.HWParameters.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HWParameters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameters</strong> – A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameters</span></code> objects,
+which needs to include at least all the parameters which are
+attributes for this class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="turboctl.virtualpump.hardware_component.Variables">
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.hardware_component.</code><code class="sig-name descname">Variables</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.Variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class encapsulates <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters" title="turboctl.virtualpump.hardware_component.HWParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HWParameters</span></code></a> in order to allow the
+simpler syntax</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span><span class="o">.</span><span class="n">parameter_name</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>instead of</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hwparameters</span><span class="o">.</span><span class="n">parameter_name</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="turboctl.virtualpump.hardware_component.Variables.parameters">
+<code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.Variables.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encapsulated <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters" title="turboctl.virtualpump.hardware_component.HWParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HWParameters</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.Variables.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.Variables.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#turboctl.virtualpump.hardware_component.Variables" title="turboctl.virtualpump.hardware_component.Variables"><code class="xref py py-class docutils literal notranslate"><span class="pre">Variables</span></code></a> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameters</strong> – Passed on to <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters.__init__" title="turboctl.virtualpump.hardware_component.HWParameters.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HWParameters.__init__()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.Variables.__setattr__">
+<code class="sig-name descname">__setattr__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.Variables.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the attribute <em>name</em> to <em>value</em>.</p>
+<p>The <em>parameters</em> attribute is handled as a special case and
+is accessed normally without delegation.
+For all other attributes, the value of the parameter in
+<a class="reference internal" href="#turboctl.virtualpump.hardware_component.Variables.parameters" title="turboctl.virtualpump.hardware_component.Variables.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a> with the name <em>name</em> is set to <em>value</em>.</p>
+<p><em>value</em> should be given as a Python builtin and will automatically be
+converted to a <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a> subclass
+instance. However, note that the type of <em>value</em> should match the type
+of the parameter; e.g. a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> cannot be converted into an
+<a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.datatypes.Uint</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.virtualpump.hardware_component.Variables.__getattr__">
+<code class="sig-name descname">__getattr__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.Variables.__getattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the the value of the attribute <em>name</em>.</p>
+<p>The <em>parameters</em> attribute is handled as a special case and
+is accessed normally without delegation.
+For all other attributes, the value of the parameter in
+<a class="reference internal" href="#turboctl.virtualpump.hardware_component.Variables.parameters" title="turboctl.virtualpump.hardware_component.Variables.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a> with the name <em>name</em> * is returned.
+This is automatically converted to a Python builtin.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../telegram/index.html">telegram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">virtualpump</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="parameter_component.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_component</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hardware_component</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="virtualconnection.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualconnection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="virtualpump.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">virtualpump</a><ul>
+      <li>Previous: <a href="parameter_component.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_component</span></code></a></li>
+      <li>Next: <a href="virtualconnection.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualconnection</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, University of Helsinki Fusor Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/modules/virtualpump/hardware_component.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

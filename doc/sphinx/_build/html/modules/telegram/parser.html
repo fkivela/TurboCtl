@@ -5,19 +5,19 @@
   <head>
     <meta charset="utf-8" />
     <title>parser &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="telegram" href="telegram.html" />
     <link rel="prev" title="turboctl.telegram.codes" href="codes.html" />
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -63,6 +63,8 @@ with error numbers as the keys.</p>
 <dt id="turboctl.telegram.parser.Parameter">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">indices</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.8)">range</a></span></em>, <em class="sig-param"><span class="n">min_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">max_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">default</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">unit</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">writable</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span></em>, <em class="sig-param"><span class="n">datatype</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.8)">type</a></span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.parser.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for representing pump parameters.</p>
+<p>This is a <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclass</span></code></a>, so the <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, <code class="docutils literal notranslate"><span class="pre">__str__</span></code>
+and <code class="docutils literal notranslate"><span class="pre">__repr__</span></code> methods are generated automatically.</p>
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.number">
 <code class="sig-name descname">number</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.number" title="Permalink to this definition">¶</a></dt>
@@ -254,7 +256,7 @@ warnings.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">TurboCtl</a></h1>
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
 
 
 
@@ -265,12 +267,17 @@ warnings.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Modules</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
 </ul>
 </li>
 </ul>
@@ -278,10 +285,12 @@ warnings.</p>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Modules</a><ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">telegram</a><ul>
       <li>Previous: <a href="codes.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
       <li>Next: <a href="telegram.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -289,7 +298,7 @@ warnings.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
@@ -316,7 +325,7 @@ warnings.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/modules/parser.rst.txt"
+      <a href="../../_sources/modules/telegram/parser.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

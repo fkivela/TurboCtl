@@ -29,7 +29,11 @@ from turboctl.telegram.datatypes import Data, Uint, Sint, Float
 
 @dataclass
 class Parameter:
-    """A class for representing pump parameters."""
+    """A class for representing pump parameters.
+    
+    This is a :obj:`~dataclasses.dataclass`, so the ``__init__``, ``__str__``
+    and ``__repr__`` methods are generated automatically.
+    """
     
     number: int
     """The number of the parameter."""

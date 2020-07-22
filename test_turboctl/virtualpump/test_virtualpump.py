@@ -3,49 +3,44 @@ import serial
 import time
 from copy import copy
 
-from turboctl import (
-    VirtualPump, 
-    ParameterNumberError, 
-    #CannotChangeError, 
-    MinMaxError, 
-    OtherError,
-    Telegram, 
-    Types, 
-    TelegramWrapper, 
-    Query, 
-    Reply
-)
-
-from test_turboctl import dummy_parameter
+from turboctl.telegram.codes import WrongNumError, MinMaxError, OtherError
+from turboctl.telegram.datatypes import Uint, Sint, Float
+from turboctl.telegram.telegram import TelegramBuilder, TelegramReader
+from turboctl.virtualpump.virtualpump import VirtualPump
+from test_turboctl.telgram.test_parser import dummy_parameter
     
+
 class Base(unittest.TestCase):
 
     def setUp(self):
-        
-        parameter_dict = self.set_up_parameters()     
-        TelegramWrapper.parameters = parameter_dict
-        self.set_up_virtualpump(parameter_dict)     
+        parameters = self.set_up_parameters()     
+        self.set_up_virtualpump(parameters)     
         
     def set_up_parameters(self):
         
-        def dp(number, type_, size, indexed, min_, max_, default):
-            indices = range(1,4) if indexed else range(0)
-            return dummy_parameter(number=number, indices=indices, 
-                                   type_=type_, size=size, min_=min_, 
-                                   max_=max_, default=default)
+        def dp(number, datatype, bits, indexed, min_value, max_value, default):
+            return dummy_parameter(
+                number=number,
+                indices=range(1,4) if indexed else range(0), 
+                datatype=datatype,
+                bits=bits,
+                min_value=datatype(min_value, bits), 
+                max_value=datatype(max_value, bits),
+                default=default
+            )
                    
-        self.u16  = dp(1, Types.UINT, 16, True,  10, 10**4, 123)
-        self.u32  = dp(2, Types.UINT, 32, True,  10, 10**8, 123456)
-        self.u16F = dp(3, Types.UINT, 16, False, 10, 10**4, 123)
-        self.u32F = dp(4, Types.UINT, 32, False, 10, 10**8, 123456)
+        self.u16  = dp(1, Uint, 16, True,  10, 10**4, 123)
+        self.u32  = dp(2, Uint, 32, True,  10, 10**8, 123456)
+        self.u16F = dp(3, Uint, 16, False, 10, 10**4, 123)
+        self.u32F = dp(4, Uint, 32, False, 10, 10**8, 123456)
         
-        self.s16  = dp(5, Types.SINT, 16, True,  -10**5, 10**4, -123)
-        self.s32  = dp(6, Types.SINT, 32, True,  -10**8, 10**8, -123456)
-        self.s16F = dp(7, Types.SINT, 16, False, -10**4, 10**4, -123)
-        self.s32F = dp(8, Types.SINT, 32, False, -10**8, 10**8, -123456)
+        self.s16  = dp(5, Sint, 16, True,  -10**5, 10**4, -123)
+        self.s32  = dp(6, Sint, 32, True,  -10**8, 10**8, -123456)
+        self.s16F = dp(7, Sint, 16, False, -10**4, 10**4, -123)
+        self.s32F = dp(8, Sint, 32, False, -10**8, 10**8, -123456)
         
-        self.real  = dp( 9, Types.FLOAT, 32, True,  -1e8, 1e8, 123.456)
-        self.realF = dp(10, Types.FLOAT, 32, False, -1e8, 1e8, 123.456)
+        self.real  = dp( 9, Float, 32, True,  -1e8, 1e8, 123.456)
+        self.realF = dp(10, Float, 32, False, -1e8, 1e8, 123.456)
         
         self.parameters = [self.u16, self.u32, self.u16F, self.u32F, self.s16, 
                           self.s32, self.s16F, self.s32F, self.real, 
@@ -53,20 +48,19 @@ class Base(unittest.TestCase):
         
         return {p.number: p for p in self.parameters}        
         
-    def set_up_virtualpump(self, parameter_dict):
-        
-        self.vp = VirtualPump(parameter_dict)
+    def set_up_virtualpump(self, parameters):
+        self.vp = VirtualPump(parameters)
         self.pc = self.vp.parameter_component
 
         self.connection = serial.Serial(
-            port=self.vp.connection_component.port,
+            port=self.vp.connection.port,
             timeout=0.1) 
         # A timeout has to be defined to prevent blocking.
         # The timeout is nonzero, since it takes a nonzero amount of 
         # time for the virtual pump to send data.
 
     def tearDown(self):
-        self.vp.connection_component.close()
+        self.vp.connection.close()
         self.connection.close()
     
     def read_test(self, parameter, value):
@@ -89,32 +83,32 @@ class Base(unittest.TestCase):
         reply = self.access_parameter(parameter, 'read', index, value)
         self.check_error(reply, parameter, error_class)
             
-    def access_parameter(self, parameter, mode, index, value=0):       
-        q = Query(parameter_number=parameter.number)
-        q.parameter_mode = mode
-        q.parameter_index = index
-        q.parameter_value = value
-        self.connection.write(q.data)
-        bytes_out = self.connection.read(q.LENGTH)
-
-        return Reply(bytes_out)
+    def access_parameter(self, parameter, mode, index, value=0):
+        tb = (TelegramBuilder()
+              .set_parameter_number(parameter.number)
+              .set_parameter_mode(mode)
+              .set_parameter_index(index)
+              .set_parameter_value(value))
+        
+        query = tb.build('query')
+        self.connection.write(bytes(query))
+        bytes_out = self.connection.read(query.LENGTH)
+        reply = TelegramBuilder().from_bytes(bytes_out).build('reply')
+        
+        return TelegramReader(reply)
     
     def check_response(self, reply, parameter, mode, value, index):
-        r = reply
-        
-        #if r.parameter_mode == 'error':
-        #    print(self.pc.latest_error)
-        
-        self.assertEqual(r.parameter_mode, mode)
-        self.assertEqual(r.parameter_number, parameter.number)
-        self.assertEqual(r.parameter_index, index)
-        self.assertAlmostEqual(r.parameter_value, value, 5)
+        self.assertEqual(reply.parameter_mode, mode)
+        self.assertEqual(reply.parameter_number, parameter.number)
+        self.assertEqual(reply.parameter_index, index)
+        # assertAlmostEqual is used because the use of floats may cause a
+        # slight difference between the values.
+        self.assertAlmostEqual(reply.parameter_value, value, 5)
         
     def check_error(self, reply, parameter, error_class):
-        r = reply
-        self.assertEqual(r.parameter_mode, 'error')
-        self.assertEqual(r.parameter_number, parameter.number)
-        self.assertEqual(r.error_code, error_class.CODE)
+        self.assertEqual(reply.parameter_mode, 'error')
+        self.assertEqual(reply.parameter_number, parameter.number)
+        self.assertEqual(reply.error_code, error_class.member.value)
         
         
 class TestConnection(Base): 
@@ -123,23 +117,20 @@ class TestConnection(Base):
         """Make sure sending something that isn't a valid telegram 
         doesn't cause blocking or other unwanted effects.
         """
-        
         self.connection.write(bytes([1,2,3,4]))
         out = self.connection.read(24)
         self.assertEqual(out, bytes())
             
     def test_parallel_thread_starts_and_stops(self):
-        
         with VirtualPump() as vp:
-            self.assertTrue(vp.connection_component.is_running())
+            self.assertTrue(vp.connection.is_running())
         
         time.sleep(0.1)
         # The parallel thread must finish the current iteration before
         # stopping.
-        self.assertFalse(vp.connection_component.is_running())
+        self.assertFalse(vp.connection.is_running())
 
     def test_empty_telegram(self):
-        
         parameter = dummy_parameter(number=0)
         reply = self.access_parameter(dummy_parameter(number=0), 'none', 0)       
         
@@ -149,10 +140,38 @@ class TestConnection(Base):
         # Since a virtual pump returns random values for these,
         # one of these might be 0 by chance, and this test 
         # would fail. In this case, the test should be run again.
-        self.assertTrue(reply.frequency)
-        self.assertTrue(reply.temperature)
-        self.assertTrue(reply.current)
-        self.assertTrue(reply.voltage)
+        self.assertEquals(reply.frequency, HardwareComponent.FREQUENCY)
+        self.assertTrue(reply.temperature, HardwareComponent.TEMPERATURE)
+        self.assertTrue(reply.current, HardwareComponent.CURRENT)
+        self.assertTrue(reply.voltage, HardwareComponent.VOLTAGE)
+        
+class TestHardware(Base):
+    
+    def test_onoff(self):
+        parameter = dummy_parameter(number=0)
+        reply = self.access_parameter(dummy_parameter(number=0), 'none', 0)       
+        
+        
+        
+        
+        self.check_response(reply, parameter, 'none', 0, 0)
+        self.assertEqual(reply.status_bits, [StatusBits.PARAM_CHANNEL])
+        self.assertEqual(reply.frequency, 0)
+        self.assertEqual(reply.temperature, 0)
+        self.assertEqual(reply.current, 0)
+        self.assertEqual(reply.voltage, 0)
+        
+        self.assertFalse(reply.status_list)
+        
+        # Since a virtual pump returns random values for these,
+        # one of these might be 0 by chance, and this test 
+        # would fail. In this case, the test should be run again.
+        self.assertEquals(reply.frequency, HardwareComponent.FREQUENCY)
+        self.assertTrue(reply.temperature, HardwareComponent.TEMPERATURE)
+        self.assertTrue(reply.current, HardwareComponent.CURRENT)
+        self.assertTrue(reply.voltage, HardwareComponent.VOLTAGE)
+
+
 
         
 class TestBasic(Base):
@@ -419,7 +438,7 @@ class TestReferencesToOtherParameters(Base):
     def set_up_parameters(self):
         
         def dp(number, min_, max_, default):
-            return dummy_parameter(number=number, type_=Types.SINT, min_=min_, 
+            return dummy_parameter(number=number, type_=Sint, min_=min_, 
                                    max_=max_, default=default)
                    
         self.lower = dp(1, -100, 100, -1)

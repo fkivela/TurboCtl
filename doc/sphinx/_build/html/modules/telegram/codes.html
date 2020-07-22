@@ -5,19 +5,19 @@
   <head>
     <meta charset="utf-8" />
     <title>turboctl.telegram.codes &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="parser" href="parser.html" />
     <link rel="prev" title="datatypes" href="datatypes.html" />
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -110,11 +110,85 @@ messages from the pump.</p>
 messages from the pump.</p>
 </dd></dl>
 
+<dl class="py class">
+<dt id="turboctl.telegram.codes.ParameterExceptionMeta">
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterExceptionMeta</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterExceptionMeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>A metaclass for parameter exceptions.</p>
+<p>The instances of this metaclass are different types of parameter
+exceptions, which all have the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> property.
+Since the instances of this class are error classes instead of instances
+of those classes, the correct syntax to access this attribute is</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ParameterErrorX.member</p>
+</dd>
+</dl>
+<p>instead of</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ParameterErrorX().member</p>
+</dd>
+</dl>
+<p>Corresponding <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> subclasses and
+<a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a> members need to contain references to each
+other, but directly assigning those would create a circular dependency
+which would prevent the objects from being initialized, and might also
+mess with garbage collection even if initialization was possible.
+The easiest way to circumvent this problem is to define the
+<a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute as a property that is computed at runtime.
+Python doesn’t have built-in class properties, so the easiest way to give
+exception classes a property is to use a metaclass.</p>
+<dl class="py method">
+<dt id="turboctl.telegram.codes.ParameterExceptionMeta.member">
+<em class="property">property </em><code class="sig-name descname">member</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> member which has <em>self</em> as
+its <strong>description</strong> attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – If <em>self</em> doesn’t match exactly one
+    <a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a> member.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.ParameterException">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterException</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterException" title="Permalink to this definition">¶</a></dt>
 <dd><p>A superclass for exceptions that represent different error conditions
-that are raised when the pump cannot access a parameter.</p>
+which are raised when the pump cannot access a parameter.</p>
+<p>Because this class doesn’t represent any specific error, trying to access
+the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute of this class raises
+a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>.</p>
+<dl class="py method">
+<dt id="turboctl.telegram.codes.ParameterException.member">
+<em class="property">property </em><code class="sig-name descname">member</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterException.member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute of the
+error class of which <em>self</em> is an instance.</p>
+<p>This property is defined so that the syntax</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ParameterErrorX().member</p>
+</dd>
+</dl>
+<p>works alongside</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ParameterErrorX.member</p>
+</dd>
+</dl>
+<p>This makes it possible to write try-catch blocks like the following:</p>
+<dl>
+<dt>::</dt><dd><dl>
+<dt>try:</dt><dd><p># Do something.</p>
+</dd>
+<dt>except ParameterException as error:</dt><dd><p>member = error.member
+# This would have to be “type(error).member” without this
+# property.</p>
+<p># Do something with <em>member</em>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py exception">
@@ -242,7 +316,7 @@ show that properly.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">TurboCtl</a></h1>
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
 
 
 
@@ -253,12 +327,17 @@ show that properly.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Modules</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
 </ul>
 </li>
 </ul>
@@ -266,10 +345,12 @@ show that properly.</p>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Modules</a><ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">telegram</a><ul>
       <li>Previous: <a href="datatypes.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
       <li>Next: <a href="parser.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -277,7 +358,7 @@ show that properly.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
@@ -304,7 +385,7 @@ show that properly.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/modules/codes.rst.txt"
+      <a href="../../_sources/modules/telegram/codes.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

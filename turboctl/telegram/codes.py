@@ -12,6 +12,8 @@ Members of enums can be accessed with any of the following syntaxes:
 import enum as e
 
 
+### Parameter access and response codes ###
+
 class ParameterCode(e.Enum):
     """A superclass for parameter access and response codes.
     
@@ -152,23 +154,92 @@ def get_parameter_mode(telegram_type, code):
     return member.mode    
 
 
-# Define error classes for ParameterError members.
-class ParameterException(Exception):
-    """A superclass for exceptions that represent different error conditions 
-    that are raised when the pump cannot access a parameter."""
+### Parameter errors ###
+
+class ParameterExceptionMeta(type):
+    """A metaclass for parameter exceptions.
+        
+    The instances of this metaclass are different types of parameter
+    exceptions, which all have the :attr:`member` property.
+    Since the instances of this class are error classes instead of instances
+    of those classes, the correct syntax to access this attribute is
+    
+    ::
+        ParameterErrorX.member
+        
+    instead of 
+    
+    ::
+        ParameterErrorX().member
+        
+    Corresponding :class:`ParameterException` subclasses and
+    :class:`ParameterError` members need to contain references to each
+    other, but directly assigning those would create a circular dependency
+    which would prevent the objects from being initialized, and might also
+    mess with garbage collection even if initialization was possible.
+    The easiest way to circumvent this problem is to define the
+    :attr:`member` attribute as a property that is computed at runtime.
+    Python doesn't have built-in class properties, so the easiest way to give
+    exception classes a property is to use a metaclass. 
+    """
     
     @property
     def member(self):
-        class_ = type(self)
+        """Return the :class:`ParameterException` member which has *self* as
+        its **description** attribute.
+        
+        Raises:
+            RuntimeError: If *self* doesn't match exactly one
+                :class:`ParameterError` member.
+        """
         results = []
         for member in ParameterError:
-            if member.exception == class_:
+            if member.exception == self:
                 results.append(member)
                 
-        if size(results) != 1:
-            raise RuntimeError(f'error class matches {size(results)} members')
-            
+        if len(results) != 1:
+            raise RuntimeError(f'error class matches {len(results)} members')
+        
         return results[0]
+
+
+class ParameterException(Exception, metaclass=ParameterExceptionMeta):
+    """A superclass for exceptions that represent different error conditions 
+    which are raised when the pump cannot access a parameter.
+    
+    Because this class doesn't represent any specific error, trying to access
+    the :attr:`~ParameterExceptionMeta.member` attribute of this class raises
+    a :class:`RuntimeError`.
+    """
+    
+    @property
+    def member(self):
+        """Return the :attr:`~ParameterExceptionMeta.member` attribute of the
+        error class of which *self* is an instance.
+        
+        This property is defined so that the syntax 
+        
+        ::
+            ParameterErrorX().member
+            
+        works alongside
+        
+        ::
+            ParameterErrorX.member
+            
+        This makes it possible to write try-catch blocks like the following: 
+        
+        ::
+            try:
+                # Do something.
+            except ParameterException as error:
+                member = error.member
+                # This would have to be "type(error).member" without this
+                # property.
+                
+                # Do something with *member*.
+        """
+        return type(self).member
 
 
 class WrongNumError(ParameterException):
@@ -254,7 +325,9 @@ class ParameterError(CustomInt, e.Enum):
                           'nonvolatile memory',          SavingError)
     # Error codes 3, 5 and 102 aren't included in the manual, but were 
     # discovered while testing the pump.
-    
+
+
+### Control and status bits ###
     
 class FlagBits(CustomInt, e.Enum):
     """A superclass for control and status bits.

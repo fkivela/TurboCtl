@@ -12,11 +12,22 @@ from turboctl.virtualpump.parameter_component import (ExtendedParameters,
                                                       ParameterComponent)
 
 class VirtualPump():
-    """This class simulates a TURBOVAC pump and tries to respond to 
+    """
+    VirtualPump(parameters=PARAMETERS)
+    
+    This class simulates a TURBOVAC pump and tries to respond to 
     signals the same way a physical pump would. This makes it possible
     to test the **turboctl** package without connecting to a physical pump.
     
     Attributes:
+        parameters: The parameter set to be used (a :class:`dict` of
+            :class:`~turboctl.telegram.parser.Parameter` objects, with
+            parameter numbers as keys). The default value is
+            :const:`~turboctl.telegram.parser.PARAMETERS`,
+            but non-default values can be used for testing the class.
+            This shouldn't be changed after initialization, unless the
+            parameter dictionaries of :attr:`ParameterComponent` and
+            :class:`HardwareComponent` are also updated.
         connection(:class:`~turboctl.virtualpump.virtualconnection.
             VirtualConnection`):
             Simulates the serial connection.    
@@ -27,24 +38,26 @@ class VirtualPump():
             HardwareComponent`):
             Simulates pump hardware.
     """
+    # The first line of the docstring overrides the default signature generated
+    # by Sphinx, and thus prevents PARAMETERS from being expanded.    
     
     def __init__(self, parameters=PARAMETERS):
         """
+        __init__(parameters=PARAMETERS)
+        
         Initialize a new :class:`VirtualPump`.
         
         Args:
-            parameters: The parameter set to be used (a :class:`dict` of
-                :class:`~turboctl.telegram.parser.Parameter` objects, with
-                parameter numbers as keys). The default value is
-                :const:`~turboctl.telegram.parser.PARAMETERS`,
-                but non-default values can be used for testing the class.
+            parameters: The object to be assigned to :attr:`parameters`.
         """
+        self.parameters = parameters
+        ext_parameters = ExtendedParameters(parameters)
+        
         # The lock prevents two parallel threads from accessing the 
         # same data at the same time.
         self.lock = threading.Lock()
         
         self.connection = VirtualConnection(self.process)
-        ext_parameters = ExtendedParameters(parameters)
         self.parameter_component = ParameterComponent(ext_parameters)
         self.hardware_component = HardwareComponent(ext_parameters, self.lock)
                         
@@ -86,7 +99,7 @@ class VirtualPump():
         Returns:
             The telegram sent back from the pump as a :class:`bytes` object.
         """
-        builder = TelegramBuilder.from_bytes(bytes_in)
+        builder = TelegramBuilder(self.parameters).from_bytes(bytes_in)
         query = TelegramReader(builder.build('query'), 'query')
         
         self.lock.acquire()

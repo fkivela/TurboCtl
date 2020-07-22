@@ -4,19 +4,17 @@ import unittest
 import os
 from serial import Serial
 
-from turboctl import VirtualConnection
+from turboctl.virtualpump.virtualconnection import VirtualConnection
 
 
-class DummyVC(VirtualConnection):
-    
-    def process(self, input_):
-        return b'reply to ' + input_
+def process(input_):
+    return b'reply to ' + input_
 
     
 class Base(unittest.TestCase):
     
     def setUp(self):
-        self.vc = DummyVC()
+        self.vc = VirtualConnection(process)
         
     def tearDown(self):
         self.vc.close()
@@ -46,22 +44,22 @@ class TestMessaging(Base):
             
     def test_message_larger_than_vc_buffer(self):
         
-        msg = b'hello_there'
+        msg = b'hello there'
         self.ser.write(msg)
         
         reply = self.ser.read(100)
-        self.assertEqual(reply, b'reply to hello_there')
+        self.assertEqual(reply, b'reply to hello reply to there')
         
     def test_message_larger_than_vc_buffer_and_read_in_pieces(self):
         
-        msg = b'hello_there'
+        msg = b'hello there'
         self.ser.write(msg)
         
         reply = self.ser.read(15)
-        self.assertEqual(reply, b'reply to hello_')
+        self.assertEqual(reply, b'reply to hello ')
         
         reply = self.ser.read(15)
-        self.assertEqual(reply, b'there')
+        self.assertEqual(reply, b'reply to there')
         
         reply = self.ser.read(15)
         self.assertEqual(reply, b'')
@@ -103,8 +101,8 @@ class TestStartingAndStopping(Base):
                     
     def test_close_all(self):
         vc1 = self.vc
-        vc2 = DummyVC()
-        vc3 = DummyVC()
+        vc2 = VirtualConnection(process)
+        vc3 = VirtualConnection(process)
         self.assertTrue(vc1.is_running())
         self.assertTrue(vc2.is_running())
         self.assertTrue(vc3.is_running())
@@ -125,11 +123,11 @@ class TestStartingAndStopping(Base):
         VirtualConnection.close_all()
         
         self.assertEqual(len(VirtualConnection.running_instances), 0)
-        vc1 = DummyVC()
+        vc1 = VirtualConnection(process)
         self.assertEqual(len(VirtualConnection.running_instances), 1)
-        DummyVC()
+        VirtualConnection(process)
         self.assertEqual(len(VirtualConnection.running_instances), 2)
-        DummyVC()
+        VirtualConnection(process)
         self.assertEqual(len(VirtualConnection.running_instances), 3)
 
         vc1.close()

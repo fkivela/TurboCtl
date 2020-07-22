@@ -11,8 +11,6 @@ TODO:
 - ParameterException objects need a 'MEMBER' attribute, which links to the
   corresponding ParameterError member. (DONE, but needs docs and testing)
 - Document the parameters.txt format better?
-- Parameters should be an attribute and an optional initializer argument
-  for TelegramBuilder and TelegramReader.
 - Document individual enum members in codes.py?
 - Pump errors could be tested by adding a raise_error method to virtualpump.
   E.g. vpump.raise_error(type='power_failure').
@@ -20,6 +18,7 @@ TODO:
 - Sphinxify ui.table.
 - Make sure the user understands that API.pump_on deosn't necassarily actually
   reflect the status of the pump. 
+- Rename WrongNumError to NumberError or something?
 
 Might be useful:
 - Change setup methods to setupclass methods in some tests in order 
@@ -51,3 +50,6 @@ Things that have to be tested with the real pump:
 - Do volatile values disappear when the pump is turned off, or only when power is cut off.
 - Does parameter 227 (warnings) work analogously compared to parameter 171 (error list).
 - Can parameters be given a value of 0 even if their minimum value is reported as 1.401E-42?
+- If access to parameter X fails (i.e. due to an invalid parameter number),
+  does the return telegram contain the sent parameter number or just 0?
+- What happens when accessing index 0 of an indexed parameter in unindexed mode etc.

@@ -10,8 +10,9 @@ It is written in Python and intended for Linux operating systems.
 Documentation
 -------------
 
+The code is located in the turboctl package.
+
 .. toctree::
-   :maxdepth: 2
    
    modules/index.rst
 

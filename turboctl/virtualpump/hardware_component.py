@@ -78,6 +78,20 @@ class HardwareComponent():
             or off.
     """
     
+    TEMPERATURE = 30
+    """The pump reports this constant temperature when it's on.
+    The unit is °C."""
+    
+    CURRENT = 10
+    """The pump reports this constant temperature when it's on.
+    The unit is 0.1 A.
+    """
+    
+    VOLTAGE = 240
+    """The pump reports this constant temperature when it's on.
+    The unit is 0.1 V.
+    """
+    
     def __init__(self, parameters, lock):
         """Initialize a new :class:`HardwareComponent`.
         
@@ -190,9 +204,9 @@ class HardwareComponent():
     def on(self):
         """Turn the pump on and update parameters accordingly."""
         self.is_on = True
-        self.variables.temperature = 30
-        self.variables.current = 10
-        self.variables.voltage = 24
+        self.variables.temperature = self.TEMPERATURE
+        self.variables.current = self.CURRENT
+        self.variables.voltage = self.VOLTAGE
         
     def off(self):
         """Turn the pump off and update parameters accordingly."""
@@ -442,6 +456,7 @@ class Variables():
         :attr:`parameters` with the name *name* * is returned.
         This is automatically converted to a Python builtin.
         """
+        # TODO: This seems unnecessary since __getattr__ is only called if the parameter isn't found otherwise
         if name == 'parameters':
             return self.__dict__[name]
         
