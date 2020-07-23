@@ -19,6 +19,8 @@ TODO:
 - Make sure the user understands that API.pump_on deosn't necassarily actually
   reflect the status of the pump. 
 - Rename WrongNumError to NumberError or something?
+- help command opens with less?
+- Add commands to set the setpoint, save data, read errors etc.
 
 Might be useful:
 - Change setup methods to setupclass methods in some tests in order 
@@ -53,3 +55,4 @@ Things that have to be tested with the real pump:
 - If access to parameter X fails (i.e. due to an invalid parameter number),
   does the return telegram contain the sent parameter number or just 0?
 - What happens when accessing index 0 of an indexed parameter in unindexed mode etc.
+- Are the T/I/U values reported by VirtualPump realistic?

@@ -1,7 +1,5 @@
 """This module handles the simulation of pump hardware in a
-:class:~`turboctl.virtualpump.virtualpump.VirtualPump`.
-
-TODO: Parameter values should be Data objects.
+:class:`~turboctl.virtualpump.virtualpump.VirtualPump`.
 
 ..
     Aliases for Sphinx.
@@ -10,7 +8,16 @@ TODO: Parameter values should be Data objects.
 .. |Sint| replace:: :class:`~turboctl.telegram.datatypes.Sint`
 .. |Float| replace:: :class:`~turboctl.telegram.datatypes.Float`
 .. |Bin| replace:: :class:`~turboctl.telegram.datatypes.Bin`
+.. |ExtendedParameter| replace::
+    :class:`~turboctl.virtualpump.parameter_component.ExtendedParameter`
+.. |ParameterComponent| replace::
+    :class:`~turboctl.virtualpump.parameter_component.ParameterComponent`
+.. |ParameterComponent.handle_parameter| replace::
+    :meth:`ParameterComponent.handle_parameter()
+    <turboctl.virtualpump.parameter_component.ParameterComponent\
+.handle_parameter>`
 """
+
 import threading
 import time
 
@@ -20,9 +27,9 @@ from turboctl.telegram.codes import StatusBits, ControlBits
 class HardwareComponent():
     """This class defines the part of a
     :class:`~turboctl.virtualpump.virtualpump.VirtualPump`
-    that handles hardware data and command/status words.
+    that handles hardware data and command/status bits.
     
-    This class simulates the following pump properties:
+    The following pump properties are simulated:
         
         - The pump can be turned on and off.
         
@@ -39,21 +46,22 @@ class HardwareComponent():
           parameter, and cannot currently be set with the frequency field of
           a telegram.
           
-        - Currently this class only recognizes the 'COMMAND' and 'ON'
+        - Currently this class only recognizes the ``COMMAND`` and ``ON``
           control bits (see :class:`~turboctl.telegram.codes.ControlBits`);
           all others are ignored.
           
         - The following status bits
-          (see :class:`~turboctl.telegram.codes.ControlBits`)
+          (see :class:`~turboctl.telegram.codes.StatusBits`)
           are applied to the reply telegram:
             
-            ``'OPERATION'``: When the pump is on.
-            ``'READY'``: When the pump is off.
-            ``'TURNING'``: When the pump frequency is not 0.
-            ``'ACCELERATION'``: When the pump acceleration is above 0.
-            ``'DECELERATION'``: When the pump acceleration is below 0.
-            ``'PARAM_CHANNEL'``: Always.
-            ``'PROCESS_CHANNEL'``: When the COMMAND control bit is supplied.
+              - ``OPERATION'``: When the pump is on.
+              - ``READY``: When the pump is off.
+              - ``TURNING``: When the pump frequency is not 0.
+              - ``ACCELERATION``: When the pump acceleration is above 0.
+              - ``DECELERATION``: When the pump acceleration is below 0.
+              - ``PARAM_CHANNEL``: Always.
+              - ``PROCESS_CHANNEL``: When the ``COMMAND`` control bit is
+                supplied.
 
     Attributes:
         variables:
@@ -61,20 +69,20 @@ class HardwareComponent():
             can be modified by this object.
             
         step:
-            The timestep of iteration; the parallel thread waits this amount
-            in seconds between iterations.
+            The timestep of iteration; the parallel thread that updates
+            :attr:`frequency` waits this amount of seconds between iterations.
             
         abs_acceleration:
             How fast the pump accelerates or decelerates, in Hz / second.
             
         frequency:
-            The exact frequency of the pump as a :class:`float.`
+            The exact frequency of the pump as a :class:`float`.
             This is needed to correctly simulate gradual changes in the
             frequency, because the frequency parameter only saves integer
             values.
             
         is_on:
-            A :class:`boolean` flag to keep track of whether the pump is on
+            A :class:`bool` flag to keep track of whether the pump is on
             or off.
     """
     
@@ -96,17 +104,18 @@ class HardwareComponent():
         """Initialize a new :class:`HardwareComponent`.
         
         Args:
-            parameters:
-                The same :class:`dict` of
-                :class:`~turboctl.virtualpump.parameter_component
-                .ExtendedParameter` objects as used by
-                :class:`turboctl.virtualpump.parameter_component
-                .ParameterComponent`. This is needed, since some hardware
-                components affect the values of parameters.
+            parameters: The same :class:`dict` of |ExtendedParameter|
+                objects as used by |ParameterComponent|.
+                This is needed because some hardware components affect the
+                values of parameters and vice versa.
                 
-            lock: The same :class:`threading.Lock` object as used by 
-                :meth:`turboctl.virtualconnection.connection_component
-                .ConnectionComponent.process_query`. 
+            lock: A :class:`threading.Lock` object that can be used to
+                temporarily freeze the parallel thread which updates
+                :attr:`frequency`.
+                The purpose of this is to prevent race conditions between that
+                thread and the :meth:`handle_hardware` and
+                |ParameterComponent.handle_parameter| methods, since they all
+                can access and modify the value of the frequency parameter.
         """
         self.parameters = parameters
         self.variables = Variables(parameters)
@@ -135,7 +144,7 @@ class HardwareComponent():
         status bits to *reply*.
         
         Args:
-            query (class:`~turboctl.telegram.telegram.TelegramReader`):
+            query (:class:`~turboctl.telegram.telegram.TelegramReader`):
                 The telegram sent to the pump.
                 
             reply(:class:`~turboctl.telegram.telegram.TelegramBuilder`):
@@ -260,15 +269,15 @@ class HardwareComponent():
 
 
 class HWParameters():
-    """A small class to group together and give names to parameters 
-    related to pump hardware.
+    """A collection of parameters related to pump hardware.
     
-    Each of the attributes of this class is an :class:`ExtendedParameter`
-    object that corresponds to the hardware variable described by the
-    attribute name.
+    Each of the attributes of this class is an |ExtendedParameter|
+    object. This class gives these parameters descriptive names and makes it
+    possible to access them without having to find out the parameter numbers.
     
-    Note that most of the parameters corresponding to the attributes of this
-    class aren't currently modified by :class:`HardwareComponent`. 
+    Note that :class:`HardwareComponent` currently cannot modify most of these
+    parameters, but they are included in case :class:`HardwareComponent` is
+    expanded in the future.
     
     Attributes:
         
@@ -308,7 +317,7 @@ class HWParameters():
             Type: 16-bit |Sint|.
             
         temperature:
-            Parameter 11. Current frequency convertertemperature in °C.
+            Parameter 11. Current frequency converter temperature in °C.
             This value is included in every reply telegram.
             
             Type: 16-bit |Sint|.
@@ -354,7 +363,7 @@ class HWParameters():
             
         error_hour_list:
             Parameter 176. This parameter works analogously to
-            :attr`error_frequency_list`:, but contains the number of
+            :attr:`error_frequency_list`, but contains the number of
             operational hours of the pump instead of the frequency. 
             
             Type: 32-bit |Sint|, 254 indices.
@@ -378,9 +387,9 @@ class HWParameters():
         """Initializer.
         
         Args:
-            parameters: A :class:`dict` of :class:`ExtendedParameters` objects,
+            parameters: A :class:`dict` of |ExtendedParameter| objects,
                 which needs to include at least all the parameters which are
-                attributes for this class.
+                attributes of this class.
         """
         self.frequency = parameters[3]
         self.voltage = parameters[4]
@@ -410,8 +419,8 @@ class Variables():
     instead of
     ::
         
-        
-        hwparameters.parameter_name.value = value
+        parameter = hwparameters.parameter_name
+        parameter.value[0] = parameter.datatype(value, parameter.bits)
         
     Attributes:
         parameters: The encapsulated :class:`HWParameters` object.
@@ -428,16 +437,17 @@ class Variables():
     def __setattr__(self, name, value):
         """Set the attribute *name* to *value*.
         
-        The *parameters* attribute is handled as a special case and
-        is accessed normally without delegation.
+        The :attr:`parameters` attribute is handled as a special case and
+        is accessed normally.
         For all other attributes, the value of the parameter in
         :attr:`parameters` with the name *name* is set to *value*.
         
-        *value* should be given as a Python builtin and will automatically be
-        converted to a :class:`~turboctl.telegram.datatypes.Data` subclass
-        instance. However, note that the type of *value* should match the type
-        of the parameter; e.g. a :class:`float` cannot be converted into an
-        :class:`turboctl.telegram.datatypes.Uint`.
+        *value* should be given as an instance of a built-in Python type, and
+        will automatically be converted to a
+        :class:`~turboctl.telegram.datatypes.Data` subclass instance.
+        However, note that the type of *value* should match the type of the
+        parameter; e.g. a :class:`float` can be converted into a |FLoat| but
+        not into an |Uint|.
         """
         if name == 'parameters':
             self.__dict__[name] = value
@@ -450,15 +460,13 @@ class Variables():
     def __getattr__(self, name):
         """Return the the value of the attribute *name*.
         
-        The *parameters* attribute is handled as a special case and
-        is accessed normally without delegation.
-        For all other attributes, the value of the parameter in
-        :attr:`parameters` with the name *name* * is returned.
-        This is automatically converted to a Python builtin.
-        """
-        # TODO: This seems unnecessary since __getattr__ is only called if the parameter isn't found otherwise
-        if name == 'parameters':
-            return self.__dict__[name]
+        This method returns the value of the parameter in :attr:`parameters`
+        with the name *name*.
+        The value is automatically converted to a built-in type.
         
+        Since ``__getattr__`` (unlike ``__getattribute__``) is only called if
+        the attribute cannot be found through normal routes, there is no need
+        to make :attr:`parameters` into a special case.
+        """        
         parameter = getattr(self.parameters, name)
         return parameter.value[0].value

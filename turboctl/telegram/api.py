@@ -35,7 +35,7 @@ def send(connection, telegram):
     """
     connection.write(bytes(telegram))
     reply_bytes = connection.read(Telegram.LENGTH)
-    reply = TelegramBuilder.from_bytes(reply_bytes).build()
+    reply = TelegramBuilder().from_bytes(reply_bytes).build()
     return TelegramReader(telegram), TelegramReader(reply)
 
     
