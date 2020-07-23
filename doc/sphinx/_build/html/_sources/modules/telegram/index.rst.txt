@@ -1,7 +1,8 @@
 telegram
 ========
 
-This is the telegram package.
+This subpackage contains the functionality for creating the telegrams used to
+communicate with the TURBOVAC pump.
 
 .. toctree::
    

@@ -1,5 +1,5 @@
 """This module handles the simulation of the serial connection in a
-:class:~`turboctl.virtualpump.virtualpump.VirtualPump`.
+:class:`~turboctl.virtualpump.virtualpump.VirtualPump`.
 """
 
 import os

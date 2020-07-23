@@ -33,21 +33,22 @@
             
   <div class="section" id="turboctl">
 <h1>TurboCtl<a class="headerlink" href="#turboctl" title="Permalink to this headline">¶</a></h1>
-<p>HVCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum pump.
-It is written in Python and intended for Linux operating systems.</p>
+<p>TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum
+pump. It was written in Python and is intended for Linux operating systems.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>TurboCtl is still under development.</p>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
-<p>The code is located in the turboctl package.</p>
+<p>The source code for TurboCtl is located in the <a class="reference internal" href="modules/index.html#turboctl"><span class="std std-ref">turboctl</span></a> package, which
+has the following internal structure of subpackages and modules:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules/index.html">turboctl</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="modules/telegram/index.html">telegram</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="modules/telegram/datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/telegram/codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">turboctl.telegram.codes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/telegram/codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/telegram/parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/telegram/telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/telegram/api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
@@ -67,6 +68,11 @@ It is written in Python and intended for Linux operating systems.</p>
 </li>
 </ul>
 </div>
+<p>In addition to <a class="reference internal" href="modules/index.html#turboctl"><span class="std std-ref">turboctl</span></a>, TurboCtl also contains the <code class="docutils literal notranslate"><span class="pre">test_turboctl</span></code>
+package, which contains automatic tests for <a class="reference internal" href="modules/index.html#turboctl"><span class="std std-ref">turboctl</span></a>. The internal
+structure of <code class="docutils literal notranslate"><span class="pre">test_turboctl</span></code> mirrors that of <a class="reference internal" href="modules/index.html#turboctl"><span class="std std-ref">turboctl</span></a>, and most
+modules in <a class="reference internal" href="modules/index.html#turboctl"><span class="std std-ref">turboctl</span></a> have a corresponding test module
+<code class="docutils literal notranslate"><span class="pre">test_&lt;modulename&gt;.py</span></code> in <code class="docutils literal notranslate"><span class="pre">test_turboctl</span></code>.</p>
 </div>
 <div class="section" id="author">
 <h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>

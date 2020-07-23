@@ -1,8 +1,8 @@
 TurboCtl
 ========
 
-HVCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum pump.
-It is written in Python and intended for Linux operating systems.
+TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum
+pump. It was written in Python and is intended for Linux operating systems.
 
 .. note::
    TurboCtl is still under development. 
@@ -10,11 +10,18 @@ It is written in Python and intended for Linux operating systems.
 Documentation
 -------------
 
-The code is located in the turboctl package.
+The source code for TurboCtl is located in the :ref:`turboctl` package, which
+has the following internal structure of subpackages and modules:
 
 .. toctree::
    
    modules/index.rst
+   
+In addition to :ref:`turboctl`, TurboCtl also contains the ``test_turboctl``
+package, which contains automatic tests for :ref:`turboctl`. The internal
+structure of ``test_turboctl`` mirrors that of :ref:`turboctl`, and most
+modules in :ref:`turboctl` have a corresponding test module
+``test_<modulename>.py`` in ``test_turboctl``.
 
 Author
 ------

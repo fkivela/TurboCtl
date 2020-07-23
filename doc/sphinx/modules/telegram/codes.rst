@@ -1,4 +1,4 @@
-:mod:`turboctl.telegram.codes`
+:mod:`~turboctl.telegram.codes`
 ===============================
 
 .. automodule:: turboctl.telegram.codes

@@ -34,7 +34,7 @@ author = 'Feliks Kivelä'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
 ]
 
 # Use the class docstring (instead of the __init__ docstring) for class

@@ -1,6 +1,5 @@
 """This module can be used to simulate the I/O behaviour of a TURBOVAC 
-pump and thus enable testing the program without access to an actual 
-physical pump.
+pump and thus enable testing the program without access to an actual pump.
 """
 import threading
 
@@ -17,25 +16,29 @@ class VirtualPump():
     
     This class simulates a TURBOVAC pump and tries to respond to 
     signals the same way a physical pump would. This makes it possible
-    to test the **turboctl** package without connecting to a physical pump.
+    to test the ``turboctl`` package without connecting to a physical pump.
     
     Attributes:
+        
         parameters: The parameter set to be used (a :class:`dict` of
             :class:`~turboctl.telegram.parser.Parameter` objects, with
             parameter numbers as keys). The default value is
             :const:`~turboctl.telegram.parser.PARAMETERS`,
             but non-default values can be used for testing the class.
             This shouldn't be changed after initialization, unless the
-            parameter dictionaries of :attr:`ParameterComponent` and
-            :class:`HardwareComponent` are also updated.
-        connection(:class:`~turboctl.virtualpump.virtualconnection.
-            VirtualConnection`):
+            parameter dictionaries of :attr:`parameter_component` and
+            :attr:`hardware_component` are also updated.
+        
+        connection(:class:`~turboctl.virtualpump.virtualconnection\
+.VirtualConnection`):
             Simulates the serial connection.    
-        parameter_component (:class:`~turboctl.virtualpump.parameter_component.
-            ParameterComponent`):
+        
+        parameter_component (:class:`~turboctl.virtualpump\
+.parameter_component.ParameterComponent`):
             Handles access to pump parameters.
-        hardware_component (:class:`~turboctl.virtualpump.hardware_component.
-            HardwareComponent`):
+        
+        hardware_component (:class:`~turboctl.virtualpump\
+.hardware_component.HardwareComponent`):
             Simulates pump hardware.
     """
     # The first line of the docstring overrides the default signature generated
@@ -69,17 +72,17 @@ class VirtualPump():
     
     def __exit__(self, type_, value, traceback):
         """Called upon exiting a ``with`` block; calls
-        :meth:`close`.
+        :meth:`stop`.
         """
-        self.close()
+        self.stop()
                     
-    def close(self):
+    def stop(self):
         """Close parallel threads by calling
         :attr:`connection`:meth:`.close()
-        <~turboctl.virtualpump.virtualconnection.VirtualConnection.close>`
+        <turboctl.virtualpump.virtualconnection.VirtualConnection.close>`
         and
-        :attr:`hardware_component`:meth:`.close
-        <~turboctl.virtualpump.hardware_component.Hardware_component.close>`.
+        :attr:`hardware_component`:meth:`.stop()
+        <turboctl.virtualpump.hardware_component.HardwareComponent.stop>`.
         """
         self.connection.close()
         self.hardware_component.stop()

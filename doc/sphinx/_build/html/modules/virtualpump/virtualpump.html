@@ -34,14 +34,13 @@
   <div class="section" id="module-turboctl.virtualpump.virtualpump">
 <span id="virtualpump"></span><h1><a class="reference internal" href="#module-turboctl.virtualpump.virtualpump" title="turboctl.virtualpump.virtualpump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a><a class="headerlink" href="#module-turboctl.virtualpump.virtualpump" title="Permalink to this headline">¶</a></h1>
 <p>This module can be used to simulate the I/O behaviour of a TURBOVAC
-pump and thus enable testing the program without access to an actual
-physical pump.</p>
+pump and thus enable testing the program without access to an actual pump.</p>
 <dl class="py class">
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.virtualpump.</code><code class="sig-name descname">VirtualPump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">PARAMETERS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class simulates a TURBOVAC pump and tries to respond to
 signals the same way a physical pump would. This makes it possible
-to test the <strong>turboctl</strong> package without connecting to a physical pump.</p>
+to test the <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package without connecting to a physical pump.</p>
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump.parameters">
 <code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameters" title="Permalink to this definition">¶</a></dt>
@@ -51,32 +50,41 @@ parameter numbers as keys). The default value is
 <a class="reference internal" href="../telegram/parser.html#turboctl.telegram.parser.PARAMETERS" title="turboctl.telegram.parser.PARAMETERS"><code class="xref py py-const docutils literal notranslate"><span class="pre">PARAMETERS</span></code></a>,
 but non-default values can be used for testing the class.
 This shouldn’t be changed after initialization, unless the
-parameter dictionaries of <code class="xref py py-attr docutils literal notranslate"><span class="pre">ParameterComponent</span></code> and
-<code class="xref py py-class docutils literal notranslate"><span class="pre">HardwareComponent</span></code> are also updated.</p>
+parameter dictionaries of <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameter_component" title="turboctl.virtualpump.virtualpump.VirtualPump.parameter_component"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_component</span></code></a> and
+<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hardware_component</span></code></a> are also updated.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">connection(</code></dt>
-<dd><p>class:<cite>~turboctl.virtualpump.virtualconnection.
-VirtualConnection</cite>):
-Simulates the serial connection.</p>
+<dt id="turboctl.virtualpump.virtualpump.VirtualPump.connection">
+<code class="sig-name descname">connection</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates the serial connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="virtualconnection.html#turboctl.virtualpump.virtualconnection.VirtualConnection" title="turboctl.virtualpump.virtualconnection.VirtualConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualConnection</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">parameter_component (</code></dt>
-<dd><p>class:<cite>~turboctl.virtualpump.parameter_component.
-ParameterComponent</cite>):
-Handles access to pump parameters.</p>
+<dt id="turboctl.virtualpump.virtualpump.VirtualPump.parameter_component">
+<code class="sig-name descname">parameter_component</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameter_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles access to pump parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ParameterComponent" title="turboctl.virtualpump.parameter_component.ParameterComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterComponent</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">hardware_component (</code></dt>
-<dd><p>class:<cite>~turboctl.virtualpump.hardware_component.
-HardwareComponent</cite>):
-Simulates pump hardware.</p>
+<dt id="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component">
+<code class="sig-name descname">hardware_component</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates pump hardware.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="hardware_component.html#turboctl.virtualpump.hardware_component.HardwareComponent" title="turboctl.virtualpump.hardware_component.HardwareComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">HardwareComponent</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -101,16 +109,16 @@ Simulates pump hardware.</p>
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump.__exit__">
 <code class="sig-name descname">__exit__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">traceback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__exit__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called upon exiting a <code class="docutils literal notranslate"><span class="pre">with</span></code> block; calls
-<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.close" title="turboctl.virtualpump.virtualpump.VirtualPump.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a>.</p>
+<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.stop" title="turboctl.virtualpump.virtualpump.VirtualPump.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.close" title="Permalink to this definition">¶</a></dt>
+<dt id="turboctl.virtualpump.virtualpump.VirtualPump.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close parallel threads by calling
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">connection</span></code><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close()</span></code>
+<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="turboctl.virtualpump.virtualpump.VirtualPump.connection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">connection</span></code></a><a class="reference internal" href="virtualconnection.html#turboctl.virtualpump.virtualconnection.VirtualConnection.close" title="turboctl.virtualpump.virtualconnection.VirtualConnection.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close()</span></code></a>
 and
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">hardware_component</span></code><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close</span></code>.</p>
+<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hardware_component</span></code></a><a class="reference internal" href="hardware_component.html#turboctl.virtualpump.hardware_component.HardwareComponent.stop" title="turboctl.virtualpump.hardware_component.HardwareComponent.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.stop()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">

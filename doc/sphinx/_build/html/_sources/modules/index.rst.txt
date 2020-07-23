@@ -1,7 +1,12 @@
+.. _turboctl:
+
 turboctl
 =========
 
-The turboctl package contains three subpackages: telegram, ui and virtualpump.
+.. _dependencies:
+
+The ``turboctl`` package contains the source code for TurboCtl, and is divided
+into the following three subpackages:
 
 .. toctree::
     
