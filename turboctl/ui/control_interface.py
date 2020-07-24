@@ -155,16 +155,13 @@ class ControlInterface():
 
     def pump_on(self):
         """Turn the pump on."""
-        query, reply = api.status(self._connection, pump_on=True)
-        self._update_status(reply)
-        self.api.pump_on = True
-        return query, reply
+        self.status.pump_on = True
+        return self.get_status()
     
     def pump_off(self):
         """Turn the pump off."""
-        query, reply = api.status(self._connection, pump_on=False)
-        self._update_status(reply)
-        return query, reply
+        self.status.pump_on = False
+        return self.get_status()
 
     def get_status(self):
         """Ask pump status by sending an empty telegram."""

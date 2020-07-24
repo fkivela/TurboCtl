@@ -108,6 +108,10 @@ class HardwareComponent():
                 objects as used by |ParameterComponent|.
                 This is needed because some hardware components affect the
                 values of parameters and vice versa.
+                Note that these need to be the actual parameters of the pump;
+                dummy values cannot be used even for testing purposes, since
+                all hardware-related parameters (see :class:`HWParameters` for
+                a list of those) need to be present for this class to function.
                 
             lock: A :class:`threading.Lock` object that can be used to
                 temporarily freeze the parallel thread which updates

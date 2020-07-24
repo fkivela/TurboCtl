@@ -11,11 +11,40 @@ from turboctl.telegram.telegram import TelegramBuilder, TelegramReader
 from turboctl.virtualpump.hardware_component import HardwareComponent
 from turboctl.virtualpump.parameter_component import ExtendedParameters
 
-# The attributes of HardwareComponent aren't explicitly tested here.
-# However, they are used internally by the class, so these tests should fail
-# if there was something wrong with the attributes.
+# The attributes of HardwareComponent or the on and off methods aren't
+# explicitly tested here, but they are used internally by the class,
+# so these tests should fail if there was something wrong with them.
 # Likewise, the other classes in the hardware_component module aren't tested,
 # because they are only used by HardwareComponent.
+
+
+class TestStop(unittest.TestCase):
+    """Test the stop() method."""
+    
+    def test_stop(self):
+        # Test classes are executed in alphabetical order, so this one is
+        # executed last. Because of this, we have to wait for the threads
+        # created by the other classes to stop.
+        # Even if there was no possibility of dangling parallel threads left by
+        # this module, this module might be run just after another test module,
+        # which could have created its own parallel threads.
+        # 0.2 is twice the default timestep for the parallel thread of
+        # HardwareComponent.
+        time.sleep(0.2)
+        
+        # Count active threads.
+        original_count = threading.active_count()
+        
+        # Creating a HardwareComponent should add one thread.
+        hwc = HardwareComponent(ExtendedParameters(PARAMETERS),
+                                threading.Lock())
+        self.assertEqual(threading.active_count(), original_count + 1)
+        
+        # Calling stop() should reduce the number of threads back to its
+        # original value.
+        hwc.stop()
+        time.sleep(2 * hwc.step)
+        self.assertEqual(threading.active_count(), original_count)
 
 
 class Base(unittest.TestCase):
@@ -57,7 +86,7 @@ class Base(unittest.TestCase):
     def pump_off_test(self, reply):
         """Test the status of the pump in the off state."""
         self.assertEqual(reply.flag_bits, [StatusBits.READY,
-                                           StatusBits.PARAM_CHANNEL])
+                                            StatusBits.PARAM_CHANNEL])
 
         self.assertEqual(reply.frequency, 0)
         self.assertEqual(reply.temperature, 0)
@@ -296,7 +325,7 @@ class TestHardwareComponent(Base):
                                                     StatusBits.PARAM_CHANNEL,
                                                     StatusBits.PROCESS_CHANNEL
                                                     ]))
-
-
+    
+        
 if __name__ == '__main__':
     unittest.main()

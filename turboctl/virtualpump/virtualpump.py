@@ -11,24 +11,12 @@ from turboctl.virtualpump.parameter_component import (ExtendedParameters,
                                                       ParameterComponent)
 
 class VirtualPump():
-    """
-    VirtualPump(parameters=PARAMETERS)
-    
-    This class simulates a TURBOVAC pump and tries to respond to 
+    """This class simulates a TURBOVAC pump and tries to respond to 
     signals the same way a physical pump would. This makes it possible
     to test the ``turboctl`` package without connecting to a physical pump.
     
     Attributes:
-        
-        parameters: The parameter set to be used (a :class:`dict` of
-            :class:`~turboctl.telegram.parser.Parameter` objects, with
-            parameter numbers as keys). The default value is
-            :const:`~turboctl.telegram.parser.PARAMETERS`,
-            but non-default values can be used for testing the class.
-            This shouldn't be changed after initialization, unless the
-            parameter dictionaries of :attr:`parameter_component` and
-            :attr:`hardware_component` are also updated.
-        
+
         connection(:class:`~turboctl.virtualpump.virtualconnection\
 .VirtualConnection`):
             Simulates the serial connection.    
@@ -44,22 +32,17 @@ class VirtualPump():
     # The first line of the docstring overrides the default signature generated
     # by Sphinx, and thus prevents PARAMETERS from being expanded.    
     
-    def __init__(self, parameters=PARAMETERS):
-        """
-        __init__(parameters=PARAMETERS)
-        
-        Initialize a new :class:`VirtualPump`.
-        
-        Args:
-            parameters: The object to be assigned to :attr:`parameters`.
-        """
-        self.parameters = parameters
-        ext_parameters = ExtendedParameters(parameters)
+    def __init__(self):
+        """Initialize a new :class:`VirtualPump`."""
         
         # The lock prevents two parallel threads from accessing the 
         # same data at the same time.
         self.lock = threading.Lock()
         
+        # Custom parameter sets cannot be specified, since HardwareComponent
+        # needs certain hardware-related parameters to be present in order to
+        # function.
+        ext_parameters = ExtendedParameters(PARAMETERS)
         self.connection = VirtualConnection(self.process)
         self.parameter_component = ParameterComponent(ext_parameters)
         self.hardware_component = HardwareComponent(ext_parameters, self.lock)
@@ -92,17 +75,22 @@ class VirtualPump():
         
         This function processes the data sent to the virtual pump by
         interpreting it as a telegram and performing any commands 
-        specified by it (such as changing parameter values).
-        
+        specified by it (such as changing parameter values).     
         A reply telegram is then formed and its contents returned.
-        
+                
         Args:
             bytes_in: The telegram sent to the pump as a :class:`bytes` object.
             
         Returns:
             The telegram sent back from the pump as a :class:`bytes` object.
+            If *bytes_in* cannot be interpreted as a valid telegram,
+            the return value will be an empty :class:`bytes` object.
         """
-        builder = TelegramBuilder(self.parameters).from_bytes(bytes_in)
+        try:
+            builder = TelegramBuilder().from_bytes(bytes_in)
+        except ValueError:
+            return bytes()
+        
         query = TelegramReader(builder.build('query'), 'query')
         
         self.lock.acquire()

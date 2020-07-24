@@ -1,26 +1,20 @@
-State of packages and modules: Code Tests Comments
+TODO
 
-telegram                OK OK OK
-virtualpump             -- -- --
-ui                      -- -- --
-bin                     -- -- --
-test_turboctl           -- -- --   
-    
-    
-TODO:
+Necessary before the program can be considered ready:
 - ParameterException objects need a 'MEMBER' attribute, which links to the
   corresponding ParameterError member. (DONE, but needs docs and testing)
+- Make sure the user understands that API.pump_on doesn't necassarily actually
+  reflect the status of the pump. 
+- If a parameter cannot be changed, print the error message!
+
+
+Can be added later (or not at all):
 - Document the parameters.txt format better?
 - Document individual enum members in codes.py?
-- Pump errors could be tested by adding a raise_error method to virtualpump.
-  E.g. vpump.raise_error(type='power_failure').
-- Everything that can be private should probably be private.
-- Sphinxify ui.table.
-- Make sure the user understands that API.pump_on deosn't necassarily actually
-  reflect the status of the pump. 
 - Rename WrongNumError to NumberError or something?
-- help command opens with less?
+- Open the output of the help command with less?
 - Add commands to set the setpoint, save data, read errors etc.
+- Move singledispatchmethod to datatypes.py 
 
 Might be useful:
 - Change setup methods to setupclass methods in some tests in order 
@@ -56,3 +50,5 @@ Things that have to be tested with the real pump:
   does the return telegram contain the sent parameter number or just 0?
 - What happens when accessing index 0 of an indexed parameter in unindexed mode etc.
 - Are the T/I/U values reported by VirtualPump realistic?
+- IIRC the limits of the setpoint are parameters with such values that the default
+  setpoint value is illegal. Investigate this.

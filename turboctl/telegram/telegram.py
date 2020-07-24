@@ -569,6 +569,10 @@ class TelegramReader:
             
         .. highlight:: default
         """
+        # str(self.parameter_error) must be used instead of
+        # self.parameter_error, because the latter is displayed as just a
+        # number instead of its __repr__ or __str__. This is probably caused by
+        # the fact that that ParameterError inherits int.
         return type(self).__name__ + ('(\n'
             f'    telegram={self.telegram},\n'
             f'    type={repr(self.type)},\n'
@@ -576,7 +580,7 @@ class TelegramReader:
             f'    parameter_number={self.parameter_number},\n'
             f'    parameter_index={self.parameter_index},\n'
             f'    parameter_value={self.parameter_value},\n'
-            f'    parameter_error={self.parameter_error},\n'
+            f'    parameter_error={str(self.parameter_error)},\n'
             f'    flag_bits={self.flag_bits},\n'
             f'    frequency={self.frequency},\n'
             f'    temperature={self.temperature},\n'
@@ -625,7 +629,16 @@ class TelegramReader:
         Raises:
             ValueError: If the error number isn't valid.
         """
-        
+        # The error code could be easily read from parameter_value
+        # (which could be changed to always give the value as an Uint if
+        # parameter_mode is 'error'). This property mostly exists to aid in
+        # debugging; __str__ displays its value, which makes it easy to see
+        # which error has occurred without looking up the meaning of the error
+        # code.
+        # There's no equivalent TelegramBuilder.set_error_code method, because
+        # it isn't really needed, and adding that bit of symmetry wouldn't be
+        # worth the increased complexity.
+
         if self.parameter_mode != 'error':
             return None
         

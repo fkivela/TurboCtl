@@ -36,7 +36,7 @@ def send(connection, telegram):
     connection.write(bytes(telegram))
     reply_bytes = connection.read(Telegram.LENGTH)
     reply = TelegramBuilder().from_bytes(reply_bytes).build()
-    return TelegramReader(telegram), TelegramReader(reply)
+    return TelegramReader(telegram, 'query'), TelegramReader(reply, 'reply')
 
     
 def status(connection, pump_on=True):
@@ -58,15 +58,15 @@ def status(connection, pump_on=True):
     return send(connection, query)
 
             
-def _access_parameter(connection, number, index, value, mode, pump_on):
+def _access_parameter(connection, mode, number, value, index, pump_on):
     """This auxiliary function provides functionality for both reading and
     writing parameter values, since the processes are very similar.
     """
     builder = (TelegramBuilder()
+        .set_parameter_mode(mode)
         .set_parameter_number(number)
         .set_parameter_index(index)
         .set_parameter_value(value)
-        .set_parameter_mode('read')
     )
     
     if pump_on:
@@ -90,24 +90,25 @@ def read_parameter(connection, number, index=0, pump_on=True):
         ValueError:
             If *number* or *index* have invalid values.
     """
-    _access_parameter(connection, number, index, 0, 'read', pump_on)
+    return _access_parameter(connection, 'read', number, 0, index, pump_on)
 
 
-def write_parameter(connection, value, number, index=0, pump_on=True):
+def write_parameter(connection, number, value, index=0, pump_on=True):
     """Write a value to an index of a parameter.
     
     Args:
         number:
             The number of the parameter.
+                        
+        value:
+            The value to be written.
             
         index:
             The index of the parameter (0 for unindexed parameters).
-            
-        value:
-            The value to be written.
             
     Raises:
         ValueError:
             If *number* or *index* have invalid values.
     """
-    _access_parameter(connection, number, index, value, 'write', pump_on)
+    return _access_parameter(
+        connection, 'write', number, value, index, pump_on)

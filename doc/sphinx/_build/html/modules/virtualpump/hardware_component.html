@@ -144,7 +144,11 @@ The unit is 0.1 V.</p>
 <li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a>
 objects as used by <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ParameterComponent" title="turboctl.virtualpump.parameter_component.ParameterComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterComponent</span></code></a>.
 This is needed because some hardware components affect the
-values of parameters and vice versa.</p></li>
+values of parameters and vice versa.
+Note that these need to be the actual parameters of the pump;
+dummy values cannot be used even for testing purposes, since
+all hardware-related parameters (see <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters" title="turboctl.virtualpump.hardware_component.HWParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HWParameters</span></code></a> for
+a list of those) need to be present for this class to function.</p></li>
 <li><p><strong>lock</strong> – A <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object that can be used to
 temporarily freeze the parallel thread which updates
 <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="turboctl.virtualpump.hardware_component.HardwareComponent.frequency"><code class="xref py py-attr docutils literal notranslate"><span class="pre">frequency</span></code></a>.

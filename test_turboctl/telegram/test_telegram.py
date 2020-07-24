@@ -1,6 +1,5 @@
 """Unit tests for the telegram module."""
 
-
 import unittest
 
 from turboctl.telegram.codes import (ParameterResponse, ParameterError,
@@ -9,8 +8,6 @@ from turboctl.telegram.datatypes import Uint, Sint, Float, Bin
 from turboctl.telegram.telegram import (Telegram, TelegramBuilder, 
                                         TelegramReader, checksum)
 from test_turboctl.telegram.test_parser import dummy_parameter
-
-import turboctl
 
 
 # The actual parameters are replaced with dummy values for easier testing.
@@ -434,8 +431,8 @@ class TestTelegramReader(Base):
     ### Magic methods ###
     
     def test_repr(self):
-        # Replace the default status bits since there are so many.
-        self.telegram.flag_bits = Bin('1010000000000000')        
+        # Replace the default status bits since there are too many.
+        self.telegram.flag_bits = Bin('1010000000000000') 
         
         tr = TelegramReader(self.telegram)
         string = f"TelegramReader(telegram={str(self.telegram)}, type='reply')"
@@ -443,18 +440,27 @@ class TestTelegramReader(Base):
         self.assertEqual(repr(tr), string)
     
     def test_str(self):
-        self.telegram.flag_bits = Bin('1010000000000000')        
+        # Replace the default status bits since there are too many.
+        self.telegram.flag_bits = Bin('1010000000000000') 
+        # Set the response code to 'error' so that we can make sure
+        # parameter_error is printed correctly (it initially was not, because
+        # f'{parameter_error}' produces a number instead of
+        # 'ParameterError.X'). 
+        self.telegram.parameter_code = Bin('0111')
+        # Set parameter_value to a valid error code (= min/max error).
+        self.telegram.parameter_value = Uint(2, 32)
+
         tr = TelegramReader(self.telegram)
         
         string = f"""
 TelegramReader(
     telegram={str(self.telegram)},
     type='reply',
-    parameter_mode='response',
+    parameter_mode='error',
     parameter_number=1234,
     parameter_index=56,
-    parameter_value=5432,
-    parameter_error=None,
+    parameter_value=2,
+    parameter_error=ParameterError.MINMAX,
     flag_bits=[<StatusBits.READY: 0>, <StatusBits.OPERATION: 2>],
     frequency=1221,
     temperature=2332,

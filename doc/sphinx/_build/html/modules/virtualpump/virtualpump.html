@@ -37,23 +37,10 @@
 pump and thus enable testing the program without access to an actual pump.</p>
 <dl class="py class">
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.virtualpump.</code><code class="sig-name descname">VirtualPump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">PARAMETERS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.virtualpump.</code><code class="sig-name descname">VirtualPump</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class simulates a TURBOVAC pump and tries to respond to
 signals the same way a physical pump would. This makes it possible
 to test the <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package without connecting to a physical pump.</p>
-<dl class="py attribute">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.parameters">
-<code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>The parameter set to be used (a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
-<a class="reference internal" href="../telegram/parser.html#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects, with
-parameter numbers as keys). The default value is
-<a class="reference internal" href="../telegram/parser.html#turboctl.telegram.parser.PARAMETERS" title="turboctl.telegram.parser.PARAMETERS"><code class="xref py py-const docutils literal notranslate"><span class="pre">PARAMETERS</span></code></a>,
-but non-default values can be used for testing the class.
-This shouldn’t be changed after initialization, unless the
-parameter dictionaries of <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameter_component" title="turboctl.virtualpump.virtualpump.VirtualPump.parameter_component"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_component</span></code></a> and
-<a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hardware_component</span></code></a> are also updated.</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump.connection">
 <code class="sig-name descname">connection</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="Permalink to this definition">¶</a></dt>
@@ -89,13 +76,8 @@ parameter dictionaries of <a class="reference internal" href="#turboctl.virtualp
 
 <dl class="py method">
 <dt id="turboctl.virtualpump.virtualpump.VirtualPump.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">PARAMETERS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="turboctl.virtualpump.virtualpump.VirtualPump"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualPump</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>parameters</strong> – The object to be assigned to <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameters" title="turboctl.virtualpump.virtualpump.VirtualPump.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a>.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -127,14 +109,16 @@ and
 <dd><p>Process incoming data.</p>
 <p>This function processes the data sent to the virtual pump by
 interpreting it as a telegram and performing any commands
-specified by it (such as changing parameter values).</p>
-<p>A reply telegram is then formed and its contents returned.</p>
+specified by it (such as changing parameter values).
+A reply telegram is then formed and its contents returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>bytes_in</strong> – The telegram sent to the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.
+If <em>bytes_in</em> cannot be interpreted as a valid telegram,
+the return value will be an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
 </dl>
 </dd></dl>
