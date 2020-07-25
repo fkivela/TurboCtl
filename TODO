@@ -1,10 +1,8 @@
 TODO
 
 Necessary before the program can be considered ready:
-- ParameterException objects need a 'MEMBER' attribute, which links to the
-  corresponding ParameterError member. (DONE, but needs docs and testing)
 - Make sure the user understands that API.pump_on doesn't necassarily actually
-  reflect the status of the pump. 
+  reflect the status of the pump.
 - If a parameter cannot be changed, print the error message!
 
 

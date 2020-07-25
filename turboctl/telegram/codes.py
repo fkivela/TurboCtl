@@ -161,22 +161,24 @@ class ParameterExceptionMeta(type):
         
     The instances of this metaclass are different types of parameter
     exceptions, which all have the :attr:`member` property.
-    Since the instances of this class are error classes instead of instances
-    of those classes, the correct syntax to access this attribute is
+    Because these instances are error classes instead of instances of error
+    classes, the correct syntax to access this property is
     
     ::
+        
         ParameterErrorX.member
         
     instead of 
     
     ::
+        
         ParameterErrorX().member
         
-    Corresponding :class:`ParameterException` subclasses and
-    :class:`ParameterError` members need to contain references to each
-    other, but directly assigning those would create a circular dependency
-    which would prevent the objects from being initialized, and might also
-    mess with garbage collection even if initialization was possible.
+    This metaclass exists, because :class:`ParameterException` subclasses and
+    :class:`ParameterError` members which represent the same error need to
+    contain references to each other.
+    Direct references would create circular dependencies which would prevent
+    the objects from being initialized.
     The easiest way to circumvent this problem is to define the
     :attr:`member` attribute as a property that is computed at runtime.
     Python doesn't have built-in class properties, so the easiest way to give
@@ -186,10 +188,10 @@ class ParameterExceptionMeta(type):
     @property
     def member(self):
         """Return the :class:`ParameterException` member which has *self* as
-        its **description** attribute.
+        its :class:`description <ParameterError>` attribute.
         
         Raises:
-            RuntimeError: If *self* doesn't match exactly one
+            AttributeError: If *self* doesn't match exactly one
                 :class:`ParameterError` member.
         """
         results = []
@@ -198,7 +200,7 @@ class ParameterExceptionMeta(type):
                 results.append(member)
                 
         if len(results) != 1:
-            raise RuntimeError(f'error class matches {len(results)} members')
+            raise AttributeError(f'error class matches {len(results)} members')
         
         return results[0]
 
@@ -207,29 +209,34 @@ class ParameterException(Exception, metaclass=ParameterExceptionMeta):
     """A superclass for exceptions that represent different error conditions 
     which are raised when the pump cannot access a parameter.
     
-    Because this class doesn't represent any specific error, trying to access
-    the :attr:`~ParameterExceptionMeta.member` attribute of this class raises
-    a :class:`RuntimeError`.
+    This class uses the :class:`ParameterExceptionMeta` metaclass, so its
+    subclasses have the :attr:`~ParameterExceptionMeta.member` attribute.
+    However, this superclass itself doesn't represent any specific error, so
+    trying to access :attr:`ParameterException.member
+    <ParameterExceptionMeta.member>` raises an :class:`AttributeError`.
     """
     
     @property
     def member(self):
         """Return the :attr:`~ParameterExceptionMeta.member` attribute of the
-        error class of which *self* is an instance.
+        class of which *self* is an instance.
         
-        This property is defined so that the syntax 
+        This property is defined in order for the syntax 
         
         ::
+            
             ParameterErrorX().member
             
-        works alongside
+        to work alongside
         
         ::
+            
             ParameterErrorX.member
             
         This makes it possible to write try-catch blocks like the following: 
         
         ::
+            
             try:
                 # Do something.
             except ParameterException as error:

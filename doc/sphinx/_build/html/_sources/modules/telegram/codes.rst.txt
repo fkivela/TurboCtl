@@ -2,6 +2,7 @@
 ===============================
 
 .. automodule:: turboctl.telegram.codes
+    :show-inheritance:
 
 .. autoclass:: turboctl.telegram.codes.ParameterError
     :show-inheritance:

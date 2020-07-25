@@ -46,7 +46,8 @@ in TURBOVAC telegrams.</p>
 <dl class="py class">
 <dt id="turboctl.telegram.codes.ParameterCode">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterCode</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterCode" title="Permalink to this definition">¶</a></dt>
-<dd><p>A superclass for parameter access and response codes.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>A superclass for parameter access and response codes.</p>
 <p>A telegram that tells the pump to accesses a parameter must contain an
 access code, which depends on the type of the parameter and the access
 mode.
@@ -78,13 +79,15 @@ parameters, and <code class="docutils literal notranslate"><span class="pre">...
 <dl class="py class">
 <dt id="turboctl.telegram.codes.ParameterAccess">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterAccess</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterAccess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Different parameter access modes.</p>
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterCode" title="turboctl.telegram.codes.ParameterCode"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterCode</span></code></a></p>
+<p>Different parameter access modes.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="turboctl.telegram.codes.ParameterResponse">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterResponse</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterResponse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Different parameter response modes.</p>
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterCode" title="turboctl.telegram.codes.ParameterCode"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterCode</span></code></a></p>
+<p>Different parameter response modes.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -113,25 +116,24 @@ messages from the pump.</p>
 <dl class="py class">
 <dt id="turboctl.telegram.codes.ParameterExceptionMeta">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterExceptionMeta</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterExceptionMeta" title="Permalink to this definition">¶</a></dt>
-<dd><p>A metaclass for parameter exceptions.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<p>A metaclass for parameter exceptions.</p>
 <p>The instances of this metaclass are different types of parameter
 exceptions, which all have the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> property.
-Since the instances of this class are error classes instead of instances
-of those classes, the correct syntax to access this attribute is</p>
-<dl class="simple">
-<dt>::</dt><dd><p>ParameterErrorX.member</p>
-</dd>
-</dl>
+Because these instances are error classes instead of instances of error
+classes, the correct syntax to access this property is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ParameterErrorX</span><span class="o">.</span><span class="n">member</span>
+</pre></div>
+</div>
 <p>instead of</p>
-<dl class="simple">
-<dt>::</dt><dd><p>ParameterErrorX().member</p>
-</dd>
-</dl>
-<p>Corresponding <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> subclasses and
-<a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a> members need to contain references to each
-other, but directly assigning those would create a circular dependency
-which would prevent the objects from being initialized, and might also
-mess with garbage collection even if initialization was possible.
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ParameterErrorX</span><span class="p">()</span><span class="o">.</span><span class="n">member</span>
+</pre></div>
+</div>
+<p>This metaclass exists, because <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> subclasses and
+<a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a> members which represent the same error need to
+contain references to each other.
+Direct references would create circular dependencies which would prevent
+the objects from being initialized.
 The easiest way to circumvent this problem is to define the
 <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute as a property that is computed at runtime.
 Python doesn’t have built-in class properties, so the easiest way to give
@@ -140,10 +142,10 @@ exception classes a property is to use a metaclass.</p>
 <dt id="turboctl.telegram.codes.ParameterExceptionMeta.member">
 <em class="property">property </em><code class="sig-name descname">member</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> member which has <em>self</em> as
-its <strong>description</strong> attribute.</p>
+its <a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">description</span></code></a> attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – If <em>self</em> doesn’t match exactly one
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.8)"><strong>AttributeError</strong></a> – If <em>self</em> doesn’t match exactly one
     <a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a> member.</p>
 </dd>
 </dl>
@@ -154,39 +156,37 @@ its <strong>description</strong> attribute.</p>
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.ParameterException">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterException</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterException" title="Permalink to this definition">¶</a></dt>
-<dd><p>A superclass for exceptions that represent different error conditions
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>A superclass for exceptions that represent different error conditions
 which are raised when the pump cannot access a parameter.</p>
-<p>Because this class doesn’t represent any specific error, trying to access
-the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute of this class raises
-a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>.</p>
+<p>This class uses the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta" title="turboctl.telegram.codes.ParameterExceptionMeta"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterExceptionMeta</span></code></a> metaclass, so its
+subclasses have the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute.
+However, this superclass itself doesn’t represent any specific error, so
+trying to access <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ParameterException.member</span></code></a> raises an <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeError</span></code></a>.</p>
 <dl class="py method">
 <dt id="turboctl.telegram.codes.ParameterException.member">
 <em class="property">property </em><code class="sig-name descname">member</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterException.member" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="#turboctl.telegram.codes.ParameterExceptionMeta.member" title="turboctl.telegram.codes.ParameterExceptionMeta.member"><code class="xref py py-attr docutils literal notranslate"><span class="pre">member</span></code></a> attribute of the
-error class of which <em>self</em> is an instance.</p>
-<p>This property is defined so that the syntax</p>
-<dl class="simple">
-<dt>::</dt><dd><p>ParameterErrorX().member</p>
-</dd>
-</dl>
-<p>works alongside</p>
-<dl class="simple">
-<dt>::</dt><dd><p>ParameterErrorX.member</p>
-</dd>
-</dl>
+class of which <em>self</em> is an instance.</p>
+<p>This property is defined in order for the syntax</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ParameterErrorX</span><span class="p">()</span><span class="o">.</span><span class="n">member</span>
+</pre></div>
+</div>
+<p>to work alongside</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ParameterErrorX</span><span class="o">.</span><span class="n">member</span>
+</pre></div>
+</div>
 <p>This makes it possible to write try-catch blocks like the following:</p>
-<dl>
-<dt>::</dt><dd><dl>
-<dt>try:</dt><dd><p># Do something.</p>
-</dd>
-<dt>except ParameterException as error:</dt><dd><p>member = error.member
-# This would have to be “type(error).member” without this
-# property.</p>
-<p># Do something with <em>member</em>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Do something.</span>
+<span class="k">except</span> <span class="n">ParameterException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="n">member</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">member</span>
+    <span class="c1"># This would have to be &quot;type(error).member&quot; without this</span>
+    <span class="c1"># property.</span>
+
+    <span class="c1"># Do something with *member*.</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -194,53 +194,61 @@ error class of which <em>self</em> is an instance.</p>
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.WrongNumError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">WrongNumError</code><a class="headerlink" href="#turboctl.telegram.codes.WrongNumError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when trying to access a parameter with a number which doesn’t
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when trying to access a parameter with a number which doesn’t
 exist.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.CannotChangeError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">CannotChangeError</code><a class="headerlink" href="#turboctl.telegram.codes.CannotChangeError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when a parameter cannot be changed.</p>
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when a parameter cannot be changed.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.MinMaxError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">MinMaxError</code><a class="headerlink" href="#turboctl.telegram.codes.MinMaxError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when a value cannot be assigned to a parameter because it is
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when a value cannot be assigned to a parameter because it is
 outside the range of accepted values.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.ParameterIndexError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterIndexError</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterIndexError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when trying to access a non-existent index of a parameter.</p>
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when trying to access a non-existent index of a parameter.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.AccessError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">AccessError</code><a class="headerlink" href="#turboctl.telegram.codes.AccessError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when the access code doesn’t match the parameter the pump tries
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when the access code doesn’t match the parameter the pump tries
 to access.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.OtherError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">OtherError</code><a class="headerlink" href="#turboctl.telegram.codes.OtherError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised for other parameter error conditions.</p>
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised for other parameter error conditions.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt id="turboctl.telegram.codes.SavingError">
 <em class="property">exception </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">SavingError</code><a class="headerlink" href="#turboctl.telegram.codes.SavingError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when trying to access a parameter which is simultaneously being
+<dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterException</span></code></a></p>
+<p>Raised when trying to access a parameter which is simultaneously being
 saved to nonvolatile memory.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="turboctl.telegram.codes.CustomInt">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">CustomInt</code><a class="headerlink" href="#turboctl.telegram.codes.CustomInt" title="Permalink to this definition">¶</a></dt>
-<dd><p>A custom superclass for enums that inherit <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> while having
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+<p>A custom superclass for enums that inherit <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> while having
 members with multiple fields.</p>
 <dl class="py method">
 <dt id="turboctl.telegram.codes.CustomInt.__new__">

@@ -4,13 +4,12 @@ Since the codes module contains mostly data, these tests only make
 sure that the superclasses ValueAndDescription and IntAndDescription 
 defined in that module work as intended.
 """
-import random
 import unittest
 
 from turboctl.telegram.codes import (ParameterAccess, ParameterResponse, 
                                      get_parameter_code, get_parameter_mode,
-                                     WrongNumError, ParameterError,
-                                     ControlBits ,StatusBits)
+                                     ParameterException, WrongNumError,
+                                     ParameterError, ControlBits ,StatusBits)
 
 
 class TestParameterCode(unittest.TestCase):
@@ -58,6 +57,24 @@ class TestGetParameterCode(unittest.TestCase):
     def test_no_matches(self):
         with self.assertRaises(ValueError):
             get_parameter_code('query', 'response', False, 16)
+            
+            
+class TestGetParameterMode(unittest.TestCase):
+    
+    def test_examples(self):
+        mode = get_parameter_mode('query', '0001')
+        self.assertEqual(mode, 'read')
+        
+        mode = get_parameter_mode('reply', '0001')
+        self.assertEqual(mode, 'response')
+
+    def test_invalid_mode(self):
+        with self.assertRaises(ValueError):
+            get_parameter_mode('qery', '0000')
+        
+    def test_no_matches(self):
+        with self.assertRaises(ValueError):
+            get_parameter_mode('query', '1111')
 
         
 class TestCustomIntEnums(unittest.TestCase):
@@ -124,6 +141,21 @@ class TestCustomIntEnumFields(unittest.TestCase):
         self.assertEqual(member, 0)
         self.assertEqual(member.value, 0)
         self.assertEqual(member.description, 'Ready for operation')
+        
+        
+class TestParameterException(unittest.TestCase):
+    """Make sure ParameterException.member attributes work properly."""
+    
+    def test_exception_member(self):
+        for member in ParameterError:
+            self.assertEqual(member.exception.member, member)
+            
+    def test_superclass_member(self):
+        """The ParameterException superclass shouldn't have the member
+        attribute.
+        """
+        with self.assertRaises(AttributeError):
+            ParameterException.member
 
         
 if __name__ == '__main__':
