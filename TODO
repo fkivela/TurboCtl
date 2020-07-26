@@ -1,52 +1,41 @@
 TODO
 
+Before Tuesday:
+- Read through the ui modules and sphinxify when necessary
+  - status_format
+- Test the program with an actual pump
+- Fix the problem with less
+- Add instructions for installing and running the program 
+
+Soon:
+- Fix the problem with less properly
+- Add a warning about errors in the user manual
+- Update test_ui
+- Make sure all tests are ok and can be run automatically at once
+- Investigate and fix the errors which are occasionally raised whenthe program
+  is used. These are probably caused by receiving an invalid telegram.
+- Add a --no-autoupdate flag.
+
+Perhaps at some point:
+
 Necessary before the program can be considered ready:
-- Make sure the user understands that API.pump_on doesn't necassarily actually
-  reflect the status of the pump.
-- If a parameter cannot be changed, print the error message!
 
-
-Can be added later (or not at all):
-- Document the parameters.txt format better?
-- Document individual enum members in codes.py?
+- Add instructions for installing and running TurboCtl
+- Improve the parser so that e.g. "list p [1, 2]" is valid syntax.
+  The command parser could also be moved into a separate class, so that it
+  could be tested more easily. Also, parser.py might be simplified by using
+  the parsing modules in the standard library.
+- Document the format in parameters.txt better? This might even be turned into
+  e.g. a CSV file.
+- Document individual enum members in codes.py.
 - Rename WrongNumError to NumberError or something?
 - Open the output of the help command with less?
-- Add commands to set the setpoint, save data, read errors etc.
-- Move singledispatchmethod to datatypes.py 
-
-Might be useful:
-- Change setup methods to setupclass methods in some tests in order 
-  to make them faster
-- Try mock objects (unittest.mock)
-
-Things that have to be tested with the real pump:
-- When are different status bits reported?
-  What do the different control bits do?
-- If a parameter number is specified but there is no parameter access, 
-  will the parameter data be included in the return telegram?
-- Is it OK to define an index when accessing an unindexed parameter?
-- When is the "cannot change" error message used?
-- What is the writability of parameters for which the manual doesn't specify 
-  it?
-- Does the pump return a parameter error if the parameter access code is 
-  invalid?
-- How does the pump behave when it is off? Is only the motor off? Does the 
-  pump read/answer commands?
-- Does the onoff command reset parameters?
-- Real parameters have a default value of 0 and a minumum value of > 0. 
-  How does this work?
-- What happens if the frequency setpoint is set to an illegal value through 
-  the setpoint command (without accessing parameters)?
-- Should an invalid parameter index raise a parameter number error or 
-  other error (currently VPump raises a parameter number error)?
-- What is the hierarchy of parameter errors? If there are multiple things
-  wrong with a telegram, which error is returned?
-- Do volatile values disappear when the pump is turned off, or only when power is cut off.
-- Does parameter 227 (warnings) work analogously compared to parameter 171 (error list).
-- Can parameters be given a value of 0 even if their minimum value is reported as 1.401E-42?
-- If access to parameter X fails (i.e. due to an invalid parameter number),
-  does the return telegram contain the sent parameter number or just 0?
-- What happens when accessing index 0 of an indexed parameter in unindexed mode etc.
-- Are the T/I/U values reported by VirtualPump realistic?
-- IIRC the limits of the setpoint are parameters with such values that the default
-  setpoint value is illegal. Investigate this.
+- Add commands to set the setpoint (most important), save data, read errors
+  etc.
+- Move singledispatchmethod to datatypes.py.
+- Run pylint/pycodestyle.
+- The docstring of the read/write_parameter methods say
+  "Raises ValueError if number or index have invalid values". Clarify this.
+- Add a command to open the docs in a web browser.
+- Merge the info and list commands into one with a boolean flag to use or not
+  to use less.

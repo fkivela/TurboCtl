@@ -28,8 +28,8 @@ class Status:
     """A boolean flag to keep track whether the pump is on or off."""
     
     status_bits: list = field(default_factory=list)
-    """A list of the status conditions (~turboctl.telegram.codes.StatusBits
-    members) affecting the pump.
+    """A list of the status conditions
+    (:class:`~turboctl.telegram.codes.StatusBits` members) affecting the pump.
     """
     
     callback: Callable = None
@@ -43,7 +43,10 @@ class Status:
     
     ::
 
-        self.callback()
+        self.callback(self)
+        
+    Note that since this isn't a bound method, the *self* argument must be
+    explicitly passed to the function. 
     """
 
     def __setattr__(self, name, value):
@@ -190,24 +193,24 @@ class ControlInterface():
         self._update_status(reply)
         return query, reply
     
-    def write_parameter(self, value, number, index=0):
+    def write_parameter(self, number, value, index=0):
         """Write a value to an index of a parameter.
         
         Args:
             number:
                 The number of the parameter.
+                                
+            value:
+                The value to be written.
                 
             index:
                 The index of the parameter (0 for unindexed parameters).
                 
-            value:
-                The value to be written.
-                
         Raises:
             ValueError:
-                If *number* or *index* have invalid values.
+                If *number*, *value* or *index* have invalid values.
         """
-        query, reply = api.write_parameter(self._connection, value, number,
+        query, reply = api.write_parameter(self._connection, number, value,
                                            index, pump_on=self.status.pump_on)
         self._update_status(reply)
         return query, reply

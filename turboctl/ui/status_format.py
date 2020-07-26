@@ -26,13 +26,13 @@ green_button = ('green', '⏺')
 
 def status_screen(status):
     """Return a status screen for the
-    :attr:`display <hvctl.advanced_tui.AdvancedTUI.display>`
-    of an :class:`~hvctl.advanced_tui.AdvancedTUI`.
+    :attr:`display <turboctl.ui.advanced_tui.AdvancedTUI.display>`
+    of an :class:`~turboctl.ui.advanced_tui.AdvancedTUI`.
 
     Args:
         status:
-            A :class:`~hvctl.api.Status` object, the contents of which
-            will be displayed on the screen.
+            A :class:`~turboctl.ui.control_interface.api.Status` object, the
+            contents of which will be displayed on the screen.
 
     Returns:
         A nested iterable of strings, which will be interpreted by
@@ -41,7 +41,7 @@ def status_screen(status):
         `here <http://urwid.org/manual/displayattributes.html
         ?highlight=display%20attributes#text-markup>`_.
     """    
-    onoff_str = 'Pump' + 'on' if status.pump_on else 'off'
+    onoff_str = 'Pump ' + 'on' if status.pump_on else 'off'
     button = green_button if status.pump_on else red_button
     
     descriptions = (member.description for member in status.status_bits)        

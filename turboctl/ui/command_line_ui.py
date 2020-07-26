@@ -12,12 +12,13 @@ from turboctl.telegram.parser import PARAMETERS, ERRORS, WARNINGS
 from turboctl.ui.control_interface import ControlInterface
 from turboctl.ui.table import table
 
+
 class CommandLineUI:
     """A simple command-line UI.
 
     Instances of this class should be closed after they are no longer
-    needed by calling :attr:`control_interface`:meth:`.close()
-    <turboctl.ui.control_interface.close()>`
+    needed by calling :attr:`control_interface`\
+:meth:`.close() <turboctl.ui.control_interface.ControlInterface.close>`
     or using a ``with`` block. Otherwise the parallel thread created by
     :attr:`control_interface` may continue to run in the background and
     consume resources.
@@ -25,8 +26,8 @@ class CommandLineUI:
     This class contains several methods with names following the pattern
     ``cmd_<command>``.
     These methods correspond to the commands a user can give to the
-    UI: when the command string ``'command'`` is entered, the method
-    ``cmd_command`` is called.
+    UI: when the command string ``'example'`` is entered, the ``cmd_example()``
+    method is called.
     Because messages printed by the ``help`` command use the
     docstrings of these methods in an unaltered form, the docstrings
     are written in plain text and cannot contain any reStructuredText
@@ -45,8 +46,8 @@ class CommandLineUI:
             See :meth:`cmd_debug` for details.
 
         control_interface:
-            An :class:`~turboctl.ui.ControlInterface` object used for sending
-            commands to the pump.
+            An :class:`~turboctl.ui.control_interface.ControlInterface` object
+            used for sending commands to the pump.
 
         intro:
             A string displayed to the user upon starting the UI.
@@ -65,7 +66,7 @@ class CommandLineUI:
         cmds_and_aliases:
             Class attribute.
             A list of tuples, where index 0 of each tuple contains
-            the name of a command accepted by the UI and index 1
+            the name of a command accepted by the UI, and index 1
             contains a list of aliases for that command.
             It has the following value:
             ::
@@ -148,7 +149,7 @@ class CommandLineUI:
 
     def __exit__(self, exception_type, exception_value, traceback):
         """Called upon exiting a ``with`` block;
-        calls :meth:`control_interface.close()
+        calls :attr:`control_interface`:meth:`.close()
         <turboctl.ui.control_interface.ControlInterface.close()>`.
 
         The arguments are ignored.
@@ -156,9 +157,9 @@ class CommandLineUI:
         self.control_interface.close()
 
     def run(self):
-        """Start the UI.
+        """Run the UI.
 
-        This functions runs the following algorithm:
+        This function runs the following algorithm:
 
         1. Print :attr:`prompt` and wait for user input.
         2. Parse the input string into a command and its arguments by
@@ -167,7 +168,7 @@ class CommandLineUI:
            The method will execute the command and print its output.
            If no method with that name exists, print an error message
            and start again from step 1.
-        4. If the method returned ``True``, break the loop.
+        4. If the method was :meth:`cmd_exit`, break the loop.
            Otherwise, start another iteration from step 1.
         """
         self.print(self.intro)
@@ -221,36 +222,39 @@ class CommandLineUI:
         self.print('Pump status:\n' + string)
         return query, reply
 
-    def cmd_read(self, number, index):
-        """Return the value of parameter *number*, index *index*."""
+    def cmd_read(self, number, index=0):
+        """Return the value of parameter *number*, index *index*."""        
         query, reply = self.control_interface.read_parameter(number, index)
-        
-        if isinstance(reply.parameter_value, int):
-            value_str = str(reply.parameter_value)
-        else:
-            value_str = f'{reply.parameter_value:.2f}'
-                    
-        self.print(
-            f'The value of parameter {reply.parameter_number}, '
-            f'index {reply.parameter_index} is {value_str}'
-        )
+
+        self._print_parameter_output(reply)
         return query, reply
 
-    def cmd_write(self, number, index, value):
-        """Write *value* to parameter *number*, index *index*."""
-        query, reply = self.control_interface.write_parameter(value, number,
-                                                              index)
+    def cmd_write(self, number, value, index=0):
+        """Write *value* to parameter *number*, index *index*."""        
+        query, reply = self.control_interface.write_parameter(
+            number, value, index)
         
-        if isinstance(reply.parameter_value, int):
-            value_str = str(reply.parameter_value)
-        else:
+        self._print_parameter_output(reply)
+        return query, reply
+    
+    def _print_parameter_output(self, reply):
+        """Format and print out the parameter information in *reply*."""
+        
+        error = reply.parameter_error
+        if error is not None:
+            self.print(f'Error: {error.description}')
+            return
+        
+        # Truncate long floats.
+        if isinstance(reply.parameter_value, float):
             value_str = f'{reply.parameter_value:.2f}'
-                    
+        else:
+            value_str = str(reply.parameter_value)
+            
         self.print(
             f'The value of parameter {reply.parameter_number}, '
             f'index {reply.parameter_index} is {value_str}'
         )
-        return query, reply
 
     def cmd_list(self, letter, numbers):
         """List parameters, error or warnings.
@@ -277,7 +281,7 @@ class CommandLineUI:
             pass
 
     def cmd_info(self, letter, number):
-        """Display information about a single parameters, error or 
+        """Display information about a single parameter, error or 
         warning.
         
         Unlike *cmd_list*, this command doesn't use less, and prints 
@@ -293,7 +297,7 @@ class CommandLineUI:
         except KeyError:
             raise ValueError(f'invalid *letter*: {repr(letter)}')
         
-        print(table(dict_, [number], self._widths[letter]))
+        self.print(table(dict_, [number], self._widths[letter]))
         
     def cmd_help(self, value=None):
         """Display a help message.
@@ -424,7 +428,7 @@ class CommandLineUI:
         for i, arg in enumerate(args):
             try:
                 args[i] = ast.literal_eval(arg)
-            except ValueError:
+            except (ValueError, SyntaxError):
                 pass
 
         # Call the method.

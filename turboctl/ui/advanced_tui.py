@@ -2,7 +2,7 @@
 
 :class:`AdvancedTUI` uses `urwid <http://urwid.org/>`_.
 If urwid hasn't been installed,
-:class:`~hvctl.command_line_ui.CommandLineUI` should be used instead.
+:class:`~turboctl.ui.command_line_ui.CommandLineUI` should be used instead.
 """
 import threading
 import urwid
@@ -20,7 +20,8 @@ class AdvancedTUI(urwid.WidgetWrap):
             Use :attr:`display`:meth:`.set_text()
             <urwid.Text.set_text>` to change its contents.
 
-        command_line_interface(:class:`~hvctl.widgets.ScrollableCommandLines`):
+        command_line_interface(:class:`~turboctl.ui.widgets\
+.ScrollableCommandLines`):
             A command-line interface for issuing commands, located
             below :attr:`display`.
     """

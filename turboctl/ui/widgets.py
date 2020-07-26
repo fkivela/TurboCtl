@@ -424,12 +424,16 @@ class Position:
             A relative scroll position between ``0`` (scrolled to the
             top) and ``1`` (scrolled to the bottom).
             Changing this also changes the value of :attr:`absolute`.
+            Values below ``0`` are set to ``0`` and values above ``1``
+            to ``1``.
 
         absolute (int):
             An absolute scroll position given as the number of
             invisible rows that are located above the top edge of the
             widget.
             Changing this also changes the value of :attr:`relative`.
+            Values below ``0`` are set to ``0`` and values above
+            :attr:`max_absolute` to :attr:`max_absolute`.
     """
 
     def __init__(self, listeners=None):
@@ -462,10 +466,6 @@ class Position:
 
     @property
     def relative(self):
-        """Get or set :attr:`relative`.
-        Values below ``0`` are set to ``0`` and values above ``1``
-        to ``1``.
-        """
         return self._relative
 
     @relative.setter
@@ -482,10 +482,6 @@ class Position:
 
     @property
     def absolute(self):
-        """Get or set :attr:`absolute`.
-        Values below ``0`` are set to ``0`` and values above
-        :attr:`max_absolute` to :attr:`max_absolute`.
-        """
         return round(self._relative * self.max_absolute)
 
     @absolute.setter
