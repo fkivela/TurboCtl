@@ -1,442 +1,476 @@
 """Unit tests for the telegram module."""
+
 import unittest
 
-from turboctl import Telegram, Types
+from turboctl.telegram.codes import (ParameterResponse, ParameterError,
+                                     ControlBits)
+from turboctl.telegram.datatypes import Uint, Sint, Float, Bin
+from turboctl.telegram.telegram import (Telegram, TelegramBuilder, 
+                                        TelegramReader, checksum)
+from test_turboctl.telegram.test_parser import dummy_parameter
 
-# Maximum and minumun values for 16 and 32 bit 
-# signed and unsigned integers.
-MAX_16 = 2**16 - 1
-MAX_32 = 2**32 - 1
 
-MAX_S16 = 2**15 - 1
-MIN_S16 = -2**15
+# The actual parameters are replaced with dummy values for easier testing.
+# TelegramBuilder is called with the parameters argument everywhere in this
+# module for simplicity, even though not all tests care about which parameters
+# are used.
+parameters = {
+    # A basic parameter.
+    1234: dummy_parameter(number=1234),
+    # Parameters of different types.
+    1: dummy_parameter(number=1, datatype=Sint),
+    2: dummy_parameter(number=2, datatype=Float),
+    3: dummy_parameter(number=3, datatype=Bin),
+    # An indexed parameter with a different number of bits. 
+    4: dummy_parameter(number=4, indices=range(1), bits=32),
+}
 
-MAX_S32 = 2**31 - 1
-MIN_S32 = -2**31
 
-def dummy_data(**kwargs):
-    """Returns a list that can be used to construct a telegram with 
-    specific contents.
-    
-    Usage: dummy_data(i2=3, i4=9) => [2, 22, 3, 0, 9, 0, ..., checksum]
-    The checksum is computed automatically unless set by hand 
-    (by defining  the argument i23).
-    """
-    
-    data = [2, 22] + 22*[0]       
-    for k, v in kwargs.items():
-        i = int(k[1:])
-        data[i] = v
-    
-    # Compute the checksum only if it isn't set by hand.
-    if 'i23' not in kwargs:    
-        data[-1] = Telegram.compute_checksum(data[:-1])
-        
-    return data
-        
 class Base(unittest.TestCase):
     
-    def setUp(self):        
+    def setUp(self):
+        self.kwargs = {
+            'parameter_code': Bin('0001'),
+            'parameter_number': Uint(1234, 11), # '0001' + '0' + 1234 = 20 210
+            'parameter_index': Uint(56),
+            'parameter_value': Uint(5432, 32), # = 21 56
+            'flag_bits': Bin('1111000011001100'), # = 51 15
+            'frequency': Uint(1221, 16), # = 4 197
+            'temperature': Sint(2332, 16), # = 9 28
+            'current': Uint(3443, 16), # = 13 115
+            'voltage': Uint(4554, 16) # = 17 202
+        }
+        
+        self.telegram = Telegram(**self.kwargs)
+        
+        self.bytes = bytes([
+            2, 22, 0,     # Start 
+            20, 210,      # Parameter code and number
+            0,            # Empty
+            56,           # Parameter index
+            0, 0, 21, 56, # Value
+            51, 15,       # Flag bits
+            4, 197,       # Frequency
+            9, 28,        # Temperature
+            13, 115,      # Current
+            0, 0,         # Empty
+            17, 202,      # Voltage
+            138           # Checksum
+        ])
 
-        self.data = dummy_data(i3=100, i4=210,
-                              i6=56,
-                              i9=21, i10=56,
-                              i11=51, i12=15,
-                              i13=4, i14=197,
-                              i15=9, i16=28, 
-                              i17=13, i18=115, 
-                              i21=17, i22=202)
-        
-        # A Telegram object with the following contents:
-        # Parameter access type: 0110
-        # Parameter number: 1234 ('0110' + '0' + 1234 = 100 210)
-        # Index: 56
-        # Parameter value: 5432 (21 56)
-        # Status/control bits: 1111000011001100 (51 15)
-        #     Note that status/control bits are saved in the Telegram 
-        #     in reverse order
-        # Frequency: 1221 (4 197)
-        # Temperature: 2332 (9 28)
-        # Current: 3443 (13 115)
-        # Voltage: 4554 (17 202)
-        # Checksum: 250
 
-        self.telegram = Telegram(self.data)
+class TestTelegram(Base):
     
-    
-class TestPropertyGetters(Base):
-    
-    def test_parameter_access_type(self):
-        self.assertEqual(self.telegram.parameter_access_type, '0110')
+    def test_bytes(self):
+        self.assertEqual(bytes(self.telegram), self.bytes)
         
-    def test_parameter_number(self):
-        self.assertEqual(self.telegram.parameter_number, 1234)
+    def _test_bytes_with_value(self, value):
+        # test_bytes, but telegram.parameter_value is replaced with *value*.
         
-    def test_parameter_index(self):
-        self.assertEqual(self.telegram.parameter_index, 56)
+        # Replace parameter_value in self.telegram.
+        self.kwargs['parameter_value'] = value
         
-    def test_parameter_value(self):
-        self.assertEqual(self.telegram.parameter_value, 5432)
+        # Replace parameter_value in self.bytes.
+        self.bytes = self.bytes[:7] + bytes(value) + self.bytes[11:]
         
-    def test_control_or_status_bits(self):
-        self.assertEqual(self.telegram.control_or_status_bits, 
-                         '1111000011001100')
+        # Update the checksum.
+        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
         
-    def test_frequency(self):
-        self.assertEqual(self.telegram.frequency, 1221)
-        
-    def test_temperature(self):
-        self.assertEqual(self.telegram.temperature, 2332)
-        
-        # Temperature can also be negative.
-        self.telegram.typedbytes[15:17] = 65531
-        self.assertEqual(self.telegram.temperature, -5)
-        
-    def test_current(self):
-        self.assertEqual(self.telegram.current, 3443)
-        
-    def test_voltage(self):
-        self.assertEqual(self.telegram.voltage, 4554)
-        
-    def test_checksum(self):
-        self.assertEqual(self.telegram.checksum, 250)
+        t = Telegram(**self.kwargs)
+        self.assertEqual(bytes(t), self.bytes)
 
-    
-class TestPropertySetters(Base):
-    # Because the getter tests prove that getters work as intended, 
-    # getters can be used in testing setters.
+    def test_bytes_sint(self):
+        value = Sint(-1234, 32)        
+        self._test_bytes_with_value(value)
+        
+    def test_bytes_float(self):
+        value = Float(1234.5678)
+        self._test_bytes_with_value(value)
+        
+    def test_bytes_bin(self):        
+        value = Bin(4 * '10010110')
+        self._test_bytes_with_value(value)
+
+
+class TestTelegramBuilder(Base):
+                
+    ### Setters ###
             
-    def setter_test(self, property_, valid_values, invalid_values, 
-                    invalid_types):
+    def test_setters(self):
         
-        for value in valid_values:
-            with self.subTest(i=value):
-                setattr(self.telegram, property_, value)
-                self.assertTrue(self.telegram.is_valid())
-                self.assertEqual(getattr(self.telegram, property_), value)
-                
-        for value in invalid_values:
-            with self.subTest(i=value):
-                with self.assertRaises(ValueError):
-                    setattr(self.telegram, property_, value)
-                    
-        for value in invalid_types:
-            with self.subTest(i=value):
-                with self.assertRaises(TypeError):
-                    setattr(self.telegram, property_, value)
-                    
-    def setter_uint_test(self, property_, size):
-        name = property_
-        valid = [0, 123, 2**size-1]
-        invalid = [-1, 2**size]
-        type_error = ['1', 1.0]
-        self.setter_test(name, valid, invalid, type_error)
+        # Test creating a query.
         
-    def test_parameter_access_type(self):
-        name = 'parameter_access_type'
-        valid = ['0000', '1111', '0101']
-        invalid = ['00000', '000', '0002']
-        type_error = [1, 1.0]
-        self.setter_test(name, valid, invalid, type_error)
- 
-    def test_parameter_number(self):
-        self.setter_uint_test('parameter_number', 11)
+        tb = (TelegramBuilder(parameters)
+            # 0001 is "read a value".
+            .set_parameter_mode('read')
+            .set_parameter_number(1234)
+            .set_parameter_index(56)
+            .set_parameter_value(5432)
+            .set_flag_bits(
+            [ControlBits(i) for i, c 
+             in enumerate('1111000011001100') if c == '1'])
+            .set_frequency(1221)
+            .set_temperature(2332)
+            .set_current(3443)
+            .set_voltage(4554))
         
-    def test_parameter_index(self):
-        self.setter_uint_test('parameter_index', 8)
-                
-    def test_control_or_status_bits(self):
-        name = 'control_or_status_bits'
-        valid = [16*'0', 16*'1', '1111000011001100']
-        invalid = [15*'0', 17*'0', 15*'1'+'2']
-        type_error = [1, 1.0]
-        self.setter_test(name, valid, invalid, type_error)
-        
-    def test_frequency(self):
-        self.setter_uint_test('frequency', 16)
-        
-    def test_temperature(self):        
-        name = 'temperature'
-        valid = [MIN_S16, -123, 123, MAX_S16]
-        invalid = [MIN_S16-1, MAX_S16+1]
-        type_error = ['1', 1.0]
-        self.setter_test(name, valid, invalid, type_error)
-        
-    def test_current(self):
-        self.setter_uint_test('current', 16)     
-        
-    def test_voltage(self):
-        self.setter_uint_test('voltage', 16)
-        
-    def test_checksum(self):
-        
-        # Make sure all setters update the checksum correctly.
-        t = Telegram()
-        t.parameter_access_type = '0110'
-        t.parameter_number = 1234
-        t.parameter_index = 56
-        t.parameter_value = 5432
-        t.control_or_status_bits = '1111000011001100'
-        t.frequency = 1221
-        t.temperature = 2332
-        t.current = 3443
-        t.voltage = 4554
-        
-        self.assertEqual(t.checksum, 250)
-        
-        # Make sure the checksum can also be set by hand.
-        t.checksum = 123
-        self.assertEqual(t.checksum, 123)
+        self.assertEqual(tb.build('query'), self.telegram)
 
+        # Test creating a reply.
 
-class TestParameterValue(TestPropertySetters):
-    
-    def value_test(self, type_, values):
+        # 0001 is "16 bit value sent".
+        tb.set_parameter_mode('response')
+        self.assertEqual(tb.build('reply'), self.telegram)
         
-        for value in values:
-            with self.subTest(i=value):
-                self.telegram.parameter_value = value
-                self.assertTrue(self.telegram.is_valid())
-                value_out = self.telegram.get_parameter_value(type_)
-                
-                if isinstance(value, float):
-                    self.assertAlmostEqual(value_out, value, 
-                                           delta=10**-5*value)
-                else:
-                    self.assertEqual(value_out, value)
-
     def test_default(self):
-        # This test tests the parameter_value property instead of the 
-        # get_parameter_value method.
-        name = 'parameter_value'
-        valid = [0, 123, MAX_32]
-        invalid = []
-        type_error = []
-        self.setter_test(name, valid, invalid, type_error)
+        t = Telegram(
+            parameter_code=Bin('0000'), 
+            parameter_number=Uint(0, 11), 
+            parameter_index=Uint(0, 8), 
+            parameter_value=Uint(0, 32), 
+            flag_bits=Bin(16 * '0'), 
+            frequency=Uint(0, 16), 
+            temperature=Sint(0, 16), 
+            current=Uint(0, 16),
+            voltage=Uint(0, 16)
+        )
+        self.assertEqual(TelegramBuilder(parameters).build(), t)
         
-    def test_int(self):
-        # This and all following tests test the get_parameter_value 
-        # method.
-        values = [0, 123, MAX_32]
-        self.value_test(Types.UINT, values)
-        
-        
-        
-    def test_signed_int(self):
-        values = [MIN_S32, -123, 123, MAX_S32]
-        self.value_test(Types.SINT, values)
-        
-    def test_string(self):
-        values = ['0', '1010', 32*'1']
-        
-        for value in values:
-            with self.subTest(i=value):
-                self.telegram.parameter_value = value
-                self.assertTrue(self.telegram.is_valid())
-                value_out = self.telegram.get_parameter_value(Types.STR)
-                self.assertEqual(value_out, value.zfill(32))
-        
-    def test_float(self):
-        values = [-123.456e7, 0.0, 1.0e-1, 123.456e7]
-        self.value_test(Types.FLOAT, values)
-        
-    def test_invalid_values_fail(self):
-        
-        invalid_values = [MIN_S32-1, MAX_32+1, '', 33*'0', 15*'0'+'2']
-        
-        for value in invalid_values:
-            with self.subTest(i=value):
-                with self.assertRaises(ValueError):
-                    self.telegram.parameter_value = value
-                    
-    def test_invalid_types_fail(self):
-                    
-        invalid_types = [int, [], bytes()]
-        
-        for value in invalid_types:
-            with self.subTest(i=value):
-                with self.assertRaises(TypeError):
-                    self.telegram.parameter_value = value
-                    
-                    
-class TestSpecialSetters(Base):
+    def test_wrong_type_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            TelegramBuilder(parameters).build('qery')
+            
+    ### from_bytes ###
     
-    def test_set_checksum(self):
+    def test_from_bytes(self):
+        t = TelegramBuilder(parameters).from_bytes(self.bytes).build()
+        self.assertEqual(t, self.telegram)
+            
+    def test_from_bytes_with_invalid_byte_0_fails(self):
+        bytes2 = bytes([0]) + self.bytes[1:]
+        with self.assertRaises(ValueError):
+            TelegramBuilder(parameters).from_bytes(bytes2)
+    
+    def test_from_bytes_with_invalid_byte_1_fails(self):
+        bytes2 = self.bytes[0:1] + bytes([0]) + self.bytes[2:]
+        with self.assertRaises(ValueError):
+            TelegramBuilder(parameters).from_bytes(bytes2)
+            
+    def test_from_bytes_with_invalid_length_fails(self):
+        bytes2 = self.bytes + bytes([0]) 
+        with self.assertRaises(ValueError):
+            TelegramBuilder(parameters).from_bytes(bytes2)
+            
+    def test_from_bytes_with_invalid_checksum_fails(self):
+        bytes2 = self.bytes[:-1] + bytes([0])
+        with self.assertRaises(ValueError):
+            TelegramBuilder(parameters).from_bytes(bytes2)
+            
+    ### Parameter value ###
+    
+    def test_parameter_value_sint(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(1)
+            .set_parameter_mode('write')
+            .set_parameter_value(-1234)
+            .build())
         
-        telegram = Telegram()
+        self.assertEqual(t.parameter_value, Sint(-1234, 32))
         
-        # Copy telegram contents from data but leave the correct 
-        # checksum out.
-        telegram.typedbytes.data = bytearray(self.data[:-1] + [0])
-        # The telegram should now be invalid.
-        self.assertFalse(telegram.is_valid())
+    def test_parameter_value_float(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(2)
+            .set_parameter_mode('write')
+            .set_parameter_value(1234.5678)
+            .build())
+
+        self.assertEqual(t.parameter_value, Float(1234.5678))
         
-        telegram.set_checksum()
-        self.assertEqual(telegram.checksum, self.data[-1])
-        # The telegram should now be valid again.
-        self.assertTrue(telegram.is_valid())
+    def test_parameter_value_bin(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(3)
+            .set_parameter_mode('write')
+            .set_parameter_value(4 * '10010110')
+            .build())
+
+        self.assertEqual(t.parameter_value, Bin(4 * '10010110'))
         
-    def test_set_control_or_status_bits(self):
+    def test_parameter_value_invalid_value_fails(self):
+        tb = (TelegramBuilder(parameters)
+            .set_parameter_number(1234)
+            .set_parameter_mode('write')
+            .set_parameter_value(-1234)
+        )
+        with self.assertRaises(ValueError):
+            tb.build()
         
-        telegram = Telegram()
-        self.assertEqual(telegram.control_or_status_bits, '0000000000000000')
+    def test_parameter_value_wrong_type_fails(self):
+        tb = (TelegramBuilder(parameters)
+            .set_parameter_number(3)
+            .set_parameter_mode('write')
+            .set_parameter_value(1234)
+        )
+        with self.assertRaises(TypeError):
+            tb.build()
+            
+    def test_parameter_value_with_no_parameter_access(self):
+        """Make sure the parameter type is always Uint when there is no
+        parameter access.
+        """
+        for mode in ['none', 'error']:
+            with self.subTest(i=mode):
         
-        telegram.set_control_or_status_bits([0, 10, 2, 15, 7, 4], '111111')
-        self.assertEqual(telegram.control_or_status_bits, '1010100100100001')
+                t =  (TelegramBuilder(parameters)
+                     .set_parameter_number(3)
+                     .set_parameter_mode('none')
+                     .set_parameter_value(1234)
+                     .build())
+                self.assertEqual(t.parameter_value, Uint(1234, 32))
+            
+    ### Parameter value from bytes
+    
+    # The most basic case has already been tested in test_from_bytes.
+            
+    def _test_value_from_bytes(self, param_number, param_value):
+        # test_from_bytes, but telegram.parameter_number and 
+        # telegram.parameter_value are replaced with *param_number* and
+        # *param_value*.
         
-        telegram.set_control_or_status_bits([0, 10, 2], '100')
-        self.assertEqual(telegram.control_or_status_bits, '1000100100000001')
+        parameter_bytes = bytes(Bin('00010') + Uint(param_number, 11))
+        value_bytes = bytes(param_value)
+        
+        # Replace parameter_number and parameter_value in self.bytes.
+        self.bytes = (self.bytes[:3] + parameter_bytes + self.bytes[5:7]
+                      + value_bytes + self.bytes[11:])
+        
+        # Update the checksum.
+        self.bytes = self.bytes[:-1] + bytes([checksum(self.bytes[:-1])])
+        
+        t = TelegramBuilder(parameters).from_bytes(self.bytes).build()
+        self.assertEqual(t.parameter_value, param_value)
+        
+    def test_sint_from_bytes(self):
+        number = 1
+        value = Sint(-1234, 32)        
+        self._test_value_from_bytes(number, value)
+        
+    def test_float_from_bytes(self):        
+        number = 2
+        value = Float(1234.5678)
+        self._test_value_from_bytes(number, value)        
+        
+    def test_bin_from_bytes(self):        
+        number = 3
+        value = Bin(4 * '10010110')
+        self._test_value_from_bytes(number, value)        
+            
+    ### Parameter code ###
+    
+    def test_parameter_codes(self):
+        # Test some parameter codes with an indexed 32 bit parameter.
+        # An unindexed 16 bit prameter was tested in test_setters.
+        
+        tb = (TelegramBuilder(parameters).set_parameter_number(4))
+        
+        tb.set_parameter_mode('read')
+        t = tb.build('query')
+        self.assertEqual(t.parameter_code, Bin('0110'))
+
+        tb.set_parameter_mode('write')
+        t = tb.build('query')
+        self.assertEqual(t.parameter_code, Bin('1000'))
 
 
-class TestInit(Base):
-    
-    def test_empty(self):
-        empty_bytes = dummy_data()
-        self.assertEqual(Telegram().data, bytearray(empty_bytes))
+        tb.set_parameter_mode('response')
+        t = tb.build('reply')
+        self.assertEqual(t.parameter_code, Bin('0101'))
         
-    def test_full(self):        
-        self.assertEqual(self.telegram.data, bytearray(self.data))
+    ### Parameter code from bytes ###
+        
+    def _set_parameter_access_and_value(self, code, number, value):
+        """Update the parameter code, number and value in self.bytes.
+        
+        The checksum is updated automatically.
+        
+        Args:
+            code: A string.
+            number: An int.
+            value: A Data subclass instance.
+        """
+        # Change the 4 code bits but keep the other bits in the parameter
+        # block the same.
+        parameter_block = bytes(Bin(code) + Bin('0') + Uint(number, 11))
+
+        # Replace the parameter code/number and value blocks.
+        self.bytes = (self.bytes[:3] + parameter_block + self.bytes[5:7]
+                      + bytes(value) + self.bytes[11:])
+        
+        # Update the checksum.
+        self.bytes = (
+            self.bytes[:-1] + bytes([checksum(self.bytes[:-1])]))
+    
+    def test_from_bytes_no_parameter_access(self):
+        """Make sure invalid parameter numbers are accepted if the parameter
+        mode is 'none' or 'error'.
+        """
+        no_access_code = ParameterResponse.NONE.value
+        error_code = ParameterResponse.ERROR.value
+        
+        for code in [no_access_code, error_code]:
+            with self.subTest(i=code):
+                
+                # parameter_number is 0 (an invalid value), but this should be
+                # ok since the parameter isn't accessed.
+                self._set_parameter_access_and_value(code, 0, Sint(-1, 32))
                                 
-    def test_bad_arguments_fail(self):        
-        # This tries to initialize an empty Telegram with 
-        # a length of 24, which will fail because the start, length 
-        # and checksum bytes have invalid values.
-        with self.assertRaises(ValueError):
-            Telegram(24)
-            
-        with self.assertRaises(TypeError):
-            Telegram(1.0)
-            
-    def test_kwargs(self):  
-        t1 = Telegram(current=1234, parameter_index=5)
-        t2 = Telegram()
-        t2.current = 1234
-        t2.parameter_index = 5
-        self.assertEqual(t1, t2)
-        
-    def test_invalid_kwarg_name_fails(self):
-        with self.assertRaises(TypeError):
-            Telegram(wrong_kwarg=0)
-            
-    def test_data_as_both_arg_and_kwarg_fails(self):
-        with self.assertRaises(TypeError):
-            Telegram(self.data, data=self.data)
-            
-    def test_kwarg_with_invalid_value_fails(self):
-        with self.assertRaises(ValueError):
-            Telegram(frequency=-1)
-            
-    def test_setting_both_kwargs_and_data_fails(self):
-        with self.assertRaises(TypeError):
-            Telegram(self.data, current=0)
-            
-    def test_wrong_length_fails(self):
-        
-        empty = dummy_data()
-        short = empty[:2] + empty[3:] # length = 23
-        long = empty[:2] + [0] + empty[2:] # length = 25
-        
-        with self.assertRaises(ValueError):
-            Telegram(short) 
-                    
-        with self.assertRaises(ValueError):
-            Telegram(long)
-                        
-    def test_wrong_start_byte_fails(self):
-        
-        data = dummy_data(i0=0) # Should be 2.
-        with self.assertRaises(ValueError):
-            Telegram(data)    
-            
-    def test_wrong_length_byte_fails(self):
-        
-        data = dummy_data(i1=0) # Should be 22.
-        with self.assertRaises(ValueError):
-            Telegram(data)     
-            
-    def test_wrong_checksum_fails(self):
+                # The 'error' mode only works here if the telegram is a reply.
+                t = (TelegramBuilder(parameters)
+                     .from_bytes(self.bytes)
+                     .build('reply'))
 
-        data = dummy_data(i23=1) # Should be 20.
+                # The value will be interpreted as an Uint instead of a Sint,
+                # since the type of the parameter wasn't checked.
+                self.assertEqual(t.parameter_value, Uint(2**32 - 1, 32))
+        
+    def test_from_bytes_invalid_parameter_number(self):
+        """Make sure invalid parameter numbers are not accepted if the
+        parameter mode is not 'none' or 'error'.
+        """
+        # parameter_number is 0, which should raise an error, since the
+        # parameter is now accessed.        
+        self._set_parameter_access_and_value('0001', 0, Uint(0, 32))
+        
         with self.assertRaises(ValueError):
-            Telegram(data)      
-            
-            
-class TestIsValid(Base):
-            
-    def test_correct_telegram_is_valid(self):
-        # Test an empty telegram
-        self.assertTrue(Telegram().is_valid())
+            TelegramBuilder(parameters).from_bytes(self.bytes).build()
+
+
+class TestTelegramReader(Base):
         
-        # Test a telegram full of data
-        self.assertTrue(self.telegram.is_valid())
-        
-    def test_wrong_start_byte_is_invalid(self):
-        self.telegram.typedbytes[0] = 10
-        self.assertFalse(self.telegram.is_valid())
-        
-    def test_wrong_length_byte_is_invalid(self):
-        self.telegram.typedbytes[1] = 10
-        self.assertFalse(self.telegram.is_valid())
-        
-    def test_wrong_length_is_invalid(self):
-        self.telegram.typedbytes.data = bytearray(
-            [2, 22, 0, 0, 0, 0, 0, 0, 0, 20])
-        self.assertFalse(self.telegram.is_valid())
-        
-    def test_wrong_checksum_is_invalid(self):
-        self.telegram.typedbytes[23] = 10
-        self.assertFalse(self.telegram.is_valid())
-            
-            
-class TestUtils(Base):
+    ### Getters ###
     
-    def test_str(self):
-        t = Telegram()
-        string = ("Telegram(parameter_access_type='0000', "
-                           "parameter_number=0, "
-                           "parameter_index=0, "
-                           "parameter_value=0, "
-                           "control_or_status_bits='0000000000000000', "
-                           "frequency=0, "
-                           "temperature=0, "
-                           "current=0, "
-                           "voltage=0, "
-                           "checksum=20)")
-        self.assertEqual(str(t), string)
+    def test_values(self):
+        tr = TelegramReader(self.telegram)
+        
+        self.assertEqual(tr.parameter_mode, 'response')
+        self.assertEqual(tr.parameter_number, 1234)
+        self.assertEqual(tr.parameter_index, 56)
+        self.assertEqual(tr.parameter_value, 5432)
+        self.assertEqual(
+            tr.flag_bits, [ControlBits(i) for i, c 
+                           in enumerate('1111000011001100') if c == '1'])
+        self.assertEqual(tr.frequency, 1221)
+        self.assertEqual(tr.temperature, 2332)
+        self.assertEqual(tr.current, 3443)
+        self.assertEqual(tr.voltage, 4554)
+        
+    def test_query(self):
+        tr = TelegramReader(self.telegram, 'query')        
+        self.assertEqual(tr.parameter_mode, 'read')
+        
+    def test_invalid_type_fails(self):
+        with self.assertRaises(ValueError):
+            TelegramReader(self.telegram, 'qery')
+            
+    ### parameter_mode ###
+    
+    # Test the same modes as in TestTelegramBuilder.test_parameter_codes.
+    
+    def test_parameter_mode_read(self):        
+        self.kwargs['parameter_code'] = Bin('0110')
+        
+        t = Telegram(**self.kwargs)
+        tr = TelegramReader(t, 'query')
+        
+        self.assertEqual(tr.parameter_mode, 'read')
+        
+    def test_parameter_mode_write(self):
+        self.kwargs['parameter_code'] = Bin('1000')
+        
+        t = Telegram(**self.kwargs)
+        tr = TelegramReader(t, 'query')
+        
+        self.assertEqual(tr.parameter_mode, 'write')
+        
+    def test_parameter_mode_response(self):
+        self.kwargs['parameter_code'] = Bin('0101')
+        
+        t = Telegram(**self.kwargs)
+        tr = TelegramReader(t, 'reply')
+        
+        self.assertEqual(tr.parameter_mode, 'response')
+
+    ### parameter_error ###
+        
+    def test_parameter_error(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(1234)
+            .set_parameter_mode('error')
+            .set_parameter_value(0)
+            .build('reply'))
+            
+        tr = TelegramReader(t)
+        self.assertEqual(tr.parameter_error, ParameterError.WRONG_NUM)
+
+    def test_no_parameter_error(self):
+        t = (TelegramBuilder(parameters).build('reply'))
+            
+        tr = TelegramReader(t)
+        self.assertEqual(tr.parameter_error, None)
+        
+    def test_invalid_parameter_error_number_fails(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(1234)
+            .set_parameter_mode('error')
+            .set_parameter_value(999)
+            .build('reply'))
+            
+        tr = TelegramReader(t)
+        with self.assertRaises(ValueError):
+            tr.parameter_error
+            
+    ### Magic methods ###
     
     def test_repr(self):
-        new_tel = eval(repr(self.telegram))
-        self.assertEqual(new_tel, self.telegram)
-        self.assertFalse(new_tel is self.telegram)
+        # Replace the default status bits since there are too many.
+        self.telegram.flag_bits = Bin('1010000000000000') 
         
-    def test_eq(self):
+        tr = TelegramReader(self.telegram)
+        string = f"TelegramReader(telegram={str(self.telegram)}, type='reply')"
         
-        self.assertEqual(self.telegram, self.telegram)
-        self.assertEqual(self.telegram, Telegram(self.data))
-        self.assertNotEqual(self.telegram, Telegram())
-        # Make sure comparison with a non-Telegram object doesn't
-        # raise errors.
-        self.assertNotEqual(self.telegram, 1)
-        
-    def test_len(self):
-        self.assertEqual(len(self.telegram), 24)
+        self.assertEqual(repr(tr), string)
     
+    def test_str(self):
+        # Replace the default status bits since there are too many.
+        self.telegram.flag_bits = Bin('1010000000000000') 
+        # Set the response code to 'error' so that we can make sure
+        # parameter_error is printed correctly (it initially was not, because
+        # f'{parameter_error}' produces a number instead of
+        # 'ParameterError.X'). 
+        self.telegram.parameter_code = Bin('0111')
+        # Set parameter_value to a valid error code (= min/max error).
+        self.telegram.parameter_value = Uint(2, 32)
+
+        tr = TelegramReader(self.telegram)
         
-class TestHiddenMethods(Base):
-    
-    def test_xor(self):        
-        a = 12 # = 1100_bin
-        b = 10 # = 1010_bin
-        c = 6  # = 0110_bin  
-        
-        self.assertEqual(Telegram._xor(a, b), c)
-        
-    def test_compute_checksum(self):
-        
-        nums = [54, 12, 255, 0, 17, 2, 89, 55, 23, 88, 48, 21, 5, 89, 70, 150, 
-                199, 52, 109, 201, 11, 56, 38]
-        self.assertEqual(Telegram.compute_checksum(nums), 28)
-                
-        
+        string = f"""
+TelegramReader(
+    telegram={str(self.telegram)},
+    type='reply',
+    parameter_mode='error',
+    parameter_number=1234,
+    parameter_index=56,
+    parameter_value=2,
+    parameter_error=ParameterError.MINMAX,
+    flag_bits=[<StatusBits.READY: 0>, <StatusBits.OPERATION: 2>],
+    frequency=1221,
+    temperature=2332,
+    current=3443,
+    voltage=4554
+)
+"""[1:-1]
+
+        self.assertEqual(str(tr), string)
+
+
 if __name__ == '__main__':
     unittest.main()

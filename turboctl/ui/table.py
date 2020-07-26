@@ -1,29 +1,36 @@
-"""Create tables of parameters, errors and warnings."""
+"""This module is used to create formatted tables of parameters, errors and
+warnings.
+"""
+
 import textwrap as tx
 import tabulate
 
-from ..data import Types
-        
+from turboctl.telegram.datatypes import Data
+
+
 tabulate.PRESERVE_WHITESPACE = True
         
+
 def table(database, numbers='all', widths={}):
     """Return a table of parameters, errors or warnings.
     
     Args:
-        database: A dict of parameters, errors or warnings. The keys 
-            should be numbers and the values Parameter or 
-            ErrorOrWarning objects.
-        numbers: 'all', or the numbers of the 
+        database: A :class:`dict` of parameters, errors or warnings. The values 
+            should be :class:`~turboctl.telegram.parser.Parameter` or 
+            :class:`~turboctl.telegram.parser.ErrorOrWarning` objects, and the
+            keys the numbers (:class:`int`) of those objects.
+        numbers: ``'all'``, or a sequence of the numbers of the 
             parameters/errors/warnings that should be displayed.
-        widths: A dict with keys corresponding to column names and 
-            values to the maximum widths of the columns. Column names 
-            are the same as the attributes of the Parameter or 
-            ErrorOrWarning classes. If a column's maximum width isn't 
-            specified in *widths*, it is set to infinite and no text 
-            wrapping is used for that column.
+        widths: A :class:`dict` with keys corresponding to column names and 
+            values to the maximum widths of the columns. The column names 
+            are the same as the attributes of the
+            :class:`~turboctl.telegram.parser.Parameter` or 
+            :class:`~turboctl.telegram.parser.ErrorOrWarning` classes.
+            If the maximum width of a column isn't specified in *widths*, it
+            is set to infinite and no text wrapping is used for that column.
     
     Returns:
-        The table as a formatted string ready for printing. 
+        The table as a formatted :class:`str` ready for printing. 
             
     Raises:
         ValueError: If *database* is empty or if there is no 
@@ -34,8 +41,9 @@ def table(database, numbers='all', widths={}):
     return tabulate.tabulate(a, tablefmt='plain')
 
 def array(database, numbers='all', widths={}):
-    """The same as table(), but returns the table as a 2d list 
-    instead of a string.
+    """The same as :func:`table`, but instead of a :class:`str` the table is
+    returned as a :class:`list` of rows, each of which is a :class:`list` of
+    fields (:class:`str`).
     
     This function can be used to test this module.
     """
@@ -105,28 +113,45 @@ def _format_field(name, value, width):
         *width* wthout them. If *value* already contains line breaks, 
         these are preserved.
     """
+    # Format fields differently based on the type of the value.
+    if isinstance(value, str):
+        # Replace empty text fields with a dash. 
+        if value == '':
+            value = '-'        
+        # Add line breaks to text fields.
+        value = _wrap(value, width)
     
-    if isinstance(value, Types):
-        value = value.description
-        
-    if isinstance(value, range):
+    elif isinstance(value, range):
+        # Display the 'indices' field in a nicer format instead of
+        # "range(i, j)".
         value = f'{value.start}...{value.stop-1}' if value else '-'            
-        
-    if value == '':
-        value = '-'
     
-    value = str(value)
-    
-    if name == 'type':
-        value = value.capitalize()
+    elif isinstance(value, Data):
+        # Display only the value of Data subclass instances
+        # (i.e. the 'min_value', 'max_value' and 'default' fields).
+        value = value.value
         
+        # Truncate long floats.
+        if isinstance(value, float):
+            value = f'{value:.7}'
+    
+    elif isinstance(value, list):
+        # The 'default' field may contain a list of Data subclass instances.
+        for i, item in enumerate(value):
+            value[i] = item.value
+            
+    elif isinstance(value, type):
+        # Display the name of classes.
+        value = value.__name__
+    
+    # Replace underscores in the field name with spaces.
+    # E.g. 'min_value' -> 'min value'         
     name = name.replace('_', ' ')
     
-    value = _wrap(value, width)
-    
+    # The field name is written in all capitals.
     # Tabulate seems to strip a '\n' from the end of a string, 
     # so two line breaks are needed to add an empty line between rows.
-    return name.upper() + '\n' + value + '\n\n'
+    return name.upper() + '\n' + str(value) + '\n\n'
 
 def _wrap(string, width):
     """Add line breaks to a long string.

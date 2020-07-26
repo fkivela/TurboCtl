@@ -1,7 +1,7 @@
 """This module was created to test the run_tests module.
 
-When the run_tests function is run, the results should show this 
-module as having the following test results:
+When the this module is tested with run_test.run_tests, the results should 
+show it as having the following test results:
     Successes:  1
     Failures:   2
     Errors:     3

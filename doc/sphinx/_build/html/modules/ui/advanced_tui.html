@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>advanced_tui &#8212; TurboCtl  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="queuefile" href="queuefile.html" />
+    <link rel="prev" title="widgets" href="widgets.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-turboctl.ui.advanced_tui">
+<span id="advanced-tui"></span><h1><a class="reference internal" href="#module-turboctl.ui.advanced_tui" title="turboctl.ui.advanced_tui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advanced_tui</span></code></a><a class="headerlink" href="#module-turboctl.ui.advanced_tui" title="Permalink to this headline">¶</a></h1>
+<p>This module defines the <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a> class.</p>
+<p><a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a> uses <a class="reference external" href="http://urwid.org/">urwid</a>.
+If urwid hasn’t been installed,
+<a class="reference internal" href="command_line_ui.html#turboctl.ui.command_line_ui.CommandLineUI" title="turboctl.ui.command_line_ui.CommandLineUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommandLineUI</span></code></a> should be used instead.</p>
+<dl class="py class">
+<dt id="turboctl.ui.advanced_tui.AdvancedTUI">
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.ui.advanced_tui.</code><code class="sig-name descname">AdvancedTUI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">script</span></em>, <em class="sig-param"><span class="n">inputfile</span></em>, <em class="sig-param"><span class="n">outputfile</span></em>, <em class="sig-param"><span class="n">palette</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>A text-based user interface combining a terminal-style
+command line interface and a text screen.</p>
+<dl class="py attribute">
+<dt id="turboctl.ui.advanced_tui.AdvancedTUI.display">
+<code class="sig-name descname">display</code><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="Permalink to this definition">¶</a></dt>
+<dd><p>A text field for presenting information to the user.
+Use <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="turboctl.ui.advanced_tui.AdvancedTUI.display"><code class="xref py py-attr docutils literal notranslate"><span class="pre">display</span></code></a><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Text.set_text" title="(in Urwid v2.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.set_text()</span></code></a> to change its contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Text" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Text</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface">
+<code class="sig-name descname">command_line_interface</code><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>A command-line interface for issuing commands, located
+below <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="turboctl.ui.advanced_tui.AdvancedTUI.display"><code class="xref py py-attr docutils literal notranslate"><span class="pre">display</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="widgets.html#turboctl.ui.widgets.ScrollableCommandLines" title="turboctl.ui.widgets.ScrollableCommandLines"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScrollableCommandLines</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.ui.advanced_tui.AdvancedTUI.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">script</span></em>, <em class="sig-param"><span class="n">inputfile</span></em>, <em class="sig-param"><span class="n">outputfile</span></em>, <em class="sig-param"><span class="n">palette</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>script</strong> – The program that this UI controls.
+It should be wrapped in a callable object so that
+calling <code class="docutils literal notranslate"><span class="pre">script()</span></code> executes it.
+The UI communicates with the program through
+<em>inputfile</em> and <em>outputfile</em>;
+the program should read its input from <em>inputfile</em>
+and send its output to <em>outputfile</em>.</p></li>
+<li><p><strong>inputfile</strong> (<em>file-like object</em>) – User input entered into the UI is written into this
+object.</p></li>
+<li><p><strong>outputfile</strong> (<em>file-like object</em>) – Output printed on the screen by the UI is read from
+this object.</p></li>
+<li><p><strong>palette</strong> (<em>iterable of palette entries</em>) – The palette used for the UI.
+This is passed to the initializer of
+<a class="reference external" href="http://urwid.org/reference/main_loop.html#urwid.MainLoop" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.MainLoop</span></code></a>.
+The format used by palette entries is specified in the
+documentation of
+<a class="reference external" href="http://urwid.org/reference/display_modules.html#urwid.BaseScreen.register_palette" title="(in Urwid v2.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">urwid.BaseScreen.register_palette()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.ui.advanced_tui.AdvancedTUI.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the program and the UI loop in parallel threads.
+The UI loop beaks automatically when the program ends.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the UI loop (which is executed in the main thread)
+crashes,
+the program (executed in a parallel thread) will probably
+be left waiting for input in a blocking state.
+Safeguards to prevent this should be built into code that
+uses <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a>; for example, this method may
+be called in a <code class="docutils literal notranslate"><span class="pre">with</span></code> or a <code class="docutils literal notranslate"><span class="pre">try-finally</span></code> block that
+makes sure the program is closed when the block is
+exited.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../telegram/index.html">telegram</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">ui</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="control_interface.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">control_interface</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="table.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_ui.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_line_ui</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="widgets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">widgets</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advanced_tui</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="queuefile.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">queuefile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="status_format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">status_format</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">ui</a><ul>
+      <li>Previous: <a href="widgets.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">widgets</span></code></a></li>
+      <li>Next: <a href="queuefile.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">queuefile</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, University of Helsinki Fusor Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/modules/ui/advanced_tui.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

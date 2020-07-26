@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>api &#8212; TurboCtl  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ui" href="../ui/index.html" />
+    <link rel="prev" title="telegram" href="telegram.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-turboctl.telegram.api">
+<span id="api"></span><h1><a class="reference internal" href="#module-turboctl.telegram.api" title="turboctl.telegram.api"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a><a class="headerlink" href="#module-turboctl.telegram.api" title="Permalink to this headline">¶</a></h1>
+<p>This module defines an API of functions which can be used to send commands
+to the pump.</p>
+<p>All functions in this module share the following common arguments:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>connection</em>:</dt><dd><p>This is a <a class="reference external" href="https://pyserial.readthedocs.io/en/latest/pyserial_api.html#serial.Serial" title="(in pySerial v3.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">serial.Serial</span></code></a> instance, which is used to send the
+command.</p>
+</dd>
+<dt><em>pump_on</em>:</dt><dd><p>If this evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>, control bits telling the pump to turn or
+stay on are added to the telegram. Otherwise receiving the telegram
+will cause the pump to turn off if it is on.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>If a command cannot be sent due to an error in the connection, a
+<a class="reference external" href="https://pyserial.readthedocs.io/en/latest/pyserial_api.html#serial.SerialException" title="(in pySerial v3.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">serial.SerialException</span></code></a> will be raised.</p>
+<p>The functions return both the query sent to the pump and the reply received
+back as <a class="reference internal" href="telegram.html#turboctl.telegram.telegram.TelegramReader" title="turboctl.telegram.telegram.TelegramReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">TelegramReader</span></code></a> instances.</p>
+<dl class="py function">
+<dt id="turboctl.telegram.api.send">
+<code class="sig-prename descclassname">turboctl.telegram.api.</code><code class="sig-name descname">send</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">telegram</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.api.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send <em>telegram</em> to the pump.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>telegram</strong> – A <a class="reference internal" href="telegram.html#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="turboctl.telegram.api.status">
+<code class="sig-prename descclassname">turboctl.telegram.api.</code><code class="sig-name descname">status</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">pump_on</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.api.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request pump status.</p>
+<p>This function sends an empty telegram to the pump, which causes it to send
+back a reply containing some data about the status of the pump.</p>
+<p>This can also be used for turning the pump on or off by setting <em>pump_on</em>
+to <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="turboctl.telegram.api.read_parameter">
+<code class="sig-prename descclassname">turboctl.telegram.api.</code><code class="sig-name descname">read_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">pump_on</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.api.read_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the value of an index of a parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number</strong> – The number of the parameter.</p></li>
+<li><p><strong>index</strong> – The index of the parameter (0 for unindexed parameters).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If <em>number</em> or <em>index</em> have invalid values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="turboctl.telegram.api.write_parameter">
+<code class="sig-prename descclassname">turboctl.telegram.api.</code><code class="sig-name descname">write_parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">pump_on</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.api.write_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a value to an index of a parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number</strong> – The number of the parameter.</p></li>
+<li><p><strong>value</strong> – The value to be written.</p></li>
+<li><p><strong>index</strong> – The index of the parameter (0 for unindexed parameters).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If <em>number</em> or <em>index</em> have invalid values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">telegram</a><ul>
+      <li>Previous: <a href="telegram.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+      <li>Next: <a href="../ui/index.html" title="next chapter">ui</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, University of Helsinki Fusor Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/modules/telegram/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

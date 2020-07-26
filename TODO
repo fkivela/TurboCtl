@@ -1,70 +1,41 @@
-State of packages and modules: Code Tests Comments
+TODO
 
-telegram                OK -- OK
-- update test_telegram_wrapper (cs_set setter changed)
-- change value errors to type errors in conversions
-data                    OK OK OK
-virtualpump             OK -- OK
-- virtualconnection       OK OK OK
-- parameter_component     OK -- OK
-- virtualpump             OK -- OK
-- hardware_component      OK -- OK
-ui                      -- -- --
-- abstract_ui module:     OK OK OK
-- command_parser          OK -- OK
-  - test UIArgumentNumberError
-- correct_error_message   OK OK OK
-- output module           OK OK OK
-- table                   OK OK OK
-- tui module              -- -- OK
-- ui_errors               OK NA OK
-bin                     OK OK OK
-test_turboctl           OK OK OK
-    
-    
-TODO:    
+Before Tuesday:
+- Read through the ui modules and sphinxify when necessary
+  - status_format
+- Test the program with an actual pump
+- Fix the problem with less
+- Add instructions for installing and running the program 
 
-Priority 1 (current)
-- Comment and test all modules
-- Add output to the setpoint command
+Soon:
+- Fix the problem with less properly
+- Add a warning about errors in the user manual
+- Update test_ui
+- Make sure all tests are ok and can be run automatically at once
+- Investigate and fix the errors which are occasionally raised whenthe program
+  is used. These are probably caused by receiving an invalid telegram.
+- Add a --no-autoupdate flag.
 
-Priority 2 (soon)
-- Test the program with the real pump
-- Double-check control and status bits etc.
-- Check units in the TUI (0.1 V vs V etc.)
-- Improve the TUI help message
+Perhaps at some point:
 
-Priority 3 (when I have time)
-- Change setup methods to setupclass methods in some tests in order 
-  to make them faster
-- Replace type(x) with type(x).__name__ in error and UI messages
-- Use the _ignore_ class property to define enum properties
-- Replace XOR with ^ in Telegram
-- Rename ParameterError to avoid confusion with the parameter error classes
-- Add a license
-- Add a README
-- Replace 'instance of enum' with 'member'
+Necessary before the program can be considered ready:
 
-Priority 4 (maybe never)
-- Add a config file
-- Add functionality for changing the telegram address
-
-
-Things that have to be tested with the real pump:
-- If a parameter number is specified but there is no parameter access, 
-  will the parameter data be included in the return telegram?
-- Is it OK to define an index when accessing an unindexed parameter?
-- When is the "cannot change" error message used?
-- What is the writability of parameters for which the manual doesn't specify 
-  it?
-- Does the pump return a parameter error if the parameter access code is 
-  invalid?
-- How does the pump behave when it is off? Is only the motor off? Does the 
-  pump read/answer commands?
-- Does the onoff command reset parameters?
-- Real parameters have a default value of 0 and a minumum value of > 0. 
-  How does this work?
-- What happens if the frequency setpoint is set to an illegal value through 
-  the setpoint command (without accessing parameters)?
-- Should an invalid parameter index raise a parameter number error or 
-  other error (currently VPump raises a parameter number error)?
+- Add instructions for installing and running TurboCtl
+- Improve the parser so that e.g. "list p [1, 2]" is valid syntax.
+  The command parser could also be moved into a separate class, so that it
+  could be tested more easily. Also, parser.py might be simplified by using
+  the parsing modules in the standard library.
+- Document the format in parameters.txt better? This might even be turned into
+  e.g. a CSV file.
+- Document individual enum members in codes.py.
+- Rename WrongNumError to NumberError or something?
+- Open the output of the help command with less?
+- Add commands to set the setpoint (most important), save data, read errors
+  etc.
+- Move singledispatchmethod to datatypes.py.
+- Run pylint/pycodestyle.
+- The docstring of the read/write_parameter methods say
+  "Raises ValueError if number or index have invalid values". Clarify this.
+- Add a command to open the docs in a web browser.
+- Merge the info and list commands into one with a boolean flag to use or not
+  to use less.

@@ -1,112 +1,368 @@
-"""This module handles parameter access in a VirtualPump."""
+"""This module handles parameter access in a
+:class:`~turboctl.virtualpump.virtualpump.VirtualPump`.
+"""
 
-from ..data import Parameter, ParameterError
-from ..telegram import Reply
+from turboctl.telegram.codes import (ParameterAccess, ParameterException,
+                                     AccessError, CannotChangeError,
+                                     MinMaxError, ParameterIndexError,
+                                     WrongNumError)
+from turboctl.telegram.datatypes import Data
+from turboctl.telegram.parser import Parameter
 
 
 class ParameterComponent():
-    """This class defines the part of a VirtualPump that handles 
-    parameter access.
+    """This class defines the part of a
+    :class:`~turboctl.virtualpump.virtualpump.VirtualPump` that holds the
+    values of pump parameters and handles access to them.
+    
+    Attributes:
+        parameters: A :class:`dict` that represents pump parameters.
+            The keys should be parameter numbers (:class:`int`) and values
+            corresponding :class:`ExtendedParameter` objects.
     """
     
     def __init__(self, parameters):
-        """Initialize a new ParameterComponent.
+        """Initialize a new :class:`ParameterComponent`.
         
         Args:
-            parameters: The parameter dictionary to be used.
-                The keys should be parameter numbers and values 
-                ExtendedParameter objects.
-        """        
-        self.parameters = parameters
-        self.latest_error = None 
-        # This can be used for debugging or testing.
-        
-    def handle_parameter(self, query):
-        """Handle *query* by accessing parameters and returning a 
-        Reply object.
-        
-        Args:
-            query: A Query object.
-            
-        Returns:
-            A Reply object. Only parameter access data is written to 
-            the reply; handling other data is left to other classes.        
+            parameters: The object to be assigned to :attr:`parameters`.
         """
+        self.parameters = parameters
         
-        reply = Reply(parameter_number=query.parameter_number,
-                      parameter_index=query.parameter_index,
-                      parameter_value=query.parameter_value)
+    def handle_parameter(self, query, reply):
+        """Access a parameter as commanded by *query*.
         
-        if query.parameter_mode == 'none':
-            return reply
+        The data to be returned to the user is written to *reply*.
         
-        try:
-            reply.parameter_value = self._access_parameter(query)
-            reply.parameter_mode = 'response'
-            return reply
-        
-        except CannotChangeError as error:
-            # CannotChangeError also contains an error code, 
-            # but the 'no write' parameter response option 
-            # seems to be the option more likely used by the pump.
-            self.latest_error = error
-            reply.parameter_mode = 'no write'
-            return reply
-        
-        except ParameterAbstractError as error:
-            self.latest_error = error                
-            reply.parameter_mode = 'error'
-            reply.error_code = error.CODE
-            return reply
+        Args:
+            query: A :class:`~turboctl.telegram.telegram.TelegramReader`
+                object, which represents the telegram sent to the pump.
+            
+            reply: A :class:`~turboctl.telegram.telegram.TelegramBuilder`
+                object, which is used to construct the telegram sent back
+                from the pump.
+        """
+        if query.parameter_mode != 'none':
+            try:
+                reply.set_parameter_mode('response')
+                reply.set_parameter_value(self._access_parameter(query))
+            except ParameterException as error:
+                # TODO: Find out how CannotChangeError is used?
+                # Should it return 'error' with an error code, or 'no write'.        
+                reply.set_parameter_mode('error')
+                reply.set_parameter_value(error.member.value)
+            
+        return reply
 
     def _access_parameter(self, query):
-        """Write or read the value of a parameter.
+        """Access a parameter as commanded by *query* and return the return
+        value.
         
         Args:
-            query: A Query object.
+            query: A TelegramReader object.
                 
             Raises:
-                RuntimeError: If query.parameter_mode is not any of 
-                    the values it should be.
+                A subclass of ParameterException: If the parameter cannot be
+                    accessed due to a valid readon (i.e. one that can happen
+                    to the real pump).
+                
+                ValueError: If query.parameter_mode is not 'read' or 'write'.
         """
-        
+        # Check that the parameter number is valid, and find that parameter.         
         try:
             parameter = self.parameters[query.parameter_number]
         except KeyError:
-            raise ParameterNumberError(
-                f'Invalid parameter number: {query.parameter_number}')
+            raise WrongNumError(
+                f'invalid parameter number: {query.parameter_number}')
+        # The parameter error messages here are written to descriptive to aid
+        # debugging, even though they should never propagate beyond this
+        # method. 
+            
+        # Extract the parameter access code as a string.            
+        parameter_code = query.telegram.parameter_code.value
+        # Find the corresponding ParameterAccess member.
+        access_member = ParameterAccess(parameter_code)
         
-        if query.parameter_mode == 'read':
-            return parameter.get_value(indexed=query.parameter_indexed, 
-                                       index=query.parameter_index)
+        # Check that the access mode matches the size of the parameter.
+        bits = access_member.bits
+        # The ellipsis means this mode doesn't care about parameter size.
+        if bits not in [parameter.bits, ...]:
+            raise AccessError(f'bits should be {parameter.bits}, not {bits}')
         
-        if query.parameter_mode == 'write':
-            parameter.set_value(new_value=query.parameter_value,
-                                bits=query.parameter_size, 
-                                indexed=query.parameter_indexed, 
-                                index=query.parameter_index)
-            return query.parameter_value
+        # Check that the access mode matches the indices of the parameter.
+        indexed = access_member.indexed
+        # The ellipsis is again a "wild card" value.
+        if indexed not in [bool(parameter.indices), ...]:
+            raise AccessError('wrong value of *indexed*')
         
-        if query.parameter_mode == 'invalid':
-            raise OtherError(
-                f'Invalid parameter mode; '
-                f'access code = {query.parameter_access_type}')
+        # Some parameters start their indices from some other number than 0.
+        # "parameter.indices[0]" is only evaluated here if parameter.indices
+        # is not range(0).
+        offset = parameter.indices[0] if parameter.indices else 0
+        # Example: A parameter has the indices [1, 2, 3] and the values
+        # [4, 5, 6]. query.parameter_index is 3.
+        # offset is then 1 and index is 3 - 1 = 2, so the value that is
+        # returned is parameter.value[2] = 6.
+        index = query.parameter_index - offset
+                
+        # Make sure the index is within range. A try-catch-block could be used
+        # instead, but that wouldn't be ideal, since parameter.value is
+        # accessed at two different points in the code.
+        # This also catches negative indices, but a try-catch-block wouldn't,
+        # since negative indices are perfectly valid in Python. 
+        if not 0 <= index < len(parameter.value):
+            raise ParameterIndexError(
+                f'parameter index ({query.parameter_index}) out of range '
+                f'({parameter.indices})')
         
-        raise RuntimeError(
-            f"query.parameter_mode should be 'none', 'read', 'write' or "
-            f"'invalid', not {query.parameter_mode}")
+        # Write the new value, if the mode is 'write'.
+        mode = query.parameter_mode
+        if mode == 'write':
+            # Check that the parameter is writable.
+            if not parameter.writable:
+                raise CannotChangeError(
+                    f'parameter {query.parameter_number} is not writable')
+            
+            # Check that the new value is within range.
+            
+            min_value = parameter.min_value.value
+            max_value = parameter.max_value.value
+            value = query.parameter_value
+            
+            if not (min_value <= value <= max_value):
+                raise MinMaxError(f'value ({value}) out of range'
+                                  f'([{min_value}, {max_value}])')
+
+            # Write the new value as a Data subclass instance of the
+            # appropriate type and size.
+            parameter.value[index] = (
+                parameter.datatype(query.parameter_value, parameter.bits))
+
+        if mode not in ['read', 'write']:
+            raise ValueError(f'invalid parameter_mode: {mode}')
+
+        return parameter.value[index].value
+
+
+class ExtendedParameter():
+    """This class represents a parameter that has a value which can 
+    change, while the regular :class:`~turboctl.telegram.parser.Parameter`
+    class only describes the immutable attributes of a parameter.
+    
+    Attributes:
+        
+        number:
+            See :attr:`Parameter.number
+            <turboctl.telegram.parser.Parameter.number>`.
+        
+        indices:
+            See :attr:`Parameter.indices
+            <turboctl.telegram.parser.Parameter.indices>`.
+        
+        default:
+            See :attr:`Parameter.default
+            <turboctl.telegram.parser.Parameter.number>`.
+
+        writable:
+            See :attr:`Parameter.writable
+            <turboctl.telegram.parser.Parameter.number>`.
+        
+        datatype:
+            See :attr:`Parameter.datatype
+            <turboctl.telegram.parser.Parameter.number>`.
+        
+        bits:
+            See :attr:`Parameter.bits
+            <turboctl.telegram.parser.Parameter.number>`.
+            
+        value (:class:`turboctl.telegram.datatypes.Data`):
+            The current values of the indices of the parameter as a list.
+            This will be a list even for unindexed parameters, but in that
+            case the length of the list will be 1. The values of the list
+            will be instances of
+            :attr:`~turboctl.telegram.parser.Parameter.datatype`.
+            
+        parameters: A :class:`dict` of all instances of this class, 
+            with parameter numbers as keys and objects as values.
+            This is needed, because the :attr:`min_value` and
+            :attr:`max_value` attributes of some parameters depend on the
+            values of other parameters.
+    """
+    
+    def __init__(self, parameter, extended_parameters):
+        """Initialize a new :class:`ExtendedParameter`.
+                
+        Args:
+            parameter (:class:`~turboctl.telegram.parser.Parameter`):
+                The non-extended version of this parameter. Most attributes
+                of this object are copied from *parameter*.
+
+            extended_parameters:
+                The object to be assigned to :attr:`parameters`. 
+        """
+        # Copy attributes from *parameter*.
+        copied_attributes = [
+            'number', 'indices', 'default', 'writable', 'datatype', 'bits'
+        ]
+        for name in copied_attributes:
+            value = getattr(parameter, name)
+            setattr(self, name, value)
+
+        self.parameters = extended_parameters
+        
+        # Save the min and max values of the original parameter.
+        # These can be either Data subclass instances or references to the
+        # values of other parameters (e.g. 'P18').
+        self._raw_min_value = parameter.min_value
+        self._raw_max_value = parameter.max_value
+        
+        # Set self.value based on self.default.
+        if type(parameter.default) == list:
+            # parameter.default is a list -> indices have different values.
+            self.value = parameter.default
+        else:
+            # parameter.default is a single value -> all indices have the same
+            # value.
+            if parameter.indices:
+                # Indexed parameter.
+                self.value = [parameter.default for i in parameter.indices]
+            else:
+                # Unindexed parameter: parameter.indices = range(0).
+                self.value = [parameter.default]
+                
+    @property
+    def min_value(self):
+        """Return the minimum value of the parameter.
+        
+        This is always a :class:`~turboctl.telegram.datatypes.Data` subclass
+        instance. If the :attr:`~turboctl.telegram.parser.Paramete.min_value`
+        of the original non-extended parameter is a reference to the value of
+        another parameter, this property returns that value.
+        
+        Raises:
+            KeyError: If a referenced parameter cannot be found in
+                :attr:`parameters`.
+        """
+        return self._get_true_value(self._raw_min_value)
+        
+    @property
+    def max_value(self):
+        """Return the maximum value of the parameter.
+        
+        This is always a :class:`~turboctl.telegram.datatypes.Data` subclass
+        instance. If the :attr:`~turboctl.telegram.parser.Parameter.max_value`
+        of the original non-extended parameter is a reference to the value of
+        another parameter, this property returns that value.
+        
+        Raises:
+            KeyError: If a referenced parameter cannot be found in
+                :attr:`parameters`.
+        """
+        return self._get_true_value(self._raw_max_value)
+        
+    def _get_true_value(self, value):
+        """Returns the numerical value  of *value*.
+        
+        If *value* is a reference to the value of another 
+        parameter (e.g. 'P18'), this attribute will return the 
+        numerical value of that attribute.
+        
+        The return value will match the format of :attr:`value`.
+        
+        Args:
+            value: An instance of a :class:`turboctl.telegram.datatypes.Data`
+                subclass or a string with the format ``'P<number>'``.
+        
+        Raises:
+            ValueError: If *value* is invalid.
+        """
+        if isinstance(value, Data):
+            return value
+        
+        if isinstance(value, str) and value[0] == 'P':
+            # Extract the number.
+            num = int(value[1:])
+            # Even the values of unindexed parameters are lists.
+            # The index is always 0, since there should be no references to
+            # unindexed parameters.
+            return self.parameters[num].value[0]
+        
+        raise ValueError(f'invalid *value*: {value}')
+                
+    def __str__(self):
+        """Returns a :class:`str` with the following format:
+            
+        ::
+            
+            ExtendedParameter(
+                number=<number>,   
+                indices=<indices>,
+                min_value=<min_value>,
+                max_value=<max_value>,
+                default=<default>,
+                writable=<writable>,
+                datatype=<datatype>,
+                bits=<bits>,
+                value=<value>
+            )
+            
+        If the :attr:`~turboctl.telegram.parser.Parameter.min_value` or 
+        :attr:`~turboctl.telegram.parser.Parameter.max_value` attributes of the
+        original parameter are references, both the reference and the actual
+        value are displayed. The following is an example of the format:
+        
+        ::
+            
+            ...
+            min_value='P18' (Uint(1, 16)),
+            ...
+        """
+        
+        if isinstance(self._raw_min_value, str):
+            min_str = repr(self._raw_min_value) + f' ({self.min_value})'
+        else:
+            min_str = str(self.min_value)
+            
+        if isinstance(self._raw_max_value, str):
+            max_str = repr(self._raw_max_value) + f' ({self.max_value})'
+        else:
+            max_str = str(self.max_value)
+        
+        return f"""
+ExtendedParameter(
+    number={self.number},   
+    indices={self.indices},
+    min_value={min_str},
+    max_value={max_str},
+    default={self.default},
+    writable={self.writable},
+    datatype={self.datatype.__name__},
+    bits={self.bits},
+    value={self.value}
+)
+"""[1:-1]
 
 
 class ExtendedParameters(dict):
-    """A dictionary of extended parameters with some functionality 
-    added on top of that provided by the dict class."""
+    """A :class:`dict` of :class:`ExtendedParameter` objects.
+    
+    This class can be used to avoid the need to manually initialize a
+    :class:`dict` of :class:`ExtendedParameter` objects. After initialization
+    instances of this class behave like regular :class:`dict` objects.  
+    """
 
     def __init__(self, parameters):
-        """Initialize a new ExtendedParameters based on *parameters* 
-        (a dict of Parameter objects).
-        """
+        """Initialize a new :class:`ExtendedParameters` object from
+        *parameters* (a :class:`dict` of
+        :class:`~turboctl.telegram.parser.Parameter` objects).
         
-        extended_parameters = {}
+        The data from each :class:`~turboctl.telegram.parser.Parameter` object
+        is copied into an :class:`ExtendedParameter` object. The objects are
+        initialized in such an order that no errors will be raised because of
+        references to uninitialized parameters.
+        """
+        super().__init__()        
+
         max_iters = 5
         # The min and max values of some parameters depend on the 
         # values of other parameters, and so some parameters cannot be 
@@ -118,294 +374,10 @@ class ExtendedParameters(dict):
         # dependency chains that need more iterations.
         for i in range(max_iters):
             for num, p in parameters.items():
-                if num not in extended_parameters.keys():
+                if num not in self.keys():
                     try:
-                        extended_parameters[num] = ExtendedParameter(p, self)
+                        self[num] = ExtendedParameter(p, self)
                     # A KeyError is raised if a parameter's dependency 
                     # has not been initialized.
                     except KeyError:
                         pass
-                    
-        super().__init__(extended_parameters)
-        
-
-class ExtendedParameter(Parameter):
-    """This class represents a parameter that has a value which can 
-    change, while the regular Parameter class only describes the 
-    immutable attributes of a parameter. 
-    
-    Changing the value of an extended parameter raises one of the 
-    custom parameter errors (ParameterNumberError, CannotChangeError, 
-    MinMaxError or OtherError), if the real TURBOVAC pump would do so 
-    in that situation. E.g. if an indexed parameter is accessed in 
-    unindexed mode, an error is raised, because the TURBOVAC access 
-    codes for indexed and unindexed parameters are different.
-    """
-    
-    def __init__(self, parameter, extended_parameters):
-        """Initialize a new ExtendedParameter.
-        
-        Args:
-            parameter: The attributes of *parameter* are copied to 
-                *self*, and some new attributes are added based on the
-                existing ones. 
-            extended_parameters: A dictionary of extended parameters 
-                (with numbers as keys and objects as values). This 
-                is needed, because the min and max values of some 
-                parameters depend on the values of other parameters. 
-                
-        Raises:
-            ValueError: If *parameter* has one or more invalid values.
-                (See the Parameter class for a description of its valid 
-                attribute values.)
-        """
-        self.__dict__.update(parameter.__dict__)
-        self.parameters = extended_parameters
-        self.value = self.default_value
-        
-    def __str__(self):
-        """Returns 'ExtendedParameter(attribute1=value1, ...)'."""
-        fields = [
-            'number', 'name', 'indices', 'indexed', 'min', 'max', 'default', 
-            'min_value', 'max_value', 'default_value', 'value', 'unit', 
-            'writable', 'type', 'size', 'description']
-        
-        strings = [f'{f}={repr(getattr(self, f))}' for f in fields]
-        string = ', '.join(strings)
-        return f'{type(self).__name__}({string})'
-        
-    @property
-    def default_value(self):
-        """Return the default value of this parameter.
-        
-        Returns:
-            - An int or a float, if *self* is an unindexed parameter.
-            - A list of ints or floats, if *self* is an indexed 
-                parameter.
-                
-        Raises:
-            ValueError: If self.default has an invalid value.
-        """
-        indexed, indices, default = self.indexed, self.indices, self.default
-         
-        if not indexed and isinstance(default, (int, float)):             
-            return default
-         
-        if indexed and isinstance(default, (int, float)):             
-            return len(indices) * [default]
-         
-        if indexed and isinstance(default, list):
-                 
-             if len(default) != len(indices):
-                 raise ValueError(
-                     f'self.default (={default}) should have the '
-                     f'same len() as as self.indices (={indices})')                         
-             
-             return default
-
-        raise ValueError(f'Invalid self.default: {default}')
-                    
-    @property
-    def indexed(self):
-        """Returns True IFF *self* is an indexed parameter 
-        (i.e. indices != range(0).
-        """
-        return bool(self.indices)
-            
-    @property
-    def min_value(self):
-        """Returns the minimum value of this parameter (int or float).
-        
-        If self.min returns a reference to the value of another 
-        parameter (e.g. 'P18'), this attribute will return the 
-        numerical value of that attribute.
-        
-        Raises:
-            ValueError: If self.min has an invalid value.
-        """
-        return self._get_true_value(self.min)
-    
-    @property
-    def max_value(self):
-        """Returns the maximum value of this parameter (int or float).
-        
-        If self.max returns a reference to the value of another 
-        parameter (e.g. 'P18'), this attribute will return the 
-        numerical value of that attribute.
-        
-        Raises:
-            ValueError: If self.max has an invalid value.
-        """
-        return self._get_true_value(self.max)
-    
-    def _get_true_value(self, value):
-        """Returns the numerical value (int or float) of *value*.
-        
-        If *value* is a reference to the value of another 
-        parameter (e.g. 'P18'), this attribute will return the 
-        numerical value of that attribute.
-        
-        Args:
-            value: int or float; or a string in the format 'P<number>'.
-        
-        Returns:
-            An int or a float.
-        
-        Raises:
-            ValueError: If *value* has an invalid value.
-        """
-        
-        if isinstance(value, (int, float)):
-            return value
-        
-        if isinstance(value, str) and value[0] == 'P':
-            
-            try:
-                num = int(value[1:])
-            except (TypeError, ValueError, IndexError):
-                raise ValueError(f'Invalid value: {value}')
-            
-            try:
-                return self.parameters[num].value
-            except (IndexError):
-                raise ValueError(f'Invalid parameter number: {num}')
-        
-        raise ValueError('Invalid value: {value}')
-        
-    def get_value(self, indexed, index=0):
-        """Return the value (of an index) of this parameter.
-        
-        Args:
-            indexed: True, IFF this is an indexed parameter.
-            index=0: The index of the value to be read 
-                (ignored for unindexed parameters). 
-        
-        Returns:
-            Value: An int or a float.
-        
-        Raises:
-            OtherError:
-                -If the parameter doesn't have the requested index 
-                    (in indexed mode).
-                -If an unindexed parameter is accessed in indexed mode
-                    or vice versa. 
-        """
-        
-        # This only checks *indexed*; all the other arguments are set 
-        # to values that automatically pass.
-        # The access code for read access doesn't specify the size of 
-        # the parameter.
-        self._check_access_mode(write_access=False, bits=self.size, 
-                                indexed=indexed)
-        
-        if indexed:
-            # Parameter indices don't always begin at 0,
-            # but list indices do.
-            list_index = index - self.indices[0]
-            try:
-                if list_index < 0:
-                    raise IndexError()
-                return self.value[list_index]
-            except IndexError:
-                raise OtherError('Index error')
-        else:
-            return self.value
-        
-    def set_value(self, new_value, bits, indexed, index=0):
-        """Set the value (of an index) of this parameter.
-        
-        Args:
-            indexed: True IFF this is an indexed parameter.
-            new_value: The value to be set.
-            bits: Size of the parameter in bits.
-            index=0: The index of the value to be read 
-                (ignored for unindexed parameters).
-        
-        Raises:
-            CannotChangeError: If the parameter isn't writable.
-            MinMaxError: If *new_value* is out of range.
-            OtherError:
-                -If the parameter doesn't have the requested index 
-                    (in indexed mode).
-                -If *bits* doesn't match the parameter size.
-                -If an unindexed parameter is accessed in indexed mode
-                    or vice versa.
-        """
-        
-        self._check_access_mode(write_access=True, bits=bits, indexed=indexed, 
-                                value=new_value)
-     
-        if indexed:
-            # Parameter indices don't always begin at 0,
-            # but list indices do.
-            list_index = index - self.indices[0]            
-            try:
-                if list_index < 0:
-                    raise IndexError()
-                self.value[list_index] = new_value
-            except IndexError:
-                raise OtherError('Index error')
-        else:
-            self.value = new_value
-        
-    def _check_access_mode(self, write_access, bits, indexed, value=0):
-        """Raise an error if the parameter is accessed with a wrong 
-        mode.
-        
-        Args:
-           write_access: A boolean. True if a value is being written to
-               the parameter; false if the value is only read.
-           bits: Size of the parameter in bits.
-           indexed: True, IFF this is an indexed parameter.
-           value=0: The value that is being written; ignored, 
-               if writeAccess is False.
-                    
-        Raises:
-            CannotChangeError: If the parameter isn't writable.
-            MinMaxError: If *new_value* is out of range.
-            OtherError:
-                -If the parameter doesn't have the requested index 
-                    (in indexed mode).
-                -If *bits* doesn't match the parameter size.
-                -If an unindexed parameter is accessed in indexed mode
-                    or vice versa.
-        """
-        if write_access and not self.writable:
-            raise CannotChangeError('Parameter is not writable')
-        
-        if write_access and not self.min_value <= value <= self.max_value:
-            raise MinMaxError('Value out of range')
-        
-        if bits != self.size:
-            raise OtherError(f'Bits should be {self.size}, not {bits}')
-        
-        if indexed != self.indexed:
-            raise OtherError('Accessing indexed parameter with unindexed mode '
-                             'or vice versa')
-            
-            
-class ParameterAbstractError(Exception):
-    """A superclass for all parameter-related errors."""
-    pass
-
-class ParameterNumberError(ParameterAbstractError):
-    """Raised when a parameter number doesn't match any parameters."""
-    CODE = ParameterError.WRONG_NUM.value
- 
-class CannotChangeError(ParameterAbstractError):
-    """Raised when trying to write to a parameter without write 
-    access.
-    """
-    CODE = ParameterError.CANNOT_CHANGE.value
- 
-class MinMaxError(ParameterAbstractError):
-    """Raised when assigning a value too large oŕ too small to a  
-    parameter.
-    """
-    CODE = ParameterError.MINMAX.value
- 
-class OtherError(ParameterAbstractError):
-    """Raised when a parameter cannot be accessed for any other 
-    reason.
-    """
-    CODE = ParameterError.OTHER.value
