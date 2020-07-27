@@ -271,14 +271,18 @@ class CommandLineUI:
         except KeyError:
             raise ValueError(f'invalid *letter*: {repr(letter)}')
             
-        command = 'less -S'
-        pipe = os.popen(command, 'w')
-        pipe.write(table(dict_, numbers, self._widths[letter]))
-        try:
-            pipe.close()
-        except BrokenPipeError:
-            # This is sometimes raised, but can be safely ignored.
-            pass
+        #command = 'less -S'
+        #pipe = os.popen(command, 'w')
+        #pipe.write(table(dict_, numbers, self._widths[letter]))
+        #try:
+        #    pipe.close()
+        #except BrokenPipeError:
+        #    # This is sometimes raised, but can be safely ignored.
+        #    pass
+    
+        # less doesn't work with AdvancedTUI.
+        # TODO: Fix this.
+        self.print(table(dict_, numbers, self._widths[letter]))
 
     def cmd_info(self, letter, number):
         """Display information about a single parameter, error or 

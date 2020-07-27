@@ -1,11 +1,8 @@
 TODO
 
 Before Tuesday:
-- Read through the ui modules and sphinxify when necessary
-  - status_format
 - Test the program with an actual pump
-- Fix the problem with less
-- Add instructions for installing and running the program 
+- Add instructions for installing and running the program
 
 Soon:
 - Fix the problem with less properly
@@ -17,9 +14,6 @@ Soon:
 - Add a --no-autoupdate flag.
 
 Perhaps at some point:
-
-Necessary before the program can be considered ready:
-
 - Add instructions for installing and running TurboCtl
 - Improve the parser so that e.g. "list p [1, 2]" is valid syntax.
   The command parser could also be moved into a separate class, so that it
@@ -39,3 +33,6 @@ Necessary before the program can be considered ready:
 - Add a command to open the docs in a web browser.
 - Merge the info and list commands into one with a boolean flag to use or not
   to use less.
+- Add instructions for importing the API/control interface (and also add 
+  those to the turboctl namespace)
+- Make sure there are no TODO tags anywhere is the code.
