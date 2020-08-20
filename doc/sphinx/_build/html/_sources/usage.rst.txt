@@ -52,6 +52,17 @@ Both of these commands accept the following command-line arguments:
                     doesn't require :ref:`urwid <dependencies>`.
                     If TurboCtl is run without the ``-s`` argument, a more
                     advanced UI will be used (see below for an example).
+                    The simple UI doesn't use automatic polling, so the ``-n``
+                    argument is incomatible with the ``-s`` argument.
+                    
+-n, --no-poll       Don't poll the status of the pump by sending automatic
+                    telegrams.
+                    Normally TurboCtl sends automatic telegrams to the pump at
+                    regular intervals in order to stay updated about the status
+                    of the pump. This argument suppresses that functionality.
+                    As a result, the status screen of the UI is only updated
+                    when the user manually sends a telegram to the pump by
+                    writing a command in the UI.
 
 -t, --test          Instead of running the TurboCtl program, run all automatic
                     tests for it.
