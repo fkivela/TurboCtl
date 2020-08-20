@@ -10,7 +10,12 @@ The TurboCtl program is run via the ``__main__.py`` script inside the
 ::
 
     $ python path/to/turboctl -args
-    
+
+This only works if the ``python`` command is set to run a Python version that
+TurboCtl is compatible with; i.e. Python 3.7 or newer. If this is not the case,
+substitute ``python`` for a command that runs a compatible version of Python,
+e.g. ``python3`` or ``python3.7``.        
+
 Because this command requires providing the relative or absolute path of the
 ``turboctl`` package every time it is used, TurboCtl also provides a shell
 script which automatically fills in the path before calling the command.
@@ -20,6 +25,12 @@ can be run from any directory with
 ::
 
     $ turboctl-run -args
+    
+The script uses the ``/usr/bin/env python3`` command to run the program. If
+the ``python3`` command is set to use an older Python 3 version that isn't
+compatible with TurboCtl, the script should be edited to use a specific newer
+version (e.g. ``python3.7``) instead. The script is located in
+``TurboCtl/turboctl-run``.
 
 Both of these commands accept the following command-line arguments:
 

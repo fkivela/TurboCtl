@@ -41,6 +41,10 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python path/to/turboctl -args
 </pre></div>
 </div>
+<p>This only works if the <code class="docutils literal notranslate"><span class="pre">python</span></code> command is set to run a Python version that
+TurboCtl is compatible with; i.e. Python 3.7 or newer. If this is not the case,
+substitute <code class="docutils literal notranslate"><span class="pre">python</span></code> for a command that runs a compatible version of Python,
+e.g. <code class="docutils literal notranslate"><span class="pre">python3</span></code> or <code class="docutils literal notranslate"><span class="pre">python3.7</span></code>.</p>
 <p>Because this command requires providing the relative or absolute path of the
 <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package every time it is used, TurboCtl also provides a shell
 script which automatically fills in the path before calling the command.
@@ -49,6 +53,11 @@ can be run from any directory with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ turboctl-run -args
 </pre></div>
 </div>
+<p>The script uses the <code class="docutils literal notranslate"><span class="pre">/usr/bin/env</span> <span class="pre">python3</span></code> command to run the program. If
+the <code class="docutils literal notranslate"><span class="pre">python3</span></code> command is set to use an older Python 3 version that isn’t
+compatible with TurboCtl, the script should be edited to use a specific newer
+version (e.g. <code class="docutils literal notranslate"><span class="pre">python3.7</span></code>) instead. The script is located in
+<code class="docutils literal notranslate"><span class="pre">TurboCtl/turboctl-run</span></code>.</p>
 <p>Both of these commands accept the following command-line arguments:</p>
 <dl class="option-list">
 <dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
