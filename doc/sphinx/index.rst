@@ -7,6 +7,10 @@ pump. It was written in Python and is intended for Linux operating systems.
 .. note::
    TurboCtl is still under development. 
 
+.. The documentation for TurboCtl is in html form.
+   If you can see this text, you are viewing the the rst source code of this
+   file. The compiled HTML version can be found in README.html. 
+
 Documentation
 -------------
 
