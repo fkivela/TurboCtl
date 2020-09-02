@@ -44,6 +44,11 @@ class CommandLineUI:
             Setting this to ``True`` activates the debug mode;
             the default value is ``False``.
             See :meth:`cmd_debug` for details.
+            
+        verbose (bool):
+            Setting this to ``True`` increases the verbosity of the output of
+            commands; the default value is ``False``.
+            See :meth:`cmd_verbose` for details.
 
         control_interface:
             An :class:`~turboctl.ui.control_interface.ControlInterface` object
@@ -81,6 +86,7 @@ class CommandLineUI:
                     ('exit'   , ['e', 'q', 'x']),
                     ('help'   , ['h']),
                     ('debug'  , ['d']),
+                    ('verbose', ['v']),
                 ]
     """
 
@@ -97,6 +103,7 @@ class CommandLineUI:
         ('exit'   , ['e', 'q', 'x']),
         ('help'   , ['h']),
         ('debug'  , ['d']),
+        ('verbose', ['v']),
     ]
     # pylint: enable=bad-whitespace
     
@@ -139,6 +146,7 @@ class CommandLineUI:
 
         self.control_interface = ControlInterface(port, auto_update)
         self.debug = False
+        self.verbose = False
         self.intro = "Welcome to TurboCtl! Type 'help' for a list of commands."
         self.prompt = '>> '
         self._stop_flag = False
@@ -365,6 +373,28 @@ class CommandLineUI:
 
         else:
             raise ValueError('invalid value')
+            
+    def cmd_verbose(self, value):
+        """Activate or deactivate the verbose mode.
+
+        Values of '1', 'True' and 'on' activate the verbose mode;
+        '0', 'False' and 'off' deactivate it.
+
+        When the verbose mode is on, commands that send telegrams to the pump
+        will print all the contents of the telegram and the reply to the
+        screen.
+        """
+        # 1 == True and 0 == False.
+        if value in [True, 'on']:
+            self.verbose = True
+            self.print('Verbose mode activated')
+
+        elif value in [False, 'off']:
+            self.verbose = False
+            self.print('Verbose mode deactivated')
+
+        else:
+            raise ValueError('invalid value')
 
     def input(self, prompt=''):
         """Ask the user for input.
@@ -438,24 +468,31 @@ class CommandLineUI:
         # Call the method.
         try:
             out = method(*args)
-            # If the debug mode is on, print the contents of every telegram
+            # If the verbose mode is on, print the contents of every telegram
             # that is sent or received.
             # For methods that don't send telegrams, *out* will be None.
-            if out and self.debug:
-                self.print('\n' + self._debug_string(*out))
+            if out and self.verbose:
+                self.print('\n' + self._verbose_string(*out))
                 
         except (ValueError, TypeError) as error:
 
+            # Suppress errors, unless the debig mode is on.
             if self.debug:
                 raise error
 
             if isinstance(error, ValueError):
+                # ValueErrors should contain a meaningful explanation string,
+                # so they can be displayed to the user.
                 self.print(f'Error: {error}')
             else:
+                # TypeErrors will count the number of arguments wrong (since
+                # they also count the *self* argument), and other types of
+                # errors shouldn't be raised during normal operation, so those
+                # aren't displayed to the user.
                 self.print('Error: invalid argument type or number of '
                            'arguments')
                 
-    def _debug_string(self, query, reply):
+    def _verbose_string(self, query, reply):
         """Return a string displaying the contents of both the query and the
         reply.
         """        

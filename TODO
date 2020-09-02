@@ -1,20 +1,22 @@
 TODO
 
-Before Tuesday:
+Soon:
+- Separate verbosity and error catching.
 - Test the program with an actual pump
 - Add instructions for installing and running the program
+- Add automatic polling to the simple UI
+- Document the shutdown feature of the pump
+- Add instructions for using screen
 
-Soon:
+Later:
 - Fix the problem with less properly
 - Add a warning about errors in the user manual
 - Update test_ui
 - Make sure all tests are ok and can be run automatically at once
 - Investigate and fix the errors which are occasionally raised whenthe program
   is used. These are probably caused by receiving an invalid telegram.
-- Add a --no-autoupdate flag.
 
 Perhaps at some point:
-- Add instructions for installing and running TurboCtl
 - Improve the parser so that e.g. "list p [1, 2]" is valid syntax.
   The command parser could also be moved into a separate class, so that it
   could be tested more easily. Also, parser.py might be simplified by using
@@ -36,3 +38,4 @@ Perhaps at some point:
 - Add instructions for importing the API/control interface (and also add 
   those to the turboctl namespace)
 - Make sure there are no TODO tags anywhere is the code.
+- Fix the bug where closing TurboCtl in screen doesn't erase the UI text.

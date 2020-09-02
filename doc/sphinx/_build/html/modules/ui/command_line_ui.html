@@ -79,6 +79,19 @@ See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLine
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="turboctl.ui.command_line_ui.CommandLineUI.verbose">
+<code class="sig-name descname">verbose</code><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setting this to <code class="docutils literal notranslate"><span class="pre">True</span></code> increases the verbosity of the output of
+commands; the default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_verbose()</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="turboctl.ui.command_line_ui.CommandLineUI.control_interface">
 <code class="sig-name descname">control_interface</code><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>An <a class="reference internal" href="control_interface.html#turboctl.ui.control_interface.ControlInterface" title="turboctl.ui.control_interface.ControlInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlInterface</span></code></a> object
@@ -126,6 +139,7 @@ It has the following value:</p>
     <span class="p">(</span><span class="s1">&#39;exit&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;help&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;debug&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]),</span>
 <span class="p">]</span>
 </pre></div>
 </div>
@@ -256,6 +270,17 @@ raised during the execution of commands are caught to prevent
 users from crashing the program with invalid commands.
 Activating the debug mode disables this error-catching in order
 to make debugging easier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose">
+<code class="sig-name descname">cmd_verbose</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate the verbose mode.</p>
+<p>Values of ‘1’, ‘True’ and ‘on’ activate the verbose mode;
+‘0’, ‘False’ and ‘off’ deactivate it.</p>
+<p>When the verbose mode is on, commands that send telegrams to the pump
+will print all the contents of the telegram and the reply to the
+screen.</p>
 </dd></dl>
 
 <dl class="py method">
