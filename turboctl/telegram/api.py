@@ -22,6 +22,7 @@ back as :class:`~turboctl.telegram.telegram.TelegramReader` instances.
 from turboctl.telegram.codes import ControlBits
 from turboctl.telegram.telegram import (Telegram, TelegramBuilder, 
                                         TelegramReader)
+from test_turboctl.telegram.test_parser import dummy_parameter
 
 
 _PUMP_ON_BITS = [ControlBits.COMMAND, ControlBits.ON]
@@ -112,3 +113,12 @@ def write_parameter(connection, number, value, index=0, pump_on=True):
     """
     return _access_parameter(
         connection, 'write', number, value, index, pump_on)
+
+def test(connection, *args, **kwargs):
+    builder = TelegramBuilder(parameters={9: dummy_parameter(number=9)})
+    query = (builder
+         .set_parameter_number(9)
+         .set_parameter_mode('write')
+         .set_parameter_value(123)
+         .build('query'))
+    return send(connection, query)
