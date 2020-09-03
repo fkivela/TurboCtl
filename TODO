@@ -9,6 +9,7 @@ Soon:
 - Add instructions for using screen
 
 Later:
+- Make Float accept int arguments.
 - Fix the problem with less properly
 - Add a warning about errors in the user manual
 - Update test_ui

@@ -496,9 +496,12 @@ class TelegramBuilder:
             # specified.
             self._kwargs['parameter_value'] = datatype(self._parameter_value)
         else:
+            # If _parameter_value was specified by the user, its type should
+            # match the type of the parameter.
+            # The default value of 0 is accepted by all parameter types.
             self._kwargs['parameter_value'] = datatype(self._parameter_value,
                                                        bits=32)
-            
+
         return Telegram(**self._kwargs)
 
 

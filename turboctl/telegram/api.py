@@ -115,10 +115,15 @@ def write_parameter(connection, number, value, index=0, pump_on=True):
         connection, 'write', number, value, index, pump_on)
 
 def test(connection, *args, **kwargs):
-    builder = TelegramBuilder(parameters={9: dummy_parameter(number=9)})
+    parameters = {9: dummy_parameter(number=9)}
+    builder = TelegramBuilder(parameters=parameters)
     query = (builder
          .set_parameter_number(9)
          .set_parameter_mode('write')
          .set_parameter_value(123)
          .build('query'))
-    return send(connection, query)
+    
+    connection.write(bytes(query))
+    reply_bytes = connection.read(Telegram.LENGTH)
+    reply = TelegramBuilder(parameters=parameters).from_bytes(reply_bytes).build()
+    return TelegramReader(query, 'query'), TelegramReader(reply, 'reply')

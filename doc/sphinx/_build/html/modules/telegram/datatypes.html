@@ -235,6 +235,7 @@ accepts is different.</p>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>.</p>
 <p>This method may be called with any of the following signatures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Float</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">Float</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 <span class="n">Float</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Data</span><span class="p">)</span>
 <span class="n">Float</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span>
 </pre></div>
@@ -242,8 +243,9 @@ accepts is different.</p>
 <p>The method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>,
 with the following exceptions:</p>
 <ul class="simple">
-<li><p>If <em>value</em> is given as a number, it should be a
-<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> instead of an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.</p></li>
+<li><p>If <em>value</em> is given as a number, it can be either a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
+or an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>. <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> values are automatically converted
+into a corresponding <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> value.</p></li>
 <li><p><em>bits</em> must always be <code class="docutils literal notranslate"><span class="pre">32</span></code>; it exists as an argument
 only to give all <code class="docutils literal notranslate"><span class="pre">__init__</span></code> methods of <a class="reference internal" href="#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a>
 subclasses a similar signature.
@@ -297,20 +299,26 @@ because <a class="reference internal" href="#turboctl.telegram.datatypes.Float" 
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a>.</p>
 <p>This method may be called with any of the following signatures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Data</span><span class="p">)</span>
 <span class="n">Bin</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>, with the exception that
-if <em>value</em> is specified directly, it must be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead
-of an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.
-In this case, <em>value</em> should be composed solely of
-the characters <code class="docutils literal notranslate"><span class="pre">'1'</span></code> and <code class="docutils literal notranslate"><span class="pre">'0'</span></code>, or be an empty string.
-If <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will be set to the length of
-<em>value</em>. Otherwise, <em>value</em> is padded with zeroes to a length
-of <em>bits</em>.</p>
-<p>Giving <em>bits</em> a value that is smaller than the length of
-<em>value</em> will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+<p>The method works like <a class="reference internal" href="#turboctl.telegram.datatypes.Uint.__init__" title="turboctl.telegram.datatypes.Uint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Uint.__init__()</span></code></a>, with the following
+exceptions:</p>
+<ul class="simple">
+<li><p>If <em>value</em> is specified directly, it can be either a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+or an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>. If it is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, it must be composed
+solely of the characters <code class="docutils literal notranslate"><span class="pre">'1'</span></code> and <code class="docutils literal notranslate"><span class="pre">'0'</span></code>, or be an empty string.
+If it is an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, it must be a valid <em>bits</em> bit unsigned
+integer, which will be automatically converted into its binary
+representation.</p></li>
+<li><p>If <em>value</em> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> and <em>bits</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>bits</em> will be
+set to the length of <em>value</em>.  If <em>value</em> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> and
+<em>bits</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, <em>value</em> is padded with zeroes to a length of
+<em>bits</em>. Giving <em>bits</em> a value that is smaller than the length of
+<em>value</em> will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -342,29 +350,37 @@ of <em>bits</em>.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">Packages and modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="codes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">Packages and modules</a><ul>
   <li><a href="../index.html">turboctl</a><ul>
   <li><a href="index.html">telegram</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">telegram</a></li>
       <li>Next: <a href="codes.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
   </ul></li>

@@ -23,6 +23,10 @@ MIN_SINT = minsint(MAX_BITS)
 def values_and_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
     """Generate tuples of valid arguments for initializing Data
     objects.
+    
+    The type of *value* will always match the class; e.g.
+    values_and_invalid_bits(Float) only generates floats and not ints or bytes
+    objects.
     """
     bits = draw(st.integers(min_value=min_bits, max_value=max_bits))
     
@@ -41,14 +45,19 @@ def values_and_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
         
     return value, bits
 
+
 @st.composite
-def classes_values_and_invalid_bits(draw, min_bits=0, max_bits=MAX_BITS):
-    """Generate tuples of a consisting of a Data subclass, a *values* argument 
-    and an invalid *bits* argument. 
-    *bits* will be a non-negative int, but *value* will be too 
+def values_and_invalid_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
+    """Generate tuples of a consisting of a *value* argument and an invalid
+    *bits* argument for a given Data subclass.
+    
+    The type of *value* will always match the class; e.g.
+    values_and_invalid_bits(Float) only generates floats and not ints or bytes
+    objects.
+
+    *bits* will be a non-negative int, but *value* will be too
     large or too small to be stored by that number of bits.
     """
-    class_ = draw(data_types())
     bits = draw(st.integers(min_value=min_bits, max_value=max_bits))    
     
     if class_ == Uint:
@@ -71,10 +80,21 @@ def classes_values_and_invalid_bits(draw, min_bits=0, max_bits=MAX_BITS):
         value = draw(st.floats(width=32))
     
     elif class_ == Bin:
-        length = st.integers(min_value=bits + 1, max_value=MAX_BITS + 2)
+        length = draw(st.integers(min_value=bits + 1, max_value=MAX_BITS + 2))
         value = draw(st.from_regex(f'\A[01]{{{length}}}\Z'))
 
+    return value, bits
+
+
+@st.composite
+def classes_values_and_invalid_bits(draw, min_bits=0, max_bits=MAX_BITS):
+    """Like values_and_invalid_bits, but the class will also be randomly
+    determined, and the returned value will be a tuple of (class, value, bits).
+    """
+    class_ = draw(data_types())
+    value, bits = draw(values_and_invalid_bits(class_, min_bits, max_bits))
     return class_, value, bits
+
 
 @st.composite
 def data_types(draw, classes=(Uint, Sint, Float, Bin)):
@@ -294,9 +314,7 @@ class TestInit(unittest.TestCase):
         
     @given(values_and_bits(Float))
     def test_float_from_float_sets_attributes_correctly(self, x_and_bits):
-        x, bits = x_and_bits
-        
-        # Bits specified.
+        x, bits = x_and_bits        
         float_ = Float(x, bits)
         
         if math.isnan(x):
@@ -304,6 +322,17 @@ class TestInit(unittest.TestCase):
         else:
             self.assertEqual(float_.value, x)
         
+        self.assertEqual(float_.bits, 32)
+        
+    @given(values_and_bits(Float))
+    def test_float_from_int_sets_attributes_correctly(self, x_and_bits):
+        x, bits = x_and_bits
+        # x must be a numerical value so that it can be converted to int.
+        assume(not math.isnan(x) and not math.isinf(x))
+        i = int(x)        
+        float_ = Float(i, bits)
+        
+        self.assertEqual(float_.value, i)
         self.assertEqual(float_.bits, 32)
         
     def test_float_sets_small_value_to_0(self):
@@ -324,49 +353,110 @@ class TestInit(unittest.TestCase):
         self.assertEqual(bin_.value, s)        
         self.assertEqual(bin_.bits, len(s))
         
+    @given(values_and_bits(Bin))
+    def test_bin_from_int_sets_attributes_correctly(self, str_and_bits):
+        s, bits = str_and_bits
+        # '' is a valid 0-bit representation for 0. 
+        i = int(s, 2) if s else 0
+
+        bin_ = Bin(i, bits)
+        self.assertEqual(bin_.value, s)        
+        self.assertEqual(bin_.bits, bits)
+                
     def test_bits_default_value(self):
         self.assertEqual(Uint(1).bits, 8)
         self.assertEqual(Sint(-1).bits, 8)
         self.assertEqual(Float(1.0).bits, 32)
-        # Bin doesn't have a default bit number.
+        self.assertEqual(Float(1).bits, 32)
+        self.assertEqual(Bin(1).bits, 8)
+        # Bin doesn't have a default bit number when it's initialized from a
+        # str.
         
         
 class TestErrors(unittest.TestCase):
     
     ### Invalid value ###
     
-    def test_Uint_with_negative_value_raises_ValueError(self):
+    def test_uint_with_negative_value_raises_ValueError(self):
         with self.assertRaises(ValueError):
             Uint(-123)
             
     # Sint should work with all int values.
     
-    def test_Float_with_too_large_value_raises_ValueError(self):
+    def test_float_with_too_large_value_raises_ValueError(self):
         with self.assertRaises(ValueError):
             Float(1E50)
         with self.assertRaises(ValueError):
             Float(-1E50)
                         
-    def test_Bin_from_invalid_str_raises_ValueError(self):
+    def test_bin_from_invalid_str_raises_ValueError(self):
         with self.assertRaises(ValueError):
             Bin('10201')
         
     ### Invalid bits ###
-    
+        
+    # This only tests Floats with a float argument and Bins with a str
+    # argument, so int arguments are tested separately below. 
     @given(classes_values_and_invalid_bits())
     def test_invalid_bits_raises_ValueError(self, class_value_and_bits):
         class_, value, bits = class_value_and_bits
         with self.assertRaises(ValueError):
             class_(value, bits)
+ 
+    @given(values_and_invalid_bits(Float))
+    def test_invalid_bits_raises_ValueError_for_float_from_int(self,
+                                                               x_and_bits):
+        x, bits = x_and_bits
+        # x must be a numerical value so that it can be converted to int.
+        assume(not math.isnan(x) and not math.isinf(x))
+        i = int(x)        
+        
+        with self.assertRaises(ValueError):
+            Float(i, bits)
             
+    # We can simply generate Uint values, since the range of valid int
+    # arguments is the same for both Uints and Bins.
+    @given(values_and_invalid_bits(Uint))
+    def test_invalid_bits_raises_ValueError_for_bin_from_int(self, i_and_bits):
+        i, bits = i_and_bits
+        
+        with self.assertRaises(ValueError):
+            Bin(i, bits)
+            
+    # The tests above only test positive *bits* values, so negative values need
+    # to be tested separately.
+    # Floats and Bins with int arguments are again tested in different methods.
     @given(classes_values_and_invalid_bits(),
            st.integers(min_value=-MAX_BITS, max_value=-1))
     def test_negative_bits_raises_ValueError(self, class_value_and_bits, 
                                              negative_bits):     
         class_, value, _ = class_value_and_bits
         with self.assertRaises(ValueError):
-            class_(value, negative_bits)       
+            class_(value, negative_bits)
             
+    @given(values_and_invalid_bits(Float),
+           st.integers(min_value=-MAX_BITS, max_value=-1))
+    def test_negative_bits_raises_ValueError_for_float_from_int(
+            self, x_and_bits, negative_bits):
+        
+        x, _ = x_and_bits
+        assume(not math.isnan(x) and not math.isinf(x))
+        i = int(x)        
+        
+        with self.assertRaises(ValueError):
+            Float(i, negative_bits)
+            
+    @given(values_and_invalid_bits(Uint),
+           st.integers(min_value=-MAX_BITS, max_value=-1))
+    def test_negative_bits_raises_ValueError_for_bin_from_int(
+            self, i_and_bits, negative_bits):
+        
+        i, _ = i_and_bits
+        
+        with self.assertRaises(ValueError):
+            Bin(i, negative_bits)
+        
+    
     ### Bits specified when it shouldn't be ###
     
     @given(data_objects())

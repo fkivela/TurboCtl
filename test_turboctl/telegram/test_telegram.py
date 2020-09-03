@@ -186,6 +186,15 @@ class TestTelegramBuilder(Base):
 
         self.assertEqual(t.parameter_value, Float(1234.5678))
         
+    def test_parameter_value_int_as_float(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(2)
+            .set_parameter_mode('write')
+            .set_parameter_value(1234)
+            .build())
+
+        self.assertEqual(t.parameter_value, Float(1234.0))
+        
     def test_parameter_value_bin(self):
         t = (TelegramBuilder(parameters)
             .set_parameter_number(3)
@@ -194,6 +203,15 @@ class TestTelegramBuilder(Base):
             .build())
 
         self.assertEqual(t.parameter_value, Bin(4 * '10010110'))
+        
+    def test_parameter_value_int_as_bin(self):
+        t = (TelegramBuilder(parameters)
+            .set_parameter_number(3)
+            .set_parameter_mode('write')
+            .set_parameter_value(2526451350)
+            .build())
+
+        self.assertEqual(t.parameter_value, Bin(4 * '10010110'))        
         
     def test_parameter_value_invalid_value_fails(self):
         tb = (TelegramBuilder(parameters)
@@ -208,7 +226,7 @@ class TestTelegramBuilder(Base):
         tb = (TelegramBuilder(parameters)
             .set_parameter_number(3)
             .set_parameter_mode('write')
-            .set_parameter_value(1234)
+            .set_parameter_value(12.34)
         )
         with self.assertRaises(TypeError):
             tb.build()

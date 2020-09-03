@@ -17,12 +17,6 @@ from typing import Optional
 from turboctl.singledispatchmethod import singledispatchmethod 
 
 
-__all__ = ['BYTESIZE', 'maxuint', 'maxsint', 'minsint',
-           'Data', 'Uint', 'Sint', 'Float', 'Bin']
-# These variables are "public" and are shown in the docs.
-# The others are "private" (equivalent to prefixing them with '_').
-
-
 BYTESIZE = 8
 """The number of bits in a byte."""
 
@@ -203,7 +197,7 @@ class Uint(Data):
         
     @__init__.register
     def _from_int(self, value: int, bits: int=BYTESIZE):
-        check_uint(value, bits)
+        _check_uint(value, bits)
         self._value = value
         self._bits = bits        
 
@@ -247,7 +241,7 @@ class Sint(Data):
         
     @__init__.register
     def _from_int(self, value: int, bits: int=BYTESIZE):
-        check_sint(value, bits)
+        _check_sint(value, bits)
         self._value = value
         self._bits = bits        
 
@@ -304,14 +298,16 @@ class Float(Data):
         ::
             
             Float(value: float, bits: int=32)
+            Float(value: int, bits: int=32)
             Float(value: Data)
             Float(value: bytes)
             
         The method works like :meth:`Uint.__init__`,
         with the following exceptions:
         
-        - If *value* is given as a number, it should be a 
-          :class:`float` instead of an :class:`int`.
+        - If *value* is given as a number, it can be either a :class:`float`
+          or an :class:`int`. :class:`int` values are automatically converted
+          into a corresponding :class:`float` value.
         - *bits* must always be ``32``; it exists as an argument
           only to give all ``__init__`` methods of :class:`Data`
           subclasses a similar signature.
@@ -328,11 +324,17 @@ class Float(Data):
         
     @__init__.register
     def _from_float(self, value: float, bits: int=4*BYTESIZE):
-        check_float(value, bits)
+        _check_float(value, bits)
         # Values that are too close to 0 to be expressed as a float are
         # rounded to 0.
         self._value = struct.unpack('>f', struct.pack('>f', value))[0]
         self._bits = bits
+        
+    #  This is needed so that that datatype(0) works for all datatypes.
+    @__init__.register
+    def _from_int(self, value: int, bits: int=4*BYTESIZE):
+        x = float(value)
+        self._from_float(x, bits)
 
     @__init__.register
     def _from_data(self, value: Data):
@@ -388,44 +390,55 @@ class Bin(Data):
         ::
             
             Bin(value: str, bits: Optional[int]=None)
+            Bin(value: int, bits: int=8)
             Bin(value: Data)
             Bin(value: bytes)
-            
-        The method works like :meth:`Uint.__init__`, with the exception that 
-        if *value* is specified directly, it must be a :class:`str` instead 
-        of an :class:`int`.
-        In this case, *value* should be composed solely of
-        the characters ``'1'`` and ``'0'``, or be an empty string. 
-        If *bits* is ``None``, it will be set to the length of
-        *value*. Otherwise, *value* is padded with zeroes to a length
-        of *bits*.
         
-        Giving *bits* a value that is smaller than the length of
-        *value* will raise a :class:`ValueError`.
+        The method works like :meth:`Uint.__init__`, with the following
+        exceptions:
+            
+        - If *value* is specified directly, it can be either a :class:`str`
+          or an :class:`int`. If it is a :class:`str`, it must be composed
+          solely of the characters ``'1'`` and ``'0'``, or be an empty string.
+          If it is an :class:`int`, it must be a valid *bits* bit unsigned
+          integer, which will be automatically converted into its binary
+          representation.
+        
+        - If *value* is a :class:`str` and *bits* is ``None``, *bits* will be
+          set to the length of *value*.  If *value* is a :class:`str` and
+          *bits* is not ``None``, *value* is padded with zeroes to a length of
+          *bits*. Giving *bits* a value that is smaller than the length of
+          *value* will raise a :class:`ValueError`.
         """
         raise TypeError(f'invalid type for *value*: {type(value)}')
         
     @__init__.register
     def _from_str(self, value: str, bits: Optional[int]=None):
-        check_bin(value, bits)
+        _check_bin(value, bits)
         self._value = value
         if bits == None:
             bits = len(self.value)
         self._bits = bits
+        
+    #  This is needed so that that datatype(0) works for all datatypes.
+    @__init__.register
+    def _from_int(self, value: int, bits: int=BYTESIZE):
+        s = _bin_str(value, bits)
+        self._from_str(s, bits)
                 
     @__init__.register
     def _from_data(self, value: Data):
         bytes_ = bytes(value)
         i = int.from_bytes(bytes_, 'big')
         bits = value.bits
-        s = bin_str(i, bits)
+        s = _bin_str(i, bits)
         self._from_str(s, bits)
 
     @__init__.register
     def _from_bytes(self, value: bytes):
         i = int.from_bytes(value, 'big')
         bits = len(value) * BYTESIZE
-        s = bin_str(i, bits)
+        s = _bin_str(i, bits)
         self._from_str(s, bits)
                     
     def __bytes__(self):
@@ -439,7 +452,7 @@ class Bin(Data):
         return int(self.value, 2).to_bytes(self.n_bytes, 'big')
 
 
-def check_uint(value, bits=None):
+def _check_uint(value, bits=None):
     """Make sure *value* is a valid *bits* bit unsigned integer.
     
     If *bits* is None, *value* can have any number of bits.
@@ -455,36 +468,36 @@ def check_uint(value, bits=None):
         raise ValueError(f'value is negative: {value}')
     
     if bits is not None:
-        check_uint(bits)
+        _check_uint(bits)
         
         if value > maxuint(bits):
             raise ValueError(f'value is too large: {value}')
     
     
-def check_sint(value, bits=None):
-    """Like 'check_uint', but for signed integers."""
+def _check_sint(value, bits=None):
+    """Like _check_uint, but for signed integers."""
     if not isinstance(value, int):
         raise TypeError(f'value is not an int: {value}')
         
     if bits is not None:
-        check_uint(bits)
+        _check_uint(bits)
         
         if value < minsint(bits) or value > maxsint(bits):
             raise ValueError(f'value is too large or too small: {value}')
 
 
-def check_float(value, bits=4*BYTESIZE):
-    """Like 'check_uint', but for floats.
+def _check_float(value, bits=4*BYTESIZE):
+    """Like _check_uint, but for floats.
     
     Raises:
         TypeError or ValueError:
-            If *bits* is not 32
-            (in addition to the exceptions raised by 'check_uint').
+            If *bits* is not 32 (in addition to the exceptions raised by
+            _check_uint).
     """
     if not isinstance(value, float):
         raise TypeError(f'value is not a float: {value}')
         
-    check_uint(bits)
+    _check_uint(bits)
         
     if bits != 4*BYTESIZE:
         raise ValueError(f'*bits* should be 32, not {bits}')
@@ -495,8 +508,8 @@ def check_float(value, bits=4*BYTESIZE):
         raise ValueError(f'value is too large or too small: {value}')
     
     
-def check_bin(value, bits=None):
-    """Like 'check_uint', but for binary strings.
+def _check_bin(value, bits=None):
+    """Like _check_uint, but for binary strings.
     
     A binary string is '' or a string of '1's and '0's.
     If *bits* is None, it is set to len(value).
@@ -504,7 +517,7 @@ def check_bin(value, bits=None):
     Raises:
         ValueError:
             If len(value) != bits
-            (in addition to the exceptions raised by 'check_uint').
+            (in addition to the exceptions raised by '_check_uint').
     """
     # Print 'repr(value)' instead of 'value',
     # since *value* is probably a string.
@@ -514,7 +527,7 @@ def check_bin(value, bits=None):
     if bits is None:
         bits = len(value)
         
-    check_uint(bits)
+    _check_uint(bits)
         
     if bits != len(value):
         raise ValueError(
@@ -526,26 +539,26 @@ def check_bin(value, bits=None):
             f'{repr(value)} is not a {bits} bit binary string')
 
 
-def bin_str(i: int, bits: int) -> str:
+def _bin_str(i, bits):
     """Return a *bits* bit binary representation of i.
     
-    *i* must be non-negative, but returned strings are cropped
-    at *bits* characters so that representations of signed integers
-    are handled correctly.
-    E.g. bin_str(-1, 1) doesn't work,
-    but bin_str(255, 1) returns the correct value of '1'.
+    *i* must be a valid *bits* bit unsigned integer.
+    
+    E.g. _bin_str(123, 8) returns '01111011'.
+        
+    Raises:
+        TypeError or ValueError:
+            If *value* or *bits* have invalid values or types.
     """
-    string = (
-        # Returns something like '0b101'.
-        bin(i)
-        # Remove '0b'.
-        [2:]
-        # Remove extra bits.
-        # Uints are padded with 0s and sints with 1s.
-        # Unlike slicing with negative indices,
-        # this syntax produces empty strings when bits=0.
-        [::-1][0:bits][::-1]
-        # Pad with zeroes to a length of *bits*.
-        .zfill(bits)
+    _check_uint(i, bits)
+
+    # _bin_str(0, 0) should return '', which is easiest to handle as a special
+    # case, since the algorithm below cannot produce empty strings.
+    if (bits == 0):
+        return ''
+
+    return (
+        bin(i) # Returns something like '0b101'.
+        [2:] # Remove '0b'.
+        .zfill(bits) # Pad with zeroes to a length of *bits*.
     )
-    return string
