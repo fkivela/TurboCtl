@@ -134,7 +134,6 @@ It has the following value:</p>
     <span class="p">(</span><span class="s1">&#39;status&#39;</span> <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;read&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;write&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]),</span>
-    <span class="p">(</span><span class="s1">&#39;list&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;info&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;exit&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;help&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]),</span>
@@ -222,25 +221,15 @@ Otherwise, start another iteration from step 1.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.ui.command_line_ui.CommandLineUI.cmd_list">
-<code class="sig-name descname">cmd_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">letter</span></em>, <em class="sig-param"><span class="n">numbers</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>List parameters, error or warnings.</p>
-<p>This command opens an information table with the less program.</p>
-<p><em>letter</em> should be ‘p’, ‘e’ or ‘w’ depending on what should be listed.</p>
-<p><em>numbers</em> should be a list or a tuple of numbers or ‘all’.
-It defines which parameters/errors/warnings will be displayed.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="turboctl.ui.command_line_ui.CommandLineUI.cmd_info">
-<code class="sig-name descname">cmd_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">letter</span></em>, <em class="sig-param"><span class="n">number</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Display information about a single parameter, error or
-warning.</p>
-<p>Unlike <em>cmd_list</em>, this command doesn’t use less, and prints
-the output normally instead.</p>
-<p><em>letter</em> should be ‘p’, ‘e’ or ‘w’ in the same way as in <em>cmd_list</em>.</p>
-<p><em>number</em> is the number of the parameter/error/warning which should be
-displayed.</p>
+<code class="sig-name descname">cmd_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">letter</span></em>, <em class="sig-param"><span class="n">numbers</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display information about parameters, errors, or warnings.</p>
+<p><em>letter</em> should be ‘p’, ‘e’, or ‘w’ depending on whether <em>numbers</em>
+refer to parameters, errors, or warnings.</p>
+<p><em>numbers</em> should be a list or a tuple of the numbers of those
+parameters/errors/warnings that should be displayed. It can also be a
+single number or ‘all’, if only a single parameter/error/warning or all
+of them should be listed.</p>
 </dd></dl>
 
 <dl class="py method">

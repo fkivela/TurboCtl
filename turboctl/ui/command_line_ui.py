@@ -81,7 +81,6 @@ class CommandLineUI:
                     ('status' , ['s']),
                     ('read'   , ['r']),
                     ('write'  , ['w']),
-                    ('list'   , ['l']),
                     ('info'   , ['i']),
                     ('exit'   , ['e', 'q', 'x']),
                     ('help'   , ['h']),
@@ -98,13 +97,12 @@ class CommandLineUI:
         ('status' , ['s']),
         ('read'   , ['r']),
         ('write'  , ['w']),
-        ('list'   , ['l']),
         ('info'   , ['i']),
         ('exit'   , ['e', 'q', 'x']),
         ('help'   , ['h']),
         ('debug'  , ['d']),
         ('verbose', ['v']),
-        ('test', ['t']),
+        ('test',    ['t']),
     ]
     # pylint: enable=bad-whitespace
     
@@ -265,52 +263,27 @@ class CommandLineUI:
             f'index {reply.parameter_index} is {value_str}'
         )
 
-    def cmd_list(self, letter, numbers):
-        """List parameters, error or warnings.
+    def cmd_info(self, letter, numbers):
+        """Display information about parameters, errors, or warnings.
         
-        This command opens an information table with the less program.
+        *letter* should be 'p', 'e', or 'w' depending on whether *numbers*
+        refer to parameters, errors, or warnings.
         
-        *letter* should be 'p', 'e' or 'w' depending on what should be listed.
-        
-        *numbers* should be a list or a tuple of numbers or 'all'.
-        It defines which parameters/errors/warnings will be displayed.
+        *numbers* should be a list or a tuple of the numbers of those
+        parameters/errors/warnings that should be displayed. It can also be a
+        single number or 'all', if only a single parameter/error/warning or all
+        of them should be listed. 
         """        
         try:
             dict_ = self._dicts[letter]
         except KeyError:
             raise ValueError(f'invalid *letter*: {repr(letter)}')
-            
-        #command = 'less -S'
-        #pipe = os.popen(command, 'w')
-        #pipe.write(table(dict_, numbers, self._widths[letter]))
-        #try:
-        #    pipe.close()
-        #except BrokenPipeError:
-        #    # This is sometimes raised, but can be safely ignored.
-        #    pass
-    
-        # less doesn't work with AdvancedTUI.
-        # TODO: Fix this.
-        self.print(table(dict_, numbers, self._widths[letter]))
 
-    def cmd_info(self, letter, number):
-        """Display information about a single parameter, error or 
-        warning.
+        # If *numbers* is a single number, convert it into a list.
+        if isinstance(numbers, int):
+            numbers = [numbers]
         
-        Unlike *cmd_list*, this command doesn't use less, and prints 
-        the output normally instead.
-        
-        *letter* should be 'p', 'e' or 'w' in the same way as in *cmd_list*.
-        
-        *number* is the number of the parameter/error/warning which should be
-        displayed.
-        """
-        try:
-            dict_ = self._dicts[letter]
-        except KeyError:
-            raise ValueError(f'invalid *letter*: {repr(letter)}')
-        
-        self.print(table(dict_, [number], self._widths[letter]))
+        self.print(table(dict_, numbers, self._widths[letter]))
         
     def cmd_help(self, value=None):
         """Display a help message.

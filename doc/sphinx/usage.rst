@@ -134,31 +134,16 @@ list can be displayed in the UI by issuing the ``help`` command.
 
     Aliases: ``w``
 
-**list <letter> <numbers>**
-    List parameters, error or warnings.
-
-    This command opens an information table with the less program.
-
-    *letter* should be ``'p'``, ``'e'`` or ``'w'`` depending on what should be
-    listed.
-
-    *numbers* should be a list or a tuple of numbers or ``'all'``.
-    It defines which parameters/errors/warnings will be displayed.
-
-    Aliases: ``l``
-
 **info <letter> <number>**
-    Display information about a single parameter, error or 
-    warning.
+    Display information about parameters, errors, or warnings.
 
-    Unlike **list**, this command doesn't use less, and prints 
-    the output normally instead.
+    *letter* should be ``'p'``, ``'e'``, or ``'w'`` depending on whether
+    *numbers* refer to parameters, errors, or warnings.
 
-    *letter* should be ``'p'``, ``'e'`` or ``'w'`` in the same way as in
-    *cmd_list*.
-
-    *number* is the number of the parameter/error/warning which should be
-    displayed.
+    *numbers* should be a list or a tuple of the numbers of those
+    parameters/errors/warnings that should be displayed. It can also be a
+    single number or ``'all'``, if only a single parameter/error/warning or all
+    of them should be listed. 
 
     Aliases: ``i``
 

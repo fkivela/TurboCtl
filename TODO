@@ -6,9 +6,9 @@ Soon:
 - Document the shutdown feature of the pump
 - Add instructions for using screen
 - Change the units of voltage to V.
+- Bugfix: strings with quotes crash the UI. 
 
 Later:
-- Fix the problem with less properly
 - Add a warning about errors in the user manual
 - Update test_ui
 - Make sure all tests are ok and can be run automatically at once
@@ -24,16 +24,15 @@ Perhaps at some point:
   e.g. a CSV file.
 - Document individual enum members in codes.py.
 - Rename WrongNumError to NumberError or something?
-- Open the output of the help command with less?
+- Open the output of the info and help commands with less if a specific
+  argument is given?
 - Add commands to set the setpoint (most important), save data, read errors
   etc.
 - Move singledispatchmethod to datatypes.py.
 - Run pylint/pycodestyle.
-- The docstring of the read/write_parameter methods say
+- The docstrings of the read/write_parameter methods say
   "Raises ValueError if number or index have invalid values". Clarify this.
 - Add a command to open the docs in a web browser.
-- Merge the info and list commands into one with a boolean flag to use or not
-  to use less.
 - Add instructions for importing the API/control interface (and also add 
   those to the turboctl namespace)
 - Make sure there are no TODO tags anywhere is the code.
