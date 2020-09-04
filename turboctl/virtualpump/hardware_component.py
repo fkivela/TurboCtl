@@ -95,7 +95,7 @@ class HardwareComponent():
     The unit is 0.1 A.
     """
     
-    VOLTAGE = 240
+    VOLTAGE = 24
     """The pump reports this constant temperature when it's on.
     The unit is 0.1 V.
     """

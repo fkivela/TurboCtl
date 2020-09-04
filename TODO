@@ -4,6 +4,7 @@ Soon:
 - See if the UI can be broken with invalid commands.
 - Add instructions for using screen
 - Change the units of voltage to V.
+- Document the results of the tests with the real pump.
 
 Later:
 - Add a warning about errors in the user manual

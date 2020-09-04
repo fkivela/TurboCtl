@@ -129,7 +129,7 @@ class Telegram:
     **Bytes 19-20:** - (reserved). Always 0.
 
     **Bytes 21-22:** PZD6 (current intermediate circuit voltage).
-    Intermediate circuit voltage in 0.1 V, included in all replies.
+    Intermediate circuit voltage in V, included in all replies.
     Same as parameter 4.
     
     Attribute: :attr:`voltage`
@@ -147,6 +147,8 @@ class Telegram:
     # The manual uses "stator frequency (=P3)" instead of "rotor frequency",
     # but the entry for parameter 3 uses the word "rotor", which seems to be
     # the correct version since the rotor is the moving part.
+    # The manual also lists the unit of voltage as 0.1 V, but the correct unit
+    # seems to be V.
     
     # :mod:`serial` links to a weird place in pySerial's documentation, so a
     # manual hyperlonk to the front page was used instead.

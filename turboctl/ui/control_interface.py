@@ -224,7 +224,7 @@ class ControlInterface():
         """
         self.status.frequency = reply.frequency
         self.status.temperature = reply.temperature
-        # The pump reports current and voltage in 0.1 A/V.
+        # The pump reports current in 0.1 A.
         self.status.current = reply.current / 10
-        self.status.voltage = reply.voltage / 10
+        self.status.voltage = reply.voltage
         self.status.status_bits = reply.flag_bits
