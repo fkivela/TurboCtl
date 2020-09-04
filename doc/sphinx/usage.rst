@@ -37,10 +37,12 @@ Both of these commands accept the following command-line arguments:
 -h, --help          Show a help message that lists all command-line arguments.
 
 -p, --port port     Define the port used for the serial connection.
+
                     If this argument isn't supplied, the default port
                     ``/dev/ttyUSB0`` will be used. 
 
 -v, --virtual       Run HVCtl with a virtual pump. 
+
                     If this argument is supplied, instead of sending messages
                     to a real pump, TurboCtl creates a simulated, virtual one
                     and sends messages to that.
@@ -50,19 +52,20 @@ Both of these commands accept the following command-line arguments:
 
 -s, --simple        Run TurboCtl with a simple command-line interface that
                     doesn't require :ref:`urwid <dependencies>`.
-                    If TurboCtl is run without the ``-s`` argument, a more
-                    advanced UI will be used (see below for an example).
-                    The simple UI doesn't use automatic polling, so the ``-n``
-                    argument is incomatible with the ``-s`` argument.
                     
--n, --no-poll       Don't poll the status of the pump by sending automatic
-                    telegrams.
+                    If TurboCtl is run without the ``-s`` argument, a more
+                    advanced UI will be used.
+                    
+-n, --no-poll       Don't send automatic telegrams to the pump.
+                    
+                    The pump automatically turns off if it doesn't receive any
+                    commands for about 10 seconds.
                     Normally TurboCtl sends automatic telegrams to the pump at
-                    regular intervals in order to stay updated about the status
-                    of the pump. This argument suppresses that functionality.
-                    As a result, the status screen of the UI is only updated
-                    when the user manually sends a telegram to the pump by
-                    writing a command in the UI.
+                    regular intervals in order to prevent this from happening,
+                    and also to keep the status screen in the advanced UI
+                    updated.
+                    This argument prevents these automatic telegrams from being
+                    sent.
 
 -t, --test          Instead of running the TurboCtl program, run all automatic
                     tests for it.

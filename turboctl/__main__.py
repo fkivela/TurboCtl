@@ -23,11 +23,6 @@ mode_group.add_argument('-t', '--test', help='run tests', action='store_true')
 mode_group.add_argument('-s', '--simple',
                         help="use a UI that doesn't require urwid", 
                         action='store_true')
-mode_group.add_argument('-n', '--no-poll',
-                        help=('do not poll the status of the pump by sending '
-                              'automatic telegrams'), 
-                        action='store_true')
-
 
 # Regardless of mode, TurboCtl can be run with a virtual pump (-v) 
 # or with a real pump (-p and port name). These options don't matter when
@@ -37,6 +32,13 @@ vpump_group.add_argument('-v', '--virtual', help='use a virtual pump',
                          action='store_true')
 vpump_group.add_argument('-p', '--port', 
                          help='the address of the serial port device')
+
+# Automatic polling can be disabled with this argument in all modes (even
+# though this doesn't do anything in test mode).
+parser.add_argument('-n', '--no-poll',
+                    help=('do not poll the status of the pump by sending '
+                          'automatic telegrams'), 
+                    action='store_true')
 
 args = parser.parse_args()
 
@@ -64,7 +66,7 @@ def main():
         # Automatically poll the pump only if the advanced UI is used,
         # since the simple UI doesn't contain a screen to display the changing
         # status.
-        autoupdate = not (args.simple or args.no_poll)
+        autoupdate = not args.no_poll
         inputfile, outputfile = get_io_files()
         command_line_ui = CommandLineUI(port, autoupdate,
                                         inputfile, outputfile)

@@ -64,13 +64,13 @@ version (e.g. <code class="docutils literal notranslate"><span class="pre">pytho
 <dd><p>Show a help message that lists all command-line arguments.</p>
 </dd>
 <dt><kbd><span class="option">-p</span>, <span class="option">--port <var>port</var></span></kbd></dt>
-<dd><p>Define the port used for the serial connection.
-If this argument isn’t supplied, the default port
+<dd><p>Define the port used for the serial connection.</p>
+<p>If this argument isn’t supplied, the default port
 <code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> will be used.</p>
 </dd>
 <dt><kbd><span class="option">-v</span>, <span class="option">--virtual</span></kbd></dt>
-<dd><p>Run HVCtl with a virtual pump.
-If this argument is supplied, instead of sending messages
+<dd><p>Run HVCtl with a virtual pump.</p>
+<p>If this argument is supplied, instead of sending messages
 to a real pump, TurboCtl creates a simulated, virtual one
 and sends messages to that.
 This makes it possible to test TurboCtl easily without
@@ -79,21 +79,20 @@ This option is incompatible with <code class="docutils literal notranslate"><spa
 </dd>
 <dt><kbd><span class="option">-s</span>, <span class="option">--simple</span></kbd></dt>
 <dd><p>Run TurboCtl with a simple command-line interface that
-doesn’t require <a class="reference internal" href="installation.html#dependencies"><span class="std std-ref">urwid</span></a>.
-If TurboCtl is run without the <code class="docutils literal notranslate"><span class="pre">-s</span></code> argument, a more
-advanced UI will be used (see below for an example).
-The simple UI doesn’t use automatic polling, so the <code class="docutils literal notranslate"><span class="pre">-n</span></code>
-argument is incomatible with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> argument.</p>
+doesn’t require <a class="reference internal" href="installation.html#dependencies"><span class="std std-ref">urwid</span></a>.</p>
+<p>If TurboCtl is run without the <code class="docutils literal notranslate"><span class="pre">-s</span></code> argument, a more
+advanced UI will be used.</p>
 </dd>
 <dt><kbd><span class="option">-n</span>, <span class="option">--no-poll</span></kbd></dt>
-<dd><p>Don’t poll the status of the pump by sending automatic
-telegrams.
+<dd><p>Don’t send automatic telegrams to the pump.</p>
+<p>The pump automatically turns off if it doesn’t receive any
+commands for about 10 seconds.
 Normally TurboCtl sends automatic telegrams to the pump at
-regular intervals in order to stay updated about the status
-of the pump. This argument suppresses that functionality.
-As a result, the status screen of the UI is only updated
-when the user manually sends a telegram to the pump by
-writing a command in the UI.</p>
+regular intervals in order to prevent this from happening,
+and also to keep the status screen in the advanced UI
+updated.
+This argument prevents these automatic telegrams from being
+sent.</p>
 </dd>
 <dt><kbd><span class="option">-t</span>, <span class="option">--test</span></kbd></dt>
 <dd><p>Instead of running the TurboCtl program, run all automatic
