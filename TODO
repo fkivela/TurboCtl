@@ -2,11 +2,8 @@ TODO
 
 Soon:
 - See if the UI can be broken with invalid commands.
-- Add automatic polling to the simple UI
-- Document the shutdown feature of the pump
 - Add instructions for using screen
 - Change the units of voltage to V.
-- Bugfix: strings with quotes crash the UI. 
 
 Later:
 - Add a warning about errors in the user manual

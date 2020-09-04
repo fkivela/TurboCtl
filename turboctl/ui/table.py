@@ -127,8 +127,8 @@ def _format_field(name, value, width):
         value = f'{value.start}...{value.stop-1}' if value else '-'            
     
     elif isinstance(value, Data):
-        # Display only the value of Data subclass instances
-        # (i.e. the 'min_value', 'max_value' and 'default' fields).
+        # Convert Data subclass instances (i.e. the values of the the
+        # 'min_value', 'max_value' and 'default' fields) to built-in types.
         value = value.value
         
         # Truncate long floats.
@@ -136,7 +136,11 @@ def _format_field(name, value, width):
             value = f'{value:.7}'
     
     elif isinstance(value, list):
-        # The 'default' field may contain a list of Data subclass instances.
+        # The 'default' field may contain a list of Data subclass instances,
+        # which need to be converted to built-in types.
+        # list is a mutable type, so we need to make a copy in order to avoid
+        # making changes to the parameter itself. 
+        value = value.copy()
         for i, item in enumerate(value):
             value[i] = item.value
             
