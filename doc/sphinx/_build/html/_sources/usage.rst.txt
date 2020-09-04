@@ -66,30 +66,139 @@ Both of these commands accept the following command-line arguments:
 
 -t, --test          Instead of running the TurboCtl program, run all automatic
                     tests for it.
-                   
 
 
-                    
-.. The user interface
-.. ------------------
+The user interface
+------------------
 
-.. <screen + command-line, or just copmmand-line is -s was used.>
-.. <commands are given by writing the command + args just like real command line
-.. output is the printed>
-.. <values are parsed with ast-literal eval -> python syntax but no spaces, no complex objects>
-.. <the commands are the following>
-.. <advanced ui polls, less advanced doesn't>
+The simple UI (which is used when the ``-s`` argument has been given),
+consists of a simple command line interface that runs in the Linux
+terminal.
 
-.. <list here>
-.. <note about errors: invalid args raise errors which are suppressed. However,
-.. some genuine bugs may do so too. In that case, run the debid command to see the
-.. error string. Also, Turboctl ui hasn't been tested yet very well and may be
-.. buggy. In that case, simply run turboctl again, it should function then.>
+.. image:: simple_UI.png
 
-.. <a bit about the api>
+The more advanced UI takes over the entire terminal screen, and features a
+simple screen displaying the current status of the pump in addition to the
+command-line interface.
+
+.. image:: advanced_UI.png
+
+In the advanced UI, the area of the command-line interfacew can be scrolled by
+using the mouse wheel, or by clicking on or dragging the custom scroll bar on
+the right side of the area.
+In the simple UI, scrolling is done with the mouse wheel or by using
+the built-in terminal scroll bar.
+In both UI modes, command history can be accessed by using the up and down
+keys.
+
+Commands are given to the UI by writing the name of the command, followed by
+its arguments, all separated by spaces. The arguments are pased with
+:func:`ast.literal_eval` which recognizes some basic Python objects such as
+tuples and lists.
+Note that spaces are only accepted between arguments, so an argument of
+``[1,2,3]`` is correctly interpreted as a list, but ``[1, 2, 3]`` will raise
+an error.
+
+All arguments that cannot be parsed into other object types are interpreted as
+:class:`str` objects, so it isn't necessary to use quotes around string
+arguments.
+
+Most commands have at least one alias, which can be used instead of the longer
+proper command name.
 
 
+Command list
+------------
 
+The following is a list of all the commands recognized by the UI. The same
+list can be displayed in the UI by issuing the ``help`` command.
 
+**pump <value>**
+    Turn the pump on or off.
 
+    Values of ``1``, ``'True'`` and ``'on'`` turn the pump on;
+    ``'0'``, ``'False'`` and ``'off'`` turn it off.
 
+**status**
+    Get the status of the pump.
+
+    Aliases: ``s``
+
+**read <number> [index=0]**
+    Return the value of parameter *number*, index *index*.
+
+    Aliases: ``r``
+
+**write <number> <value> [index=0]**
+    Write *value* to parameter *number*, index *index*.
+
+    Aliases: ``w``
+
+**list <letter> <numbers>**
+    List parameters, error or warnings.
+
+    This command opens an information table with the less program.
+
+    *letter* should be ``'p'``, ``'e'`` or ``'w'`` depending on what should be
+    listed.
+
+    *numbers* should be a list or a tuple of numbers or ``'all'``.
+    It defines which parameters/errors/warnings will be displayed.
+
+    Aliases: ``l``
+
+**info <letter> <number>**
+    Display information about a single parameter, error or 
+    warning.
+
+    Unlike **list**, this command doesn't use less, and prints 
+    the output normally instead.
+
+    *letter* should be ``'p'``, ``'e'`` or ``'w'`` in the same way as in
+    *cmd_list*.
+
+    *number* is the number of the parameter/error/warning which should be
+    displayed.
+
+    Aliases: ``i``
+
+**exit** 
+    Exit the UI.
+
+    Aliases: ``e``, ``q``, ``x``
+
+**help [value=None]**
+    Display a help message.
+
+    *value* should be the name or an alias of the command that
+    should be described.
+    If no *value* is specified, all commands are listed and
+    described.
+
+    Aliases: ``h``
+
+**debug <value>**
+    Activate or deactivate the debug mode.
+
+    Values of ``'1'``, ``'True'`` and ``'on'`` activate the debug mode;
+    ``'0'``, ``'False'`` and ``'off'`` deactivate it.
+
+    In normal operation, TypeErrors and ValueErrors
+    raised during the execution of commands are caught to prevent
+    users from crashing the program with invalid commands.
+    Activating the debug mode disables this error-catching in order
+    to make debugging easier.
+
+    Aliases: ``d``
+
+**verbose <value>**
+    Activate or deactivate the verbose mode.
+
+    Values of ``'1'``, ``'True'`` and ``'on'`` activate the verbose mode;
+    ``'0'``, ``'False'`` and ``'off'`` deactivate it.
+
+    When the verbose mode is on, commands that send telegrams to the pump
+    will print all the contents of the telegram and the reply to the
+    screen.
+
+    Aliases: ``v``

@@ -101,6 +101,102 @@ tests for it.</p>
 </dd>
 </dl>
 </div>
+<div class="section" id="the-user-interface">
+<h2>The user interface<a class="headerlink" href="#the-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>The simple UI (which is used when the <code class="docutils literal notranslate"><span class="pre">-s</span></code> argument has been given),
+consists of a simple command line interface that runs in the Linux
+terminal.</p>
+<img alt="_images/simple_UI.png" src="_images/simple_UI.png" />
+<p>The more advanced UI takes over the entire terminal screen, and features a
+simple screen displaying the current status of the pump in addition to the
+command-line interface.</p>
+<img alt="_images/advanced_UI.png" src="_images/advanced_UI.png" />
+<p>In the advanced UI, the area of the command-line interfacew can be scrolled by
+using the mouse wheel, or by clicking on or dragging the custom scroll bar on
+the right side of the area.
+In the simple UI, scrolling is done with the mouse wheel or by using
+the built-in terminal scroll bar.
+In both UI modes, command history can be accessed by using the up and down
+keys.</p>
+<p>Commands are given to the UI by writing the name of the command, followed by
+its arguments, all separated by spaces. The arguments are pased with
+<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
+tuples and lists.
+Note that spaces are only accepted between arguments, so an argument of
+<code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code> is correctly interpreted as a list, but <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will raise
+an error.</p>
+<p>All arguments that cannot be parsed into other object types are interpreted as
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
+arguments.</p>
+<p>Most commands have at least one alias, which can be used instead of the longer
+proper command name.</p>
+</div>
+<div class="section" id="command-list">
+<h2>Command list<a class="headerlink" href="#command-list" title="Permalink to this headline">¶</a></h2>
+<p>The following is a list of all the commands recognized by the UI. The same
+list can be displayed in the UI by issuing the <code class="docutils literal notranslate"><span class="pre">help</span></code> command.</p>
+<dl>
+<dt><strong>pump &lt;value&gt;</strong></dt><dd><p>Turn the pump on or off.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> turn the pump on;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> turn it off.</p>
+</dd>
+<dt><strong>status</strong></dt><dd><p>Get the status of the pump.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">s</span></code></p>
+</dd>
+<dt><strong>read &lt;number&gt; [index=0]</strong></dt><dd><p>Return the value of parameter <em>number</em>, index <em>index</em>.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">r</span></code></p>
+</dd>
+<dt><strong>write &lt;number&gt; &lt;value&gt; [index=0]</strong></dt><dd><p>Write <em>value</em> to parameter <em>number</em>, index <em>index</em>.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">w</span></code></p>
+</dd>
+<dt><strong>list &lt;letter&gt; &lt;numbers&gt;</strong></dt><dd><p>List parameters, error or warnings.</p>
+<p>This command opens an information table with the less program.</p>
+<p><em>letter</em> should be <code class="docutils literal notranslate"><span class="pre">'p'</span></code>, <code class="docutils literal notranslate"><span class="pre">'e'</span></code> or <code class="docutils literal notranslate"><span class="pre">'w'</span></code> depending on what should be
+listed.</p>
+<p><em>numbers</em> should be a list or a tuple of numbers or <code class="docutils literal notranslate"><span class="pre">'all'</span></code>.
+It defines which parameters/errors/warnings will be displayed.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">l</span></code></p>
+</dd>
+<dt><strong>info &lt;letter&gt; &lt;number&gt;</strong></dt><dd><p>Display information about a single parameter, error or
+warning.</p>
+<p>Unlike <strong>list</strong>, this command doesn’t use less, and prints
+the output normally instead.</p>
+<p><em>letter</em> should be <code class="docutils literal notranslate"><span class="pre">'p'</span></code>, <code class="docutils literal notranslate"><span class="pre">'e'</span></code> or <code class="docutils literal notranslate"><span class="pre">'w'</span></code> in the same way as in
+<em>cmd_list</em>.</p>
+<p><em>number</em> is the number of the parameter/error/warning which should be
+displayed.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">i</span></code></p>
+</dd>
+<dt><strong>exit</strong></dt><dd><p>Exit the UI.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">e</span></code>, <code class="docutils literal notranslate"><span class="pre">q</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code></p>
+</dd>
+<dt><strong>help [value=None]</strong></dt><dd><p>Display a help message.</p>
+<p><em>value</em> should be the name or an alias of the command that
+should be described.
+If no <em>value</em> is specified, all commands are listed and
+described.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">h</span></code></p>
+</dd>
+<dt><strong>debug &lt;value&gt;</strong></dt><dd><p>Activate or deactivate the debug mode.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> activate the debug mode;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> deactivate it.</p>
+<p>In normal operation, TypeErrors and ValueErrors
+raised during the execution of commands are caught to prevent
+users from crashing the program with invalid commands.
+Activating the debug mode disables this error-catching in order
+to make debugging easier.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">d</span></code></p>
+</dd>
+<dt><strong>verbose &lt;value&gt;</strong></dt><dd><p>Activate or deactivate the verbose mode.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> activate the verbose mode;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> deactivate it.</p>
+<p>When the verbose mode is on, commands that send telegrams to the pump
+will print all the contents of the telegram and the reply to the
+screen.</p>
+<p>Aliases: <code class="docutils literal notranslate"><span class="pre">v</span></code></p>
+</dd>
+</dl>
+</div>
 </div>
 
 
@@ -124,6 +220,8 @@ tests for it.</p>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#running-the-program">Running the program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-user-interface">The user interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-list">Command list</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Packages and modules</a></li>

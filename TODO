@@ -1,15 +1,13 @@
 TODO
 
 Soon:
-- Separate verbosity and error catching.
-- Test the program with an actual pump
-- Add instructions for installing and running the program
+- See if the UI can be broken with invalid commands.
 - Add automatic polling to the simple UI
 - Document the shutdown feature of the pump
 - Add instructions for using screen
+- Change the units of voltage to V.
 
 Later:
-- Make Float accept int arguments.
 - Fix the problem with less properly
 - Add a warning about errors in the user manual
 - Update test_ui
