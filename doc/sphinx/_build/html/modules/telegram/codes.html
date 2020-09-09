@@ -81,6 +81,77 @@ parameters, and <code class="docutils literal notranslate"><span class="pre">...
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterAccess</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterAccess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterCode" title="turboctl.telegram.codes.ParameterCode"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterCode</span></code></a></p>
 <p>Different parameter access modes.</p>
+<p>This enum contains the following members:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 13%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 9%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Member name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Mode</p></th>
+<th class="head"><p>Indexed</p></th>
+<th class="head"><p>Bits</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NONE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0000'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'none'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'No</span> <span class="pre">access'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0001'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'read'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Read</span> <span class="pre">a</span> <span class="pre">value'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">W16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0010'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'write'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Write</span> <span class="pre">a</span> <span class="pre">16</span> <span class="pre">bit</span> <span class="pre">value'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">W32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0011'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'write'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Write</span> <span class="pre">a</span> <span class="pre">32</span> <span class="pre">bit</span> <span class="pre">value'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0110'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'read'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Read</span> <span class="pre">a</span> <span class="pre">field</span> <span class="pre">value'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">W16F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0111'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'write'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Write</span> <span class="pre">a</span> <span class="pre">16</span> <span class="pre">bit</span> <span class="pre">field</span> <span class="pre">value'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">W32F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'1000'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'write'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Write</span> <span class="pre">a</span> <span class="pre">32</span> <span class="pre">bit</span> <span class="pre">field</span> <span class="pre">value'</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
@@ -88,6 +159,77 @@ parameters, and <code class="docutils literal notranslate"><span class="pre">...
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.codes.</code><code class="sig-name descname">ParameterResponse</code><a class="headerlink" href="#turboctl.telegram.codes.ParameterResponse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#turboctl.telegram.codes.ParameterCode" title="turboctl.telegram.codes.ParameterCode"><code class="xref py py-class docutils literal notranslate"><span class="pre">turboctl.telegram.codes.ParameterCode</span></code></a></p>
 <p>Different parameter response modes.</p>
+<p>This enum contains the following members:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+<col style="width: 9%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Member name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Mode</p></th>
+<th class="head"><p>Indexed</p></th>
+<th class="head"><p>Bits</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NONE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0000'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'none'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'No</span> <span class="pre">response'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">S16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0001'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'response'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'16</span> <span class="pre">bit</span> <span class="pre">value</span> <span class="pre">sent'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0010'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'response'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'32</span> <span class="pre">bit</span> <span class="pre">value</span> <span class="pre">sent'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">S16F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0100'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'response'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'16</span> <span class="pre">bit</span> <span class="pre">field</span> <span class="pre">value</span> <span class="pre">sent'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S32F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0101'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'response'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'32</span> <span class="pre">bit</span> <span class="pre">field</span> <span class="pre">value</span> <span class="pre">sent'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'0111'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'error'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Cannot</span> <span class="pre">run</span> <span class="pre">command'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NO_WRITE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'1000'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'no</span> <span class="pre">write'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'No</span> <span class="pre">write</span> <span class="pre">access'</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py function">
@@ -273,14 +415,67 @@ e.g. be easily ordered.</p>
 <dt>Members of this enum have the following fields:</dt><dd><dl class="simple">
 <dt><strong>value</strong></dt><dd><p>The number of the error (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>).</p>
 </dd>
+<dt><strong>description</strong></dt><dd><p>A short <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> describing of the meaning of the error.</p>
+</dd>
 <dt><strong>exception</strong></dt><dd><p>The <a class="reference internal" href="#turboctl.telegram.codes.ParameterException" title="turboctl.telegram.codes.ParameterException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterException</span></code></a> subclass that corresponds to this
 member.</p>
 </dd>
-<dt><strong>description</strong></dt><dd><p>A short <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> describing of the meaning of the error.</p>
-</dd>
 </dl>
 </dd>
 </dl>
+<p>This enum contains the following members:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 7%" />
+<col style="width: 50%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Member name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Exception</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRONG_NUM</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Invalid</span> <span class="pre">parameter</span> <span class="pre">number'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.WrongNumError" title="turboctl.telegram.codes.WrongNumError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WrongNumError</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CANNOT_CHANGE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Parameter</span> <span class="pre">cannot</span> <span class="pre">be</span> <span class="pre">changed'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.CannotChangeError" title="turboctl.telegram.codes.CannotChangeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CannotChangeError</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINMAX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Min/max</span> <span class="pre">error'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.MinMaxError" title="turboctl.telegram.codes.MinMaxError"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinMaxError</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INDEX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Index</span> <span class="pre">error'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.ParameterIndexError" title="turboctl.telegram.codes.ParameterIndexError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterIndexError</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ACCESS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Access</span> <span class="pre">mode</span> <span class="pre">doesn't</span> <span class="pre">match</span> <span class="pre">parameter'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.AccessError" title="turboctl.telegram.codes.AccessError"><code class="xref py py-class docutils literal notranslate"><span class="pre">AccessError</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OTHER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">18</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Other</span> <span class="pre">error'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.OtherError" title="turboctl.telegram.codes.OtherError"><code class="xref py py-class docutils literal notranslate"><span class="pre">OtherError</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SAVING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">102</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Parameter</span> <span class="pre">is</span> <span class="pre">being</span> <span class="pre">saved</span> <span class="pre">to</span> <span class="pre">nonvolatile</span> <span class="pre">memory'</span></code></p></td>
+<td><p><a class="reference internal" href="#turboctl.telegram.codes.SavingError" title="turboctl.telegram.codes.SavingError"><code class="xref py py-class docutils literal notranslate"><span class="pre">SavingError</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
@@ -290,7 +485,7 @@ member.</p>
 <p>A superclass for control and status bits.</p>
 <p>This class is otherwise similar to <a class="reference internal" href="#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a>, but it doesn’t
 have any members since it’s only meant to be subclassed,
-and the members of its subclasses lack the <em>exception</em> field.</p>
+and the members of its subclasses lack the <strong>exception</strong> field.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -302,6 +497,86 @@ and the members of its subclasses lack the <em>exception</em> field.</p>
 prevent errors in the program.</p>
 <p>This class inherits <a class="reference internal" href="#turboctl.telegram.codes.FlagBits" title="turboctl.telegram.codes.FlagBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlagBits</span></code></a>, but for some reason Sphinx doesn’t
 show that properly.</p>
+<p>This enum contains the following members:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 11%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Member name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Turn</span> <span class="pre">or</span> <span class="pre">keep</span> <span class="pre">the</span> <span class="pre">pump</span> <span class="pre">on'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">control</span> <span class="pre">bit:</span> <span class="pre">1'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">control</span> <span class="pre">bit:</span> <span class="pre">2'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">control</span> <span class="pre">bit:</span> <span class="pre">3'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">control</span> <span class="pre">bit:</span> <span class="pre">4'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X201</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Output</span> <span class="pre">X201</span> <span class="pre">(air</span> <span class="pre">cooling)'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SETPOINT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Enable</span> <span class="pre">frequency</span> <span class="pre">setpoint'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RESET_ERROR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Reset</span> <span class="pre">error</span> <span class="pre">(all</span> <span class="pre">components)'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STANDBY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Enable</span> <span class="pre">standby'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">control</span> <span class="pre">bit:</span> <span class="pre">9'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COMMAND</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Enable</span> <span class="pre">control</span> <span class="pre">bits'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X1_ERROR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Error</span> <span class="pre">operation</span> <span class="pre">relay</span> <span class="pre">X1'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">X1_WARNING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Normal</span> <span class="pre">operation</span> <span class="pre">relay</span> <span class="pre">X1'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X1_NORMAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Warning</span> <span class="pre">relay</span> <span class="pre">X1'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">X202</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Output</span> <span class="pre">X202</span> <span class="pre">(packing</span> <span class="pre">pump)'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X203</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Output</span> <span class="pre">X203</span> <span class="pre">(venting</span> <span class="pre">valve)'</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
@@ -313,6 +588,86 @@ show that properly.</p>
 prevent errors in the program.</p>
 <p>This class inherits <a class="reference internal" href="#turboctl.telegram.codes.FlagBits" title="turboctl.telegram.codes.FlagBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlagBits</span></code></a>, but for some reason Sphinx doesn’t
 show that properly.</p>
+<p>This enum contains the following members:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Member name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">READY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Ready</span> <span class="pre">for</span> <span class="pre">operation'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">status</span> <span class="pre">bit:</span> <span class="pre">1'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OPERATION</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Operation</span> <span class="pre">enabled'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Error</span> <span class="pre">condition</span> <span class="pre">(all</span> <span class="pre">components)'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ACCELERATION</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Accelerating'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DECELERATION</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Decelerating'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SWITCH_ON_LOCK</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Switch-on</span> <span class="pre">lock'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TEMP_WARNING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Temperature</span> <span class="pre">warning'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">status</span> <span class="pre">bit:</span> <span class="pre">8'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PARAM_CHANNEL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Parameter</span> <span class="pre">channel</span> <span class="pre">enabled'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DETAINED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Normal</span> <span class="pre">operation</span> <span class="pre">detained'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TURNING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Pump</span> <span class="pre">is</span> <span class="pre">turning'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UNUSED12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Unknown</span> <span class="pre">status</span> <span class="pre">bit:</span> <span class="pre">12'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OVERLOAD</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Overload</span> <span class="pre">warning'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WARNING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Collective</span> <span class="pre">warning'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PROCESS_CHANNEL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'Process</span> <span class="pre">channel</span> <span class="pre">enabled'</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -335,29 +690,37 @@ show that properly.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">Packages and modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">telegram</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="datatypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="telegram.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">api</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../ui/index.html">ui</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ui/index.html">ui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Errata to the user manual</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">Packages and modules</a><ul>
   <li><a href="../index.html">turboctl</a><ul>
   <li><a href="index.html">telegram</a><ul>
       <li>Previous: <a href="datatypes.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datatypes</span></code></a></li>
       <li>Next: <a href="parser.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
   </ul></li>

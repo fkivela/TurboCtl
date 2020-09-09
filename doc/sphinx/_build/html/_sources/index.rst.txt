@@ -19,7 +19,7 @@ Documentation
    installation.rst
    usage.rst
    modules.rst
-   notes.rst
+   errata.rst
 
 Author
 ------

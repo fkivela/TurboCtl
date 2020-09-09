@@ -187,6 +187,35 @@ screen.</p>
 </dd>
 </dl>
 </div>
+<div class="section" id="using-screen">
+<h2>Using Screen<a class="headerlink" href="#using-screen" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned above, the pump turns off if it doesn’t receive any messages
+for about 10 seconds. If TurboCtl is run without the <code class="docutils literal notranslate"><span class="pre">-n</span></code> argument, it will
+send automatic messages which keep the pump on, but the pump will turn off soon
+after TurboCtl is closed.</p>
+<p>If TurboCtl is used on a local computer, it can simply be left running in the
+background. However, if TurboCtl is run over an SSH connection, it cannot be
+left running after the connection has been closed without using a third-party
+program. An easy way to accomplish this is to use <a class="reference external" href="https://www.gnu.org/software/screen/">Screen</a>. This is done as
+follows:</p>
+<ul class="simple">
+<li><p>Install Screen with your package manager. For example, on operating systems
+based on Debian or Ubuntu, this is done with the command
+<code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">screen</span></code>.</p></li>
+<li><p>Log into your remote machine via SSH.</p></li>
+<li><p>Start Screen by issuing the <code class="docutils literal notranslate"><span class="pre">screen</span></code> command.</p></li>
+<li><p>Launch TurboCtl and use it as you would normally.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl-A</span></code> and then <code class="docutils literal notranslate"><span class="pre">Ctrl-D</span></code> to detach the Screen session where you
+are running TurboCtl. This will leave TurboCtl running in the background even
+after you close the SSH connection.</p></li>
+<li><p>Whenever you log back into your remote machine, you can resume the old Screen
+session with <code class="docutils literal notranslate"><span class="pre">screen</span> <span class="pre">-r</span></code>. You can end the screen session by closing
+TurboCtl and then giving the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command. Note that due to a bug
+the advanced UI screen of TurboCtl will disappear only after the Screen
+session is closed, even though it should disappear immediately
+after closing TurboCtl.</p></li>
+</ul>
+</div>
 </div>
 
 
@@ -212,6 +241,7 @@ screen.</p>
 <li class="toctree-l2"><a class="reference internal" href="#running-the-program">Running the program</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-user-interface">The user interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#command-list">Command list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-screen">Using Screen</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Packages and modules</a></li>

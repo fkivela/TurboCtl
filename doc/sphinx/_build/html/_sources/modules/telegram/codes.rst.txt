@@ -14,7 +14,7 @@
      
 .. autoclass:: turboctl.telegram.codes.ControlBits
     :show-inheritance:
-    :no-special-members:    
+    :no-special-members:
     
 .. autoclass:: turboctl.telegram.codes.StatusBits
     :show-inheritance:

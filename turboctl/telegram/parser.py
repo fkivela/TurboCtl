@@ -484,6 +484,7 @@ def _parse_value(string, datatype, bits):
     Raises:
         ValueError: If *string* isn't a valid int or a float.'
     """
+    # This is needed, because Uint, Sint, and Float don't accept str arguments. 
     builtin_type = float if datatype == Float else int
     value = builtin_type(string)
     return datatype(value, bits)

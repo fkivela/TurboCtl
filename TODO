@@ -1,10 +1,9 @@
 TODO
 
 Soon:
-- See if the UI can be broken with invalid commands.
-- Add instructions for using screen
-- Change the units of voltage to V.
 - Document the results of the tests with the real pump.
+- Update the images in usage.rst with the correct voltage value (requires
+  updating the TurboCtl version on the fusor PC).
 
 Later:
 - Add a warning about errors in the user manual
@@ -12,6 +11,7 @@ Later:
 - Make sure all tests are ok and can be run automatically at once
 - Investigate and fix the errors which are occasionally raised whenthe program
   is used. These are probably caused by receiving an invalid telegram.
+- Implement the results of tests with the real pump to the virtual pump.
 
 Perhaps at some point:
 - Improve the parser so that e.g. "list p [1, 2]" is valid syntax.

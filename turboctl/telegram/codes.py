@@ -73,8 +73,27 @@ class ParameterCode(e.Enum):
     
 
 class ParameterAccess(ParameterCode):
-    """Different parameter access modes."""
+    """Different parameter access modes.
     
+    This enum contains the following members:
+    
+    =========== ========== =========== ========= ======= ========================
+    Member name Value      Mode        Indexed   Bits    Description
+    =========== ========== =========== ========= ======= ========================
+    ``NONE``    ``'0000'`` ``'none'``  ``...``   ``...`` ``'No access'``       
+    ``R``       ``'0001'`` ``'read'``  ``False`` ``...`` ``'Read a value'``        
+    ``W16``     ``'0010'`` ``'write'`` ``False`` ``16``  ``'Write a 16 bit value'``           
+    ``W32``     ``'0011'`` ``'write'`` ``False`` ``32``  ``'Write a 32 bit value'``           
+    ``RF``      ``'0110'`` ``'read'``  ``True``  ``...`` ``'Read a field value'``                    
+    ``W16F``    ``'0111'`` ``'write'`` ``True``  ``16``  ``'Write a 16 bit field value'``                   
+    ``W32F``    ``'1000'`` ``'write'`` ``True``  ``32``  ``'Write a 32 bit field value'``                  
+    =========== ========== =========== ========= ======= ========================
+    """
+    # Sphinx doesn't work well with enums, so the members have to be documented
+    # by hand.
+    # These tables are allowed to exceed the maximum line length, since
+    # breaking the lines would seriously hurt readability. 
+
 #   Name     Value   Mode    Indexed  Bits  Description
     NONE = ('0000', 'none',  ...,     ..., 'No access')
     R    = ('0001', 'read',  False,   ..., 'Read a value')
@@ -84,10 +103,25 @@ class ParameterAccess(ParameterCode):
     W16F = ('0111', 'write', True,     16, 'Write a 16 bit field value')
     W32F = ('1000', 'write', True,     32, 'Write a 32 bit field value')            
 
-    
+
 class ParameterResponse(ParameterCode):
-    """Different parameter response modes."""
+    """Different parameter response modes.
     
+    This enum contains the following members:
+    
+    ============ ========== ============== ========= ======= =============================
+    Member name  Value      Mode           Indexed   Bits    Description
+    ============ ========== ============== ========= ======= =============================
+    ``NONE``     ``'0000'`` ``'none'``     ``...``   ``...`` ``'No response'``       
+    ``S16``      ``'0001'`` ``'response'`` ``False`` ``16``  ``'16 bit value sent'``        
+    ``S32``      ``'0010'`` ``'response'`` ``False`` ``32``  ``'32 bit value sent'``           
+    ``S16F``     ``'0100'`` ``'response'`` ``False`` ``16``  ``'16 bit field value sent'``           
+    ``S32F``     ``'0101'`` ``'response'`` ``True``  ``32``  ``'32 bit field value sent'``                    
+    ``ERROR``    ``'0111'`` ``'error'``    ``True``  ``...`` ``'Cannot run command'``                   
+    ``NO_WRITE`` ``'1000'`` ``'no write'`` ``True``  ``...`` ``'No write access'``                  
+    ============ ========== ============== ========= ======= =============================
+    """
+
 #   Name         Value   Mode       Indexed Bits  Description
     NONE     = ('0000', 'none',     ...,    ..., 'No response')
     S16      = ('0001', 'response', False,   16, '16 bit value sent')
@@ -309,13 +343,27 @@ class ParameterError(CustomInt, e.Enum):
     Members of this enum have the following fields:
         **value**
             The number of the error (:class:`int`).
+        **description**
+            A short :class:`str` describing of the meaning of the error.
         **exception**
             The :class:`ParameterException` subclass that corresponds to this 
             member.
-        **description**
-            A short :class:`str` describing of the meaning of the error.
-    """
+            
+    This enum contains the following members:
     
+    ================= ======= ==================================================== ============================
+    Member name       Value   Description                                          Exception
+    ================= ======= ==================================================== ============================
+    ``WRONG_NUM``       ``0`` ``'Invalid parameter number'``                       :class:`WrongNumError`
+    ``CANNOT_CHANGE``   ``1`` ``'Parameter cannot be changed'``                    :class:`CannotChangeError`
+    ``MINMAX``          ``2`` ``'Min/max error'``                                  :class:`MinMaxError`
+    ``INDEX``           ``3`` ``'Index error'``                                    :class:`ParameterIndexError`
+    ``ACCESS``          ``5`` ``'Access mode doesn't match parameter'``            :class:`AccessError`
+    ``OTHER``          ``18`` ``'Other error'``                                    :class:`OtherError`
+    ``SAVING``        ``102`` ``'Parameter is being saved to nonvolatile memory'`` :class:`SavingError`
+    ================= ======= ==================================================== ============================
+    """
+
     def __init__(self, value, description, exception):
         self._value_ = value
         self.description = description
@@ -341,7 +389,7 @@ class FlagBits(CustomInt, e.Enum):
     
     This class is otherwise similar to :class:`ParameterError`, but it doesn't 
     have any members since it's only meant to be subclassed, 
-    and the members of its subclasses lack the *exception* field. 
+    and the members of its subclasses lack the **exception** field. 
     """
 
     def __init__(self, value, description):
@@ -357,13 +405,40 @@ class ControlBits(FlagBits):
     
     This class inherits :class:`FlagBits`, but for some reason Sphinx doesn't 
     show that properly.
+    
+    This enum contains the following members:
+    
+    =============== ====== ==================================
+    Member name     Value  Description
+    =============== ====== ==================================
+    ``ON``           ``0`` ``'Turn or keep the pump on'``       
+    ``UNUSED1``      ``1`` ``'Unknown control bit: 1'``        
+    ``UNUSED2``      ``2`` ``'Unknown control bit: 2'``           
+    ``UNUSED3``      ``3`` ``'Unknown control bit: 3'``                    
+    ``UNUSED4``      ``4`` ``'Unknown control bit: 4'``                    
+    ``X201``         ``5`` ``'Output X201 (air cooling)'``                   
+    ``SETPOINT``     ``6`` ``'Enable frequency setpoint'``                  
+    ``RESET_ERROR``  ``7`` ``'Reset error (all components)'``                   
+    ``STANDBY``      ``8`` ``'Enable standby'``                   
+    ``UNUSED9``      ``9`` ``'Unknown control bit: 9'``                   
+    ``COMMAND``     ``10`` ``'Enable control bits'``                  
+    ``X1_ERROR``    ``11`` ``'Error operation relay X1'``            
+    ``X1_WARNING``  ``12`` ``'Normal operation relay X1'``                
+    ``X1_NORMAL``   ``13`` ``'Warning relay X1'``                
+    ``X202``        ``14`` ``'Output X202 (packing pump)'``                  
+    ``X203``        ``15`` ``'Output X203 (venting valve)'``                                                    
+    =============== ====== ==================================
     """
     # Some weird interaction of Enum, inheriting from int, and redefining
     # __new__ in FlagBits prevents Sphinx from displaying the inheritance
     # properly (it shows "Bases: <unknown>.FlagBits"), so :show-inheritance:
     # isn't used.
     ON            = ( 0, 'Turn or keep the pump on')
+    """Lorem ipsum."""
+    
     UNUSED1       = ( 1, 'Unknown control bit: 1')
+    """Dolor sit amet."""
+    
     UNUSED2       = ( 2, 'Unknown control bit: 2')
     UNUSED3       = ( 3, 'Unknown control bit: 3')
     UNUSED4       = ( 4, 'Unknown control bit: 4')
@@ -391,6 +466,29 @@ class StatusBits(FlagBits):
     
     This class inherits :class:`FlagBits`, but for some reason Sphinx doesn't 
     show that properly.
+    
+    This enum contains the following members:
+    
+    =================== ====== ======================================
+    Member name         Value  Description
+    =================== ====== ======================================
+    ``READY``            ``0`` ``'Ready for operation'``       
+    ``UNUSED1``          ``1`` ``'Unknown status bit: 1'``        
+    ``OPERATION``        ``2`` ``'Operation enabled'``           
+    ``ERROR``            ``3`` ``'Error condition (all components)'``           
+    ``ACCELERATION``     ``4`` ``'Accelerating'``                    
+    ``DECELERATION``     ``5`` ``'Decelerating'``                   
+    ``SWITCH_ON_LOCK``   ``6`` ``'Switch-on lock'``                  
+    ``TEMP_WARNING``     ``7`` ``'Temperature warning'``                   
+    ``UNUSED8``          ``8`` ``'Unknown status bit: 8'``                   
+    ``PARAM_CHANNEL``    ``9`` ``'Parameter channel enabled'``                   
+    ``DETAINED``        ``10`` ``'Normal operation detained'``                  
+    ``TURNING``         ``11`` ``'Pump is turning'``            
+    ``UNUSED12``        ``12`` ``'Unknown status bit: 12'``                
+    ``OVERLOAD``        ``13`` ``'Overload warning'``                
+    ``WARNING``         ``14`` ``'Collective warning'``                  
+    ``PROCESS_CHANNEL`` ``15`` ``'Process channel enabled'``                                                    
+    =================== ====== ======================================
     """    
     READY           = ( 0, 'Ready for operation')
     UNUSED1         = ( 1, 'Unknown status bit: 1')

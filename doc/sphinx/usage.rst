@@ -190,3 +190,41 @@ list can be displayed in the UI by issuing the ``help`` command.
     screen.
 
     Aliases: ``v``
+
+    
+Using Screen
+------------
+
+As mentioned above, the pump turns off if it doesn't receive any messages
+for about 10 seconds. If TurboCtl is run without the ``-n`` argument, it will
+send automatic messages which keep the pump on, but the pump will turn off soon
+after TurboCtl is closed.
+
+If TurboCtl is used on a local computer, it can simply be left running in the
+background. However, if TurboCtl is run over an SSH connection, it cannot be
+left running after the connection has been closed without using a third-party
+program. An easy way to accomplish this is to use Screen_. This is done as
+follows:
+
+- Install Screen with your package manager. For example, on operating systems
+  based on Debian or Ubuntu, this is done with the command
+  ``apt install screen``.
+  
+- Log into your remote machine via SSH.
+
+- Start Screen by issuing the ``screen`` command.
+
+- Launch TurboCtl and use it as you would normally.
+
+- Press ``Ctrl-A`` and then ``Ctrl-D`` to detach the Screen session where you
+  are running TurboCtl. This will leave TurboCtl running in the background even
+  after you close the SSH connection.
+  
+- Whenever you log back into your remote machine, you can resume the old Screen
+  session with ``screen -r``. You can end the screen session by closing
+  TurboCtl and then giving the ``exit`` command. Note that due to a bug
+  the advanced UI screen of TurboCtl will disappear only after the Screen
+  session is closed, even though it should disappear immediately
+  after closing TurboCtl. 
+
+.. _screen: https://www.gnu.org/software/screen/
