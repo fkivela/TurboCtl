@@ -101,8 +101,7 @@ class CommandLineUI:
         ('exit'   , ['e', 'q', 'x']),
         ('help'   , ['h']),
         ('debug'  , ['d']),
-        ('verbose', ['v']),
-        ('test',    ['t']),
+        ('verbose', ['v'])
     ]
     # pylint: enable=bad-whitespace
     
@@ -370,9 +369,6 @@ class CommandLineUI:
         else:
             raise ValueError('invalid value')
             
-    def cmd_test(self, *args, **kwargs):
-        return self.control_interface.test(*args, **kwargs)
-
     def input(self, prompt=''):
         """Ask the user for input.
 

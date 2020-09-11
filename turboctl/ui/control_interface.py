@@ -214,10 +214,7 @@ class ControlInterface():
                                            index, pump_on=self.status.pump_on)
         self._update_status(reply)
         return query, reply
-    
-    def test(self, *args, **kwargs):
-        return api.test(self._connection, *args, **kwargs)
-    
+        
     def _update_status(self, reply):
         """Update self.status based on the reply from the pump
         (a TelegramReader object).
