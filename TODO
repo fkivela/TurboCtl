@@ -13,6 +13,7 @@ Later:
 - Make sure the program crashes elegantly when e.g. it cannot connect to the
   pump.
 - Implement the results of tests with the real pump to the virtual pump.
+- Remove the t/test command.
 
 Perhaps at some point:
 - Improve the parser so that e.g. "list p [1, 2]" is valid syntax.
