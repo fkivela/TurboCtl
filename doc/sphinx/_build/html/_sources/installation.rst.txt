@@ -22,8 +22,8 @@ TurboCtl can also run without urwid by using an alternative user interface
 (see :doc:`usage` for details).
 
 
-The TurboCtl directory
-----------------------
+The ``TurboCtl`` directory
+--------------------------
 
 TurboCtl doesn't include an installation script; simply download the
 ``TurboCtl`` directory to a location of your choosing.
@@ -34,3 +34,16 @@ or made the working directory.
 .. _pySerial: https://pypi.org/project/pyserial/
 .. _tabulate: https://pypi.org/project/tabulate/
 .. _urwid: http://urwid.org/
+
+
+The ``dialout`` group
+---------------------
+
+In order to form a serial connection, the user running TurboCtl needs to be
+part of the ``dialout`` group. If they aren't already, they can be added with
+the command
+
+::
+
+    sudo adduser <username> dialout
+

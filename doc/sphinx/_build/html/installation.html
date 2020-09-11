@@ -53,12 +53,21 @@ external libraries:</p>
 (see <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details).</p>
 </div>
 <div class="section" id="the-turboctl-directory">
-<h2>The TurboCtl directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this headline">¶</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this headline">¶</a></h2>
 <p>TurboCtl doesn’t include an installation script; simply download the
 <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory to a location of your choosing.
 In order to access the <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package and the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code> script,
 the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory  should be added to <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">$PATH</span></code>
 or made the working directory.</p>
+</div>
+<div class="section" id="the-dialout-group">
+<h2>The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group<a class="headerlink" href="#the-dialout-group" title="Permalink to this headline">¶</a></h2>
+<p>In order to form a serial connection, the user running TurboCtl needs to be
+part of the <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group. If they aren’t already, they can be added with
+the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">adduser</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="n">dialout</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -82,7 +91,8 @@ or made the working directory.</p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-turboctl-directory">The TurboCtl directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-turboctl-directory">The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-dialout-group">The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>

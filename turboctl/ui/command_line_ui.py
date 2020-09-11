@@ -220,7 +220,7 @@ class CommandLineUI:
             f'Frequency: {reply.frequency} Hz\n'
             f'Temperature: {reply.temperature} °C\n'
             f'Current: {0.1 * reply.current:.1f} A\n'
-            f'Voltage: {0.1 * reply.voltage:.1f} V'
+            f'Voltage: {reply.voltage} V'
         )
         
         string = textwrap.indent(condition_str + '\n' + hardware_str,
