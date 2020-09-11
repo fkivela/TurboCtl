@@ -25,7 +25,8 @@ Author
 ------
 
 HVCtl was written by Feliks Kivelä.
-The author can be contacted at firstname.lastname@helsinki.fi.
+The author can be contacted at firstname.lastname@helsinki.fi
+(with the "ä" replaced by an "a").
 
 Copyright © 2019 University of Helsinki Fusor Team.
 

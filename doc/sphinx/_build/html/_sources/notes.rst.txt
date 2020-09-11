@@ -1,4 +1,0 @@
-Notes
-=====
-
-Lorem ipsum.

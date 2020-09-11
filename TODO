@@ -1,16 +1,17 @@
 TODO
 
 Soon:
-- Document the results of the tests with the real pump.
 - Update the images in usage.rst with the correct voltage value (requires
   updating the TurboCtl version on the fusor PC).
 
 Later:
-- Add a warning about errors in the user manual
+- Add the following instructions:
+  Lisäsin itseni dialout-ryhmään, jotta portti toimisi:
+  sudo adduser feliks dialout
 - Update test_ui
 - Make sure all tests are ok and can be run automatically at once
-- Investigate and fix the errors which are occasionally raised whenthe program
-  is used. These are probably caused by receiving an invalid telegram.
+- Make sure the program crashes elegantly when e.g. it cannot connect to the
+  pump.
 - Implement the results of tests with the real pump to the virtual pump.
 
 Perhaps at some point:
