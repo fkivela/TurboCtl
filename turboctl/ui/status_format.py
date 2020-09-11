@@ -56,7 +56,7 @@ def status_screen(status):
         f'Frequency: {status.frequency} Hz\n'
         f'Temperature: {status.temperature} °C\n'
         f'Current: {status.current:.1f} A\n'
-        f'Voltage: {status.voltage} V'
+        f'Voltage: {status.voltage:.1f} V'
     )
         
     text = ([
