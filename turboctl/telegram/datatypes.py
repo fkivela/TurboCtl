@@ -14,7 +14,7 @@ import re
 import struct
 from typing import Optional
 
-from turboctl.singledispatchmethod import singledispatchmethod 
+from turboctl.hacks import singledispatchmethod 
 
 
 BYTESIZE = 8
