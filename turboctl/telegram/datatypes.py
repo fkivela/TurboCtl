@@ -9,12 +9,11 @@ in telegrams.
 .. |n_bytes| replace:: :attr:`n_bytes <Data.n_bytes>`
 .. |BYTESIZE| replace:: :const:`BYTESIZE`
 """
+from functools import singledispatchmethod 
 import math
 import re
 import struct
 from typing import Optional
-
-from turboctl.hacks import singledispatchmethod 
 
 
 BYTESIZE = 8

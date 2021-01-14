@@ -1,32 +1,9 @@
 """This module contains some temporary inelegant fixes that hopefully can be
 removed later.
 """
-
-from functools import singledispatch, update_wrapper
 import weakref
 
 import urwid
-
-
-def singledispatchmethod(func):
-    """The functools.singledispatchmethod decorator is included in Python 3.8,
-    but not in 3.7.
-    Because the support for 3.8 is not very widespread yet,
-    TurboCtl still uses 3.7.
-    The singledispatchmethod decorator is therefore defined here until TurboCtl is
-    updated to Python 3.8, at which point this can be removed.
-    
-    The code here was copied from StackOverflow with slight alterations. 
-    """
-    dispatcher = singledispatch(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return dispatcher.dispatch(args[1].__class__)(*args, **kwargs)
-        except IndexError:
-            raise TypeError('at least 1 positional argument is required')
-    wrapper.register = dispatcher.register
-    update_wrapper(wrapper, func)
-    return wrapper
 
 
 def monkeypatch_urwid():
