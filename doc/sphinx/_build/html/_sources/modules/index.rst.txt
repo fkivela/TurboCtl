@@ -11,4 +11,6 @@ into the following three subpackages:
     telegram/index.rst
     ui/index.rst
     virtualpump/index.rst
+    hacks.rst
+    main.rst
     

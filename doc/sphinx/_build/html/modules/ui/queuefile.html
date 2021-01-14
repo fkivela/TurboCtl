@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>queuefile &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="status_format" href="status_format.html" />
@@ -38,26 +38,26 @@
 <dl class="py class">
 <dt id="turboctl.ui.queuefile.QueueFile">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.ui.queuefile.</code><code class="sig-name descname">QueueFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.queuefile.QueueFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class wraps a <a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">queue.Queue</span></code></a> object in the interface
+<dd><p>This class wraps a <a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">queue.Queue</span></code></a> object in the interface
 of a file-like object.</p>
 <p>The <a class="reference internal" href="#turboctl.ui.queuefile.QueueFile" title="turboctl.ui.queuefile.QueueFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueFile</span></code></a> class makes redirecting input and output
 between different parts of a program easier than it would be using
-standard file objects, such as <a class="reference external" href="https://docs.python.org/3/library/io.html#io.StringIO" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.StringIO</span></code></a> or those
-created by <a class="reference external" href="https://docs.python.org/3/library/pty.html#pty.openpty" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pty.openpty()</span></code></a>.
+standard file objects, such as <a class="reference external" href="https://docs.python.org/3/library/io.html#io.StringIO" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.StringIO</span></code></a> or those
+created by <a class="reference external" href="https://docs.python.org/3/library/pty.html#pty.openpty" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pty.openpty()</span></code></a>.
 <a class="reference internal" href="#turboctl.ui.queuefile.QueueFile" title="turboctl.ui.queuefile.QueueFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueFile</span></code></a> is thread-safe, can be read from and written to
 at the same time, and its blocking behaviour can be easily
 controlled.
-(If there is nothing to read, reading from <a class="reference external" href="https://docs.python.org/3/library/io.html#io.StringIO" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.StringIO</span></code></a>
+(If there is nothing to read, reading from <a class="reference external" href="https://docs.python.org/3/library/io.html#io.StringIO" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.StringIO</span></code></a>
 never blocks, but reading from an object created with
-<a class="reference external" href="https://docs.python.org/3/library/pty.html#pty.openpty" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pty.openpty()</span></code></a> always does.)</p>
+<a class="reference external" href="https://docs.python.org/3/library/pty.html#pty.openpty" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pty.openpty()</span></code></a> always does.)</p>
 <dl class="py attribute">
 <dt id="turboctl.ui.queuefile.QueueFile.queue">
 <code class="sig-name descname">queue</code><a class="headerlink" href="#turboctl.ui.queuefile.QueueFile.queue" title="Permalink to this definition">¶</a></dt>
-<dd><p>The wrapped <a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a> object.
+<dd><p>The wrapped <a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a> object.
 Strings are saved in the queue one character at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.8)">queue.Queue</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.9)">queue.Queue</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -69,7 +69,7 @@ Strings are saved in the queue one character at a time.</p>
 <a class="reference internal" href="#turboctl.ui.queuefile.QueueFile.readline" title="turboctl.ui.queuefile.QueueFile.readline"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readline()</span></code></a> should block or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -86,7 +86,7 @@ to the value given as an argument.</p>
 <code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.queuefile.QueueFile.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write <em>string</em> to the queue and return the number of
 characters written.</p>
-<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.write" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.write()</span></code></a>.</p>
+<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.write" title="(in Python v3.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.write()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -96,7 +96,7 @@ characters written.</p>
 <p>If the queue contains less than <em>size</em> characters or <em>size</em> is
 <code class="docutils literal notranslate"><span class="pre">None</span></code> or less than <code class="docutils literal notranslate"><span class="pre">1</span></code>, all characters in the queue are
 read.</p>
-<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.read" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.read()</span></code></a>.</p>
+<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.read" title="(in Python v3.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.read()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -105,15 +105,15 @@ read.</p>
 <dd><p>Like <a class="reference internal" href="#turboctl.ui.queuefile.QueueFile.read" title="turboctl.ui.queuefile.QueueFile.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read()</span></code></a>, but reading characters is stopped if a
 newline character is encountered. If this happens, the string
 returned includes that newline character.</p>
-<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.readline" title="(in Python v3.8)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.readline()</span></code></a>.</p>
+<p>This method emulates <a class="reference external" href="https://docs.python.org/3/library/io.html#io.TextIOBase.readline" title="(in Python v3.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.readline()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="turboctl.ui.queuefile.QueueFile.flush">
 <code class="sig-name descname">flush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.queuefile.QueueFile.flush" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method does nothing, but its existence makes it
-possible to <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> to this object with <code class="docutils literal notranslate"><span class="pre">flush=True</span></code>
-without raising an <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeError</span></code></a>.</p>
+possible to <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> to this object with <code class="docutils literal notranslate"><span class="pre">flush=True</span></code>
+without raising an <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeError</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -154,6 +154,8 @@ without raising an <a class="reference external" href="https://docs.python.org/3
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -199,10 +201,10 @@ without raising an <a class="reference external" href="https://docs.python.org/3
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

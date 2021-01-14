@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>parameter_component &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="hardware_component" href="hardware_component.html" />
@@ -45,8 +45,8 @@ values of pump parameters and handles access to them.</p>
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.parameter_component.ParameterComponent.parameters">
 <code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.virtualpump.parameter_component.ParameterComponent.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> that represents pump parameters.
-The keys should be parameter numbers (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) and values
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> that represents pump parameters.
+The keys should be parameter numbers (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) and values
 corresponding <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects.</p>
 </dd></dl>
 
@@ -141,7 +141,7 @@ will be instances of
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.parameter_component.ExtendedParameter.parameters">
 <code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of all instances of this class,
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of all instances of this class,
 with parameter numbers as keys and objects as values.
 This is needed, because the <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.min_value" title="turboctl.virtualpump.parameter_component.ExtendedParameter.min_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_value</span></code></a> and
 <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.max_value" title="turboctl.virtualpump.parameter_component.ExtendedParameter.max_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_value</span></code></a> attributes of some parameters depend on the
@@ -173,7 +173,7 @@ of the original non-extended parameter is a reference to the value of
 another parameter, this property returns that value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.8)"><strong>KeyError</strong></a> – If a referenced parameter cannot be found in
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.9)"><strong>KeyError</strong></a> – If a referenced parameter cannot be found in
     <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.parameters" title="turboctl.virtualpump.parameter_component.ExtendedParameter.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a>.</p>
 </dd>
 </dl>
@@ -189,7 +189,7 @@ of the original non-extended parameter is a reference to the value of
 another parameter, this property returns that value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.8)"><strong>KeyError</strong></a> – If a referenced parameter cannot be found in
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.9)"><strong>KeyError</strong></a> – If a referenced parameter cannot be found in
     <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.parameters" title="turboctl.virtualpump.parameter_component.ExtendedParameter.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a>.</p>
 </dd>
 </dl>
@@ -198,7 +198,7 @@ another parameter, this property returns that value.</p>
 <dl class="py method">
 <dt id="turboctl.virtualpump.parameter_component.ExtendedParameter.__str__">
 <code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.parameter_component.ExtendedParameter.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> with the following format:</p>
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> with the following format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ExtendedParameter</span><span class="p">(</span>
     <span class="n">number</span><span class="o">=&lt;</span><span class="n">number</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="n">indices</span><span class="o">=&lt;</span><span class="n">indices</span><span class="o">&gt;</span><span class="p">,</span>
@@ -228,16 +228,16 @@ value are displayed. The following is an example of the format:</p>
 <dl class="py class">
 <dt id="turboctl.virtualpump.parameter_component.ExtendedParameters">
 <em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.parameter_component.</code><code class="sig-name descname">ExtendedParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.parameter_component.ExtendedParameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
-<p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects.</p>
 <p>This class can be used to avoid the need to manually initialize a
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects. After initialization
-instances of this class behave like regular <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> objects.</p>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects. After initialization
+instances of this class behave like regular <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> objects.</p>
 <dl class="py method">
 <dt id="turboctl.virtualpump.parameter_component.ExtendedParameters.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.parameter_component.ExtendedParameters.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameters" title="turboctl.virtualpump.parameter_component.ExtendedParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameters</span></code></a> object from
-<em>parameters</em> (a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
+<em>parameters</em> (a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
 <a class="reference internal" href="../telegram/parser.html#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects).</p>
 <p>The data from each <a class="reference internal" href="../telegram/parser.html#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> object
 is copied into an <a class="reference internal" href="#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> object. The objects are
@@ -280,6 +280,8 @@ references to uninitialized parameters.</p>
 <li class="toctree-l4"><a class="reference internal" href="virtualpump.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -325,10 +327,10 @@ references to uninitialized parameters.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

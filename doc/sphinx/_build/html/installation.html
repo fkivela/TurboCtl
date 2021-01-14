@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Installation &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
@@ -36,29 +36,29 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="dependencies">
 <span id="id1"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>TurboCtl was written and tested in Python 3.7.7, so that or another relatively
-new Python version should be installed.
+<p>TurboCtl requires Python 3.8, and will not run on older Python versions
+(it was tested with version 3.8.5).
 It is intended to be used on a Linux operating system, and probably won’t work
 on other systems such as Windows without some tweaks.</p>
 <p>In addition to the Python standard library, TurboCtl uses the following
 external libraries:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="https://pypi.org/project/pyserial/">pySerial</a> (tested with version 3.4)</p></li>
-<li><p><a class="reference external" href="https://pypi.org/project/tabulate/">tabulate</a> (tested with version 0.8.3)</p></li>
-<li><p><a class="reference external" href="http://urwid.org/">urwid</a> (tested with version 2.0.1).</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/pyserial/">pySerial</a> (tested with version 3.5)</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/tabulate/">tabulate</a> (tested with version 0.8.7)</p></li>
+<li><p><a class="reference external" href="http://urwid.org/">Urwid</a> (tested with version 2.1.2).</p></li>
 </ul>
 </div></blockquote>
-<p>TurboCtl can also run without urwid by using an alternative user interface
+<p>TurboCtl can also run without Urwid by using an alternative user interface
 (see <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details).</p>
 </div>
 <div class="section" id="the-turboctl-directory">
 <h2>The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this headline">¶</a></h2>
 <p>TurboCtl doesn’t include an installation script; simply download the
 <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory to a location of your choosing.
-In order to access the <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package and the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code> script,
-the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory  should be added to <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">$PATH</span></code>
-or made the working directory.</p>
+In order to access the <a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package and the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code>
+script, the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory  should be added to <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and
+<code class="docutils literal notranslate"><span class="pre">$PATH</span></code> or made the working directory.</p>
 </div>
 <div class="section" id="the-dialout-group">
 <h2>The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group<a class="headerlink" href="#the-dialout-group" title="Permalink to this headline">¶</a></h2>
@@ -132,10 +132,10 @@ the command</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

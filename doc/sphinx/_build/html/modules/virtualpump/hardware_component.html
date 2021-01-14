@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>hardware_component &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="virtualconnection" href="virtualconnection.html" />
@@ -100,7 +100,7 @@ can be modified by this object.</p>
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.hardware_component.HardwareComponent.frequency">
 <code class="sig-name descname">frequency</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>The exact frequency of the pump as a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>.
+<dd><p>The exact frequency of the pump as a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>.
 This is needed to correctly simulate gradual changes in the
 frequency, because the frequency parameter only saves integer
 values.</p>
@@ -109,7 +109,7 @@ values.</p>
 <dl class="py attribute">
 <dt id="turboctl.virtualpump.hardware_component.HardwareComponent.is_on">
 <code class="sig-name descname">is_on</code><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.is_on" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> flag to keep track of whether the pump is on
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> flag to keep track of whether the pump is on
 or off.</p>
 </dd></dl>
 
@@ -141,7 +141,7 @@ The unit is 0.1 V.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a>
+<li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a>
 objects as used by <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ParameterComponent" title="turboctl.virtualpump.parameter_component.ParameterComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterComponent</span></code></a>.
 This is needed because some hardware components affect the
 values of parameters and vice versa.
@@ -149,7 +149,7 @@ Note that these need to be the actual parameters of the pump;
 dummy values cannot be used even for testing purposes, since
 all hardware-related parameters (see <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters" title="turboctl.virtualpump.hardware_component.HWParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HWParameters</span></code></a> for
 a list of those) need to be present for this class to function.</p></li>
-<li><p><strong>lock</strong> – A <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object that can be used to
+<li><p><strong>lock</strong> – A <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object that can be used to
 temporarily freeze the parallel thread which updates
 <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="turboctl.virtualpump.hardware_component.HardwareComponent.frequency"><code class="xref py py-attr docutils literal notranslate"><span class="pre">frequency</span></code></a>.
 The purpose of this is to prevent race conditions between that
@@ -345,7 +345,7 @@ warnings instead of errors.</p>
 <dd><p>Initializer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>parameters</strong> – A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects,
+<dd class="field-odd"><p><strong>parameters</strong> – A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects,
 which needs to include at least all the parameters which are
 attributes of this class.</p>
 </dd>
@@ -396,7 +396,7 @@ For all other attributes, the value of the parameter in
 will automatically be converted to a
 <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a> subclass instance.
 However, note that the type of <em>value</em> should match the type of the
-parameter; e.g. a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> can be converted into a <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> but
+parameter; e.g. a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> can be converted into a <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> but
 not into an <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
@@ -447,6 +447,8 @@ to make <a class="reference internal" href="#turboctl.virtualpump.hardware_compo
 <li class="toctree-l4"><a class="reference internal" href="virtualpump.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -492,10 +494,10 @@ to make <a class="reference internal" href="#turboctl.virtualpump.hardware_compo
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

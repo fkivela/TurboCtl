@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>virtualconnection &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="virtualpump" href="virtualpump.html" />
@@ -75,7 +75,7 @@ In this case, all running instances of the
 (how many bits are read at once).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -87,7 +87,7 @@ In this case, all running instances of the
 input before doing it again.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -115,7 +115,7 @@ can be simulated by assigning a suitable method to the
 <code class="sig-name descname">virtual_end</code><a class="headerlink" href="#turboctl.virtualpump.virtualconnection.VirtualConnection.virtual_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>This end of the connection is used by <a class="reference internal" href="#turboctl.virtualpump.virtualconnection.VirtualConnection.process" title="turboctl.virtualpump.virtualconnection.VirtualConnection.process"><code class="xref py py-meth docutils literal notranslate"><span class="pre">process()</span></code></a> to
 read and write data. It can be written to and read from
-with <a class="reference external" href="https://docs.python.org/3/library/os.html#os.read" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.read()</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/os.html#os.write" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.write()</span></code></a>.</p>
+with <a class="reference external" href="https://docs.python.org/3/library/os.html#os.read" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.read()</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/os.html#os.write" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.write()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>file-like object</p>
@@ -128,7 +128,7 @@ with <a class="reference external" href="https://docs.python.org/3/library/os.ht
 <code class="sig-name descname">user_end</code><a class="headerlink" href="#turboctl.virtualpump.virtualconnection.VirtualConnection.user_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>This end of the connection is meant to be used by a user to
 send commands to and read data from a simulated device.
-<a class="reference external" href="https://docs.python.org/3/library/os.html#os.read" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.read()</span></code></a> doesn’t seem to work with it,
+<a class="reference external" href="https://docs.python.org/3/library/os.html#os.read" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.read()</span></code></a> doesn’t seem to work with it,
 and the <a class="reference external" href="https://pypi.org/project/pyserial/">serial</a>
 module should be used instead.</p>
 <dl class="field-list simple">
@@ -145,7 +145,7 @@ module should be used instead.</p>
 <a class="reference internal" href="#turboctl.virtualpump.virtualconnection.VirtualConnection" title="turboctl.virtualpump.virtualconnection.VirtualConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualConnection</span></code></a> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -229,7 +229,7 @@ object is created.</p>
 and simply returns <em>input_</em> uncanged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_</strong> – A bytes-like object.</p>
+<dd class="field-odd"><p><strong>input</strong> – A bytes-like object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>input_</em>.</p>
@@ -272,6 +272,8 @@ and simply returns <em>input_</em> uncanged.</p>
 <li class="toctree-l4"><a class="reference internal" href="virtualpump.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -317,10 +319,10 @@ and simply returns <em>input_</em> uncanged.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

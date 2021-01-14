@@ -4,17 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>virtualpump &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Errata to the user manual" href="../../errata.html" />
+    <link rel="next" title="hacks" href="../hacks.html" />
     <link rel="prev" title="virtualconnection" href="virtualconnection.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -114,12 +114,12 @@ specified by it (such as changing parameter values).
 A reply telegram is then formed and its contents returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bytes_in</strong> – The telegram sent to the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+<dd class="field-odd"><p><strong>bytes_in</strong> – The telegram sent to the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.
+<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.
 If <em>bytes_in</em> cannot be interpreted as a valid telegram,
-the return value will be an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+the return value will be an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -159,6 +159,8 @@ the return value will be an empty <a class="reference external" href="https://do
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -174,7 +176,7 @@ the return value will be an empty <a class="reference external" href="https://do
   <li><a href="../index.html">turboctl</a><ul>
   <li><a href="index.html">virtualpump</a><ul>
       <li>Previous: <a href="virtualconnection.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualconnection</span></code></a></li>
-      <li>Next: <a href="../../errata.html" title="next chapter">Errata to the user manual</a></li>
+      <li>Next: <a href="../hacks.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
   </ul></li>
   </ul></li>
   </ul></li>
@@ -204,10 +206,10 @@ the return value will be an empty <a class="reference external" href="https://do
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

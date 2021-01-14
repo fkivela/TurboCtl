@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>command_line_ui &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="widgets" href="widgets.html" />
@@ -73,7 +73,7 @@ the default value is <code class="docutils literal notranslate"><span class="pre
 See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_debug" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_debug"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_debug()</span></code></a> for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -86,7 +86,7 @@ commands; the default value is <code class="docutils literal notranslate"><span 
 See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_verbose()</span></code></a> for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -154,9 +154,9 @@ It has the following value:</p>
 <li><p><strong>port</strong> – This is passed to the initializer of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a>.</p></li>
 <li><p><strong>poll</strong> – This is also passed to <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a>.</p></li>
 <li><p><strong>inputfile</strong> – The value of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a>.
-If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p></li>
+If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p></li>
 <li><p><strong>outputfile</strong> – The value of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a>.
-If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p></li>
+If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -276,21 +276,21 @@ screen.</p>
 <dt id="turboctl.ui.command_line_ui.CommandLineUI.input">
 <code class="sig-name descname">input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prompt</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask the user for input.</p>
-<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#input" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">input()</span></code></a> function,
+<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#input" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">input()</span></code></a> function,
 but uses <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> and <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a> instead of
-<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
-<p>The line editing functionality provided by the <a class="reference external" href="https://docs.python.org/3/library/readline.html#module-readline" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code></a>
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
+<p>The line editing functionality provided by the <a class="reference external" href="https://docs.python.org/3/library/readline.html#module-readline" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code></a>
 module works with this method only if <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> is
-<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p>
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="turboctl.ui.command_line_ui.CommandLineUI.print">
 <code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">objects</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">' '</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">'\n'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print text to the UI.</p>
-<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function,
+<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function,
 but uses <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> and <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a> instead of
-<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>, and doesn’t include
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>, and doesn’t include
 the <em>file</em> and <em>flush</em> arguments.</p>
 </dd></dl>
 
@@ -332,6 +332,8 @@ the <em>file</em> and <em>flush</em> arguments.</p>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -377,10 +379,10 @@ the <em>file</em> and <em>flush</em> arguments.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

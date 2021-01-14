@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Usage &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Packages and modules" href="modules.html" />
@@ -36,18 +36,18 @@
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="running-the-program">
 <h2>Running the program<a class="headerlink" href="#running-the-program" title="Permalink to this headline">¶</a></h2>
-<p>The TurboCtl program is run via the <code class="docutils literal notranslate"><span class="pre">__main__.py</span></code> script inside the
-<code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package. This is done with the command</p>
+<p>The TurboCtl program is run via the <a class="reference internal" href="modules/main.html"><span class="doc">__main__.py</span></a> script
+inside the <a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package. This is done with the command</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python path/to/turboctl -args
 </pre></div>
 </div>
 <p>This only works if the <code class="docutils literal notranslate"><span class="pre">python</span></code> command is set to run a Python version that
-TurboCtl is compatible with; i.e. Python 3.7 or newer. If this is not the case,
+TurboCtl is compatible with; i.e. Python 3.8 or newer. If this is not the case,
 substitute <code class="docutils literal notranslate"><span class="pre">python</span></code> for a command that runs a compatible version of Python,
-e.g. <code class="docutils literal notranslate"><span class="pre">python3</span></code> or <code class="docutils literal notranslate"><span class="pre">python3.7</span></code>.</p>
+e.g. <code class="docutils literal notranslate"><span class="pre">python3</span></code> or <code class="docutils literal notranslate"><span class="pre">python3.8</span></code>.</p>
 <p>Because this command requires providing the relative or absolute path of the
-<code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package every time it is used, TurboCtl also provides a shell
-script which automatically fills in the path before calling the command.
+<a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package every time it is used, TurboCtl also provides a
+shell script which automatically fills in the path before calling the command.
 If the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory has been added to <code class="docutils literal notranslate"><span class="pre">$PATH</span></code>, the shell script
 can be run from any directory with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ turboctl-run -args
@@ -56,7 +56,7 @@ can be run from any directory with</p>
 <p>The script uses the <code class="docutils literal notranslate"><span class="pre">/usr/bin/env</span> <span class="pre">python3</span></code> command to run the program. If
 the <code class="docutils literal notranslate"><span class="pre">python3</span></code> command is set to use an older Python 3 version that isn’t
 compatible with TurboCtl, the script should be edited to use a specific newer
-version (e.g. <code class="docutils literal notranslate"><span class="pre">python3.7</span></code>) instead. The script is located in
+version (e.g. <code class="docutils literal notranslate"><span class="pre">python3.8</span></code>) instead. The script is located in
 <code class="docutils literal notranslate"><span class="pre">TurboCtl/turboctl-run</span></code>.</p>
 <p>Both of these commands accept the following command-line arguments:</p>
 <dl class="option-list">
@@ -119,13 +119,13 @@ In both UI modes, command history can be accessed by using the up and down
 keys.</p>
 <p>Commands are given to the UI by writing the name of the command, followed by
 its arguments, all separated by spaces. The arguments are pased with
-<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
+<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
 tuples and lists.
 Note that spaces are only accepted between arguments, so an argument of
 <code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code> is correctly interpreted as a list, but <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will raise
 an error.</p>
 <p>All arguments that cannot be parsed into other object types are interpreted as
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
 arguments.</p>
 <p>Most commands have at least one alias, which can be used instead of the longer
 proper command name.</p>
@@ -280,10 +280,10 @@ after closing TurboCtl.</p></li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,14 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>parser &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="telegram" href="telegram.html" />
@@ -40,7 +40,7 @@ errors and warnings from text files.</p>
 <dt id="turboctl.telegram.parser.PARAMETERS">
 <code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">PARAMETERS</code><a class="headerlink" href="#turboctl.telegram.parser.PARAMETERS" title="Permalink to this definition">¶</a></dt>
 <dd><p>The pump has multiple parameters which affect its behaviour.
-This attribute holds a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of these parameters, represented
+This attribute holds a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of these parameters, represented
 as <a class="reference internal" href="#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects, with the numbers of the parameters as
 the keys.</p>
 </dd></dl>
@@ -48,7 +48,7 @@ the keys.</p>
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.ERRORS">
 <code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">ERRORS</code><a class="headerlink" href="#turboctl.telegram.parser.ERRORS" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of different error conditions which can affect the
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of different error conditions which can affect the
 pump, represented as <a class="reference internal" href="#turboctl.telegram.parser.ErrorOrWarning" title="turboctl.telegram.parser.ErrorOrWarning"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorOrWarning</span></code></a> objects,
 with error numbers as the keys.</p>
 </dd></dl>
@@ -61,33 +61,33 @@ with error numbers as the keys.</p>
 
 <dl class="py class">
 <dt id="turboctl.telegram.parser.Parameter">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">indices</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.8)">range</a></span></em>, <em class="sig-param"><span class="n">min_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">max_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">default</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">unit</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">writable</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span></em>, <em class="sig-param"><span class="n">datatype</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.8)">type</a></span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.parser.Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">indices</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.9)">range</a></span></em>, <em class="sig-param"><span class="n">min_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">max_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">default</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">unit</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">writable</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">datatype</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)">type</a></span></em>, <em class="sig-param"><span class="n">bits</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.parser.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for representing pump parameters.</p>
-<p>This is a <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclass</span></code></a>, so the <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, <code class="docutils literal notranslate"><span class="pre">__str__</span></code>
+<p>This is a <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclass</span></code></a>, so the <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, <code class="docutils literal notranslate"><span class="pre">__str__</span></code>
 and <code class="docutils literal notranslate"><span class="pre">__repr__</span></code> methods are generated automatically.</p>
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.number">
-<code class="sig-name descname">number</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.number" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">number</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.number" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of the parameter.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.name">
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of the parameter.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.indices">
-<code class="sig-name descname">indices</code><em class="property">: range</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> object describing the indices of the parameter; e.g.
+<code class="sig-name descname">indices</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.9)">range</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> object describing the indices of the parameter; e.g.
 <code class="docutils literal notranslate"><span class="pre">range(5)</span></code> would mean the parameter has indices numbered 0 to 4.
 This is <code class="docutils literal notranslate"><span class="pre">range(0)</span></code> for unindexed parameters.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.min_value">
-<code class="sig-name descname">min_value</code><em class="property">: Union[Data, str]</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.min_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">min_value</code><em class="property">: Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.min_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>The minimum value of the parameter.</p>
 <p>The minumum value of some parameters depends on the current value of
 another parameter. In that case, <a class="reference internal" href="#turboctl.telegram.parser.Parameter.min_value" title="turboctl.telegram.parser.Parameter.min_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_value</span></code></a> is set to
@@ -96,7 +96,7 @@ another parameter. In that case, <a class="reference internal" href="#turboctl.t
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.max_value">
-<code class="sig-name descname">max_value</code><em class="property">: Union[Data, str]</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.max_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">max_value</code><em class="property">: Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.max_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>The maximum value of the parameter.</p>
 <p>The maximum value of some parameters depends on the current value of
 another parameter. In that case, <a class="reference internal" href="#turboctl.telegram.parser.Parameter.max_value" title="turboctl.telegram.parser.Parameter.max_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_value</span></code></a> is set to
@@ -105,28 +105,28 @@ another parameter. In that case, <a class="reference internal" href="#turboctl.t
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.default">
-<code class="sig-name descname">default</code><em class="property">: Union[Data, List[Data]]</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.default" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default</code><em class="property">: Union<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a><span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>The default value of the parameter.</p>
 <p>If the parameter is indexed and different indices have different default
-values, <a class="reference internal" href="#turboctl.telegram.parser.Parameter.default" title="turboctl.telegram.parser.Parameter.default"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default</span></code></a> will be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of default values
+values, <a class="reference internal" href="#turboctl.telegram.parser.Parameter.default" title="turboctl.telegram.parser.Parameter.default"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default</span></code></a> will be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of default values
 corresponding to the different indices.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.unit">
-<code class="sig-name descname">unit</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.unit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unit</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.unit" title="Permalink to this definition">¶</a></dt>
 <dd><p>The unit of the parameter; e.g. <code class="docutils literal notranslate"><span class="pre">'°C'</span></code> for degrees Celsius.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.writable">
-<code class="sig-name descname">writable</code><em class="property">: bool</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.writable" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">writable</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.writable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signifies whether the value of the parameter can be changed.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.datatype">
-<code class="sig-name descname">datatype</code><em class="property">: type</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.datatype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">datatype</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)">type</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.datatype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The type of the value of the parameter; a
 <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a> subclass
 (but not <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a>).</p>
@@ -134,20 +134,20 @@ corresponding to the different indices.</p>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.bits">
-<code class="sig-name descname">bits</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.bits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bits</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>The size of the parameter in bits; <code class="docutils literal notranslate"><span class="pre">16</span></code> or <code class="docutils literal notranslate"><span class="pre">32</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.Parameter.description">
-<code class="sig-name descname">description</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.description" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.Parameter.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>A string describing the parameter.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="turboctl.telegram.parser.Parameter.fields">
 <em class="property">property </em><code class="sig-name descname">fields</code><a class="headerlink" href="#turboctl.telegram.parser.Parameter.fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></a> with the attribute
+<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></a> with the attribute
 names of this objects as keys and their values as values.</p>
 </dd></dl>
 
@@ -155,36 +155,36 @@ names of this objects as keys and their values as values.</p>
 
 <dl class="py class">
 <dt id="turboctl.telegram.parser.ErrorOrWarning">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">ErrorOrWarning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">possible_cause</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">remedy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.parser.</code><code class="sig-name descname">ErrorOrWarning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">possible_cause</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">remedy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for representing pump errors and warnings.</p>
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.ErrorOrWarning.number">
-<code class="sig-name descname">number</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.number" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">number</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.number" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of the error or warning.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.ErrorOrWarning.name">
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of the error or warning.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.ErrorOrWarning.possible_cause">
-<code class="sig-name descname">possible_cause</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.possible_cause" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">possible_cause</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.possible_cause" title="Permalink to this definition">¶</a></dt>
 <dd><p>A string describing the possible cause(s) of the error or warning.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="turboctl.telegram.parser.ErrorOrWarning.remedy">
-<code class="sig-name descname">remedy</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.remedy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remedy</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.remedy" title="Permalink to this definition">¶</a></dt>
 <dd><p>A string describing possible remedies for the error or warning.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="turboctl.telegram.parser.ErrorOrWarning.fields">
 <em class="property">property </em><code class="sig-name descname">fields</code><a class="headerlink" href="#turboctl.telegram.parser.ErrorOrWarning.fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></a> with the attribute
+<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></a> with the attribute
 names of this object as keys and their values as values.</p>
 </dd></dl>
 
@@ -215,13 +215,13 @@ The syntax used to define the parameters is explained in
 <code class="docutils literal notranslate"><span class="pre">parameters.txt</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> with numbers as keys and <a class="reference internal" href="#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects as
+<dd class="field-even"><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> with numbers as keys and <a class="reference internal" href="#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects as
 values.</p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.8)"><strong>FileNotFoundError</strong></a> – If <em>filename</em> cannot be found.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – If a line in <em>filename</em> cannot be parsed.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.9)"><strong>FileNotFoundError</strong></a> – If <em>filename</em> cannot be found.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.9)"><strong>RuntimeError</strong></a> – If a line in <em>filename</em> cannot be parsed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -233,7 +233,7 @@ values.</p>
 <dd><p>Parse the error file and return a dictionary of
 errors.</p>
 <p>This works like <a class="reference internal" href="#turboctl.telegram.parser.load_parameters" title="turboctl.telegram.parser.load_parameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_parameters()</span></code></a>, but the default file is
-<code class="docutils literal notranslate"><span class="pre">'errors.txt'</span></code>, and the returned <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> contains
+<code class="docutils literal notranslate"><span class="pre">'errors.txt'</span></code>, and the returned <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> contains
 <a class="reference internal" href="#turboctl.telegram.parser.ErrorOrWarning" title="turboctl.telegram.parser.ErrorOrWarning"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorOrWarning</span></code></a> objects.</p>
 </dd></dl>
 
@@ -243,7 +243,7 @@ errors.</p>
 <dd><p>Parse the warning file and return a dictionary of
 warnings.</p>
 <p>This works like <a class="reference internal" href="#turboctl.telegram.parser.load_parameters" title="turboctl.telegram.parser.load_parameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_parameters()</span></code></a>, but the default file is
-<code class="docutils literal notranslate"><span class="pre">'warnings.txt'</span></code>, and the returned <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> contains
+<code class="docutils literal notranslate"><span class="pre">'warnings.txt'</span></code>, and the returned <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> contains
 <a class="reference internal" href="#turboctl.telegram.parser.ErrorOrWarning" title="turboctl.telegram.parser.ErrorOrWarning"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorOrWarning</span></code></a> objects.</p>
 </dd></dl>
 
@@ -281,6 +281,8 @@ warnings.</p>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../ui/index.html">ui</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -326,10 +328,10 @@ warnings.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019, University of Helsinki Fusor Team.
+      &copy;2019 - 2021, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
