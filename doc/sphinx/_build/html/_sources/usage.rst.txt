@@ -39,7 +39,7 @@ Both of these commands accept the following command-line arguments:
 -p, --port port     Define the port used for the serial connection.
 
                     If this argument isn't supplied, the default port
-                    ``/dev/ttyUSB0`` will be used. 
+                    ``/dev/ttyACM0`` will be used. 
 
 -v, --virtual       Run HVCtl with a virtual pump. 
 
@@ -95,7 +95,7 @@ In both UI modes, command history can be accessed by using the up and down
 keys.
 
 Commands are given to the UI by writing the name of the command, followed by
-its arguments, all separated by spaces. The arguments are pased with
+its arguments, all separated by spaces. The arguments are parsed with
 :func:`ast.literal_eval` which recognizes some basic Python objects such as
 tuples and lists.
 Note that spaces are only accepted between arguments, so an argument of

@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
     <title>telegram &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -32,13 +34,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-turboctl.telegram.telegram">
-<span id="telegram"></span><h1><a class="reference internal" href="#module-turboctl.telegram.telegram" title="turboctl.telegram.telegram"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a><a class="headerlink" href="#module-turboctl.telegram.telegram" title="Permalink to this headline">¶</a></h1>
+  <section id="module-turboctl.telegram.telegram">
+<span id="telegram"></span><h1><a class="reference internal" href="#module-turboctl.telegram.telegram" title="turboctl.telegram.telegram"><code class="xref py py-mod docutils literal notranslate"><span class="pre">telegram</span></code></a><a class="headerlink" href="#module-turboctl.telegram.telegram" title="Permalink to this heading">¶</a></h1>
 <p>This module defines classes for creating, representing and reading
 telegrams which are used to communicate with the pump.</p>
 <dl class="py class">
-<dt id="turboctl.telegram.telegram.Telegram">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.telegram.</code><code class="sig-name descname">Telegram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameter_code</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin">turboctl.telegram.datatypes.Bin</a></span></em>, <em class="sig-param"><span class="n">parameter_number</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></span></em>, <em class="sig-param"><span class="n">parameter_index</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></span></em>, <em class="sig-param"><span class="n">parameter_value</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a></span></em>, <em class="sig-param"><span class="n">flag_bits</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin">turboctl.telegram.datatypes.Bin</a></span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></span></em>, <em class="sig-param"><span class="n">temperature</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint">turboctl.telegram.datatypes.Sint</a></span></em>, <em class="sig-param"><span class="n">current</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></span></em>, <em class="sig-param"><span class="n">voltage</span><span class="p">:</span> <span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.telegram.telegram.</span></span><span class="sig-name descname"><span class="pre">Telegram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_bits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><span class="pre">Sint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram" title="Permalink to this definition">¶</a></dt>
 <dd><p>A simple dataclass that represents a telegram sent to or from the pump.</p>
 <p>This class is cumbersome to initialize directly, since the values of all
 attributes must be given as arguments. Instances should instead be
@@ -141,79 +143,101 @@ A checksum computed using the following algorithm:</p>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">^</span></code> is the exclusive or (XOR) operator.</p>
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.parameter_code">
-<code class="sig-name descname">parameter_code</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin">turboctl.telegram.datatypes.Bin</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_code" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.parameter_code">
+<span class="sig-name descname"><span class="pre">parameter_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parameter access or response code as a 4-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.parameter_number">
-<code class="sig-name descname">parameter_number</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_number" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.parameter_number">
+<span class="sig-name descname"><span class="pre">parameter_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parameter number as an 11-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.parameter_index">
-<code class="sig-name descname">parameter_index</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_index" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.parameter_index">
+<span class="sig-name descname"><span class="pre">parameter_index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parameter index as a 8-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.parameter_value">
-<code class="sig-name descname">parameter_value</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data">turboctl.telegram.datatypes.Data</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_value" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.parameter_value">
+<span class="sig-name descname"><span class="pre">parameter_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><span class="pre">Data</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.parameter_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parameter value. This attribute is always a 32-bit instance of a
 subclass of <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a>,
 but the exact type depends on the parameter.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.flag_bits">
-<code class="sig-name descname">flag_bits</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin">turboctl.telegram.datatypes.Bin</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.flag_bits" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.flag_bits">
+<span class="sig-name descname"><span class="pre">flag_bits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.flag_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>The control or status bits as a 32-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bin</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.frequency">
-<code class="sig-name descname">frequency</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.frequency" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>The frequency as a 32-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.temperature">
-<code class="sig-name descname">temperature</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint">turboctl.telegram.datatypes.Sint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.temperature" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.temperature">
+<span class="sig-name descname"><span class="pre">temperature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><span class="pre">Sint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.temperature" title="Permalink to this definition">¶</a></dt>
 <dd><p>The temperature as a 32-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.current">
-<code class="sig-name descname">current</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.current" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.current">
+<span class="sig-name descname"><span class="pre">current</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.current" title="Permalink to this definition">¶</a></dt>
 <dd><p>The current as a 32-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.voltage">
-<code class="sig-name descname">voltage</code><em class="property">: <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint">turboctl.telegram.datatypes.Uint</a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.voltage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.voltage">
+<span class="sig-name descname"><span class="pre">voltage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>The voltage as a 32-bit <a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.Telegram.LENGTH">
-<code class="sig-name descname">LENGTH</code><em class="property"> = 24</em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.LENGTH" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.LENGTH">
+<span class="sig-name descname"><span class="pre">LENGTH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.LENGTH" title="Permalink to this definition">¶</a></dt>
 <dd><p>The length of a telegram in bytes.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.Telegram.__bytes__">
-<code class="sig-name descname">__bytes__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__bytes__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the telegram as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.__bytes__">
+<span class="sig-name descname"><span class="pre">__bytes__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__bytes__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the telegram as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 <p>The checksum is computed automatically and added to the end.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_bits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Bin" title="turboctl.telegram.datatypes.Bin"><span class="pre">Bin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Sint" title="turboctl.telegram.datatypes.Sint"><span class="pre">Sint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><span class="pre">Uint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.Telegram.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.Telegram.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="turboctl.telegram.telegram.TelegramBuilder">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.telegram.</code><code class="sig-name descname">TelegramBuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">PARAMETERS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.telegram.telegram.</span></span><span class="sig-name descname"><span class="pre">TelegramBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PARAMETERS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can be used to easily construct instances of the
 <a class="reference internal" href="#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> class.</p>
 <p>Here is an example of how to use this class:</p>
@@ -230,15 +254,15 @@ isn’t actually indexed.</p>
 <p>Attributes which aren’t explicitly set to a value with a setter method are
 set to zero when the telegram is created.
 Trying to set an attribute to an invalid value results in a
-<a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> or a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
-<p>A telegram can also be created from a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object:</p>
+<a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> or a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a>.</p>
+<p>A telegram can also be created from a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">telegram</span> <span class="o">=</span> <span class="n">TelegramBuilder</span><span class="p">()</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">bytes_</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.parameters">
-<code class="sig-name descname">parameters</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of
 <a class="reference internal" href="parser.html#turboctl.telegram.parser.Parameter" title="turboctl.telegram.parser.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects, with
 parameter numbers as keys.
 The default value is <a class="reference internal" href="parser.html#turboctl.telegram.parser.PARAMETERS" title="turboctl.telegram.parser.PARAMETERS"><code class="xref py py-const docutils literal notranslate"><span class="pre">PARAMETERS</span></code></a>,
@@ -246,24 +270,24 @@ but non-default parameter sets can be used for testing purposes.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">PARAMETERS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PARAMETERS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.telegram.TelegramBuilder" title="turboctl.telegram.telegram.TelegramBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TelegramBuilder</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>parameters</strong> – The object to be assigned to <a class="reference internal" href="#turboctl.telegram.telegram.TelegramBuilder.parameters" title="turboctl.telegram.telegram.TelegramBuilder.parameters"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameters</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.from_bytes">
-<code class="sig-name descname">from_bytes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bytes_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.from_bytes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the contents of the telegram from a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.from_bytes">
+<span class="sig-name descname"><span class="pre">from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.from_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the contents of the telegram from a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 <p>The type of <a class="reference internal" href="#turboctl.telegram.telegram.Telegram.parameter_value" title="turboctl.telegram.telegram.Telegram.parameter_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_value</span></code></a>
 depends on <a class="reference internal" href="#turboctl.telegram.telegram.Telegram.parameter_number" title="turboctl.telegram.telegram.Telegram.parameter_number"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_number</span></code></a>,
 and is assigned automatically. If <em>bytes_</em> contains a parameter
-number that doesn’t exist, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised.</p>
+number that doesn’t exist, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised.</p>
 <p>If the parameter isn’t accessed (i.e. the parameter mode is set to
 <code class="docutils literal notranslate"><span class="pre">'none'</span></code> or code to <code class="docutils literal notranslate"><span class="pre">'0000'</span></code>), invalid parameter numbers, such as
 the default value of 0, are permitted.
@@ -273,15 +297,15 @@ In that case, the parameter type is set to
 first be initialized normally with <a class="reference internal" href="#turboctl.telegram.telegram.TelegramBuilder.__init__" title="turboctl.telegram.telegram.TelegramBuilder.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>, after which
 this method may be called.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If <em>bytes_</em> doesn’t represent a valid telegram.</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If <em>bytes_</em> doesn’t represent a valid telegram.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode">
-<code class="sig-name descname">set_parameter_mode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode">
+<span class="sig-name descname"><span class="pre">set_parameter_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameter access or response mode to one of the following:</p>
 <dl class="simple">
 <dt>Access modes:</dt><dd><ul class="simple">
@@ -303,25 +327,25 @@ based on the parameter mode and the parameter number.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_number">
-<code class="sig-name descname">set_parameter_number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_number" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_number">
+<span class="sig-name descname"><span class="pre">set_parameter_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameter number.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If there isn’t a parameter with the specified number.</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If there isn’t a parameter with the specified number.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_index">
-<code class="sig-name descname">set_parameter_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_index" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_index">
+<span class="sig-name descname"><span class="pre">set_parameter_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameter index.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_value">
-<code class="sig-name descname">set_parameter_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_value" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_parameter_value">
+<span class="sig-name descname"><span class="pre">set_parameter_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameter value.</p>
 <p>The type of <em>value</em> depends on the type of the parameter.
 This method can also be used to set the error code; if
@@ -331,8 +355,8 @@ error code regardless of parameter number or type.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_flag_bits">
-<code class="sig-name descname">set_flag_bits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_flag_bits" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_flag_bits">
+<span class="sig-name descname"><span class="pre">set_flag_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_flag_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the control or status bits.</p>
 <p><em>bits</em> should be an iterable of those
 <a class="reference internal" href="codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> or
@@ -341,41 +365,41 @@ included in the telegram.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_frequency">
-<code class="sig-name descname">set_frequency</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_frequency" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_frequency">
+<span class="sig-name descname"><span class="pre">set_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the frequency.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_temperature">
-<code class="sig-name descname">set_temperature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_temperature" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_temperature">
+<span class="sig-name descname"><span class="pre">set_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_temperature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the temperature.</p>
 <p>Note that <em>value</em> can also be negative.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_current">
-<code class="sig-name descname">set_current</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_current" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_current">
+<span class="sig-name descname"><span class="pre">set_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_current" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the current.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.set_voltage">
-<code class="sig-name descname">set_voltage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_voltage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.set_voltage">
+<span class="sig-name descname"><span class="pre">set_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the voltage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramBuilder.build">
-<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_</span><span class="o">=</span><span class="default_value">'query'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'query'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build and return a <a class="reference internal" href="#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>type</strong> – <code class="docutils literal notranslate"><span class="pre">query</span></code> if the telegram represents a message to the pump,
 <code class="docutils literal notranslate"><span class="pre">reply</span></code> if it represents a message from the pump.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If a telegram cannot
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If a telegram cannot
     be created with the specified attributes.</p>
 </dd>
 </dl>
@@ -384,58 +408,58 @@ included in the telegram.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="turboctl.telegram.telegram.TelegramReader">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.telegram.telegram.</code><code class="sig-name descname">TelegramReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">telegram</span></em>, <em class="sig-param"><span class="n">type_</span><span class="o">=</span><span class="default_value">'reply'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.telegram.telegram.</span></span><span class="sig-name descname"><span class="pre">TelegramReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">telegram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reply'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can be used to read the data of a telegram in a more
 user-friendly way. This means the returned values are Python built-ins
 instead of the custom datatypes used by the <a class="reference internal" href="#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> class, and
 <em>parameter_code</em> is automatically converted to a human-readable value.</p>
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.TelegramReader.type">
-<code class="sig-name descname">type</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.type" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">'query'</span></code> for telegrams to the pump, <code class="docutils literal notranslate"><span class="pre">'reply'</span></code> for telegrams
 from the pump.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.telegram.telegram.TelegramReader.telegram">
-<code class="sig-name descname">telegram</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.telegram" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.telegram">
+<span class="sig-name descname"><span class="pre">telegram</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.telegram" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> object that is read.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">telegram</span></em>, <em class="sig-param"><span class="n">type_</span><span class="o">=</span><span class="default_value">'reply'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">telegram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reply'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.telegram.telegram.TelegramReader" title="turboctl.telegram.telegram.TelegramReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">TelegramReader</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>telegram</strong> – The <a class="reference internal" href="#turboctl.telegram.telegram.Telegram" title="turboctl.telegram.telegram.Telegram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Telegram</span></code></a> to be read.</p></li>
 <li><p><strong>type</strong> – <code class="docutils literal notranslate"><span class="pre">query</span></code> if the telegram represents a message to the pump,
 <code class="docutils literal notranslate"><span class="pre">reply</span></code> if it represents a message from the pump.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If <em>type_</em> has an invalid value.</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If <em>type_</em> has an invalid value.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__repr__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an exact string respresentation of this object.</p>
 <p>The returned string can be evaluated to create a copy of this object.
 The format is <code class="docutils literal notranslate"><span class="pre">ClassName(telegram=&lt;telegram&gt;,</span> <span class="pre">type=&lt;type&gt;)</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.__str__">
-<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__str__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an easily readable string representation of this object.</p>
 <p>The returned string shows the values of both the attributes and the
 read-only properties of this object, and cannot thus be passed to
-<a class="reference external" href="https://docs.python.org/3/library/functions.html#eval" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> without an raising error.</p>
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#eval" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> without an raising error.</p>
 <p>The format is</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ClassName(
     telegram=&lt;telegram&gt;,
@@ -447,95 +471,95 @@ read-only properties of this object, and cannot thus be passed to
 </div>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_mode">
-<em class="property">property </em><code class="sig-name descname">parameter_mode</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_mode" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.parameter_mode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_mode</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter mode.</p>
 <p>This method is the reverse of
 <a class="reference internal" href="#turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode" title="turboctl.telegram.telegram.TelegramBuilder.set_parameter_mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TelegramBuilder.set_parameter_mode()</span></code></a>: it automatically converts
 a parameter access or response code to a human-readable string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If the parameter code of the telegram is invalid.</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If the parameter code of the telegram is invalid.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_number">
-<em class="property">property </em><code class="sig-name descname">parameter_number</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_number" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.parameter_number">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_number</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter number.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_index">
-<em class="property">property </em><code class="sig-name descname">parameter_index</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_index" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.parameter_index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_index</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter index.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_value">
-<em class="property">property </em><code class="sig-name descname">parameter_value</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_value" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.parameter_value">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_value</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter value.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.parameter_error">
-<em class="property">property </em><code class="sig-name descname">parameter_error</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_error" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.parameter_error">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_error</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.parameter_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parameter error.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A member of the <a class="reference internal" href="codes.html#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a>
 enum, or <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <a class="reference internal" href="#turboctl.telegram.telegram.TelegramReader.parameter_mode" title="turboctl.telegram.telegram.TelegramReader.parameter_mode"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_mode</span></code></a> isn’t <code class="docutils literal notranslate"><span class="pre">'error'</span></code>.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If the error number isn’t valid.</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If the error number isn’t valid.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.flag_bits">
-<em class="property">property </em><code class="sig-name descname">flag_bits</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.flag_bits" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.flag_bits">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flag_bits</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.flag_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the control or status bits as a list of those
 <a class="reference internal" href="codes.html#turboctl.telegram.codes.StatusBits" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a> or
 <a class="reference internal" href="codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> members that are set to
 1 in the telegram.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.frequency">
-<em class="property">property </em><code class="sig-name descname">frequency</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.frequency" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.frequency">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frequency</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the frequency.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.temperature">
-<em class="property">property </em><code class="sig-name descname">temperature</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.temperature" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.temperature">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temperature</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.temperature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the temperature.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.current">
-<em class="property">property </em><code class="sig-name descname">current</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.current" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.current">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.current" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the current.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="turboctl.telegram.telegram.TelegramReader.voltage">
-<em class="property">property </em><code class="sig-name descname">voltage</code><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.voltage" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.voltage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voltage</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the voltage.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="turboctl.telegram.telegram.checksum">
-<code class="sig-prename descclassname">turboctl.telegram.telegram.</code><code class="sig-name descname">checksum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bytes_</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)">bytes</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="headerlink" href="#turboctl.telegram.telegram.checksum" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.telegram.telegram.checksum">
+<span class="sig-prename descclassname"><span class="pre">turboctl.telegram.telegram.</span></span><span class="sig-name descname"><span class="pre">checksum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><span class="pre">bytes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#turboctl.telegram.telegram.checksum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a checksum for a telegram.</p>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -597,12 +621,12 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -616,10 +640,10 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 - 2021, University of Helsinki Fusor Team.
+      &copy;2019 - 2023, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

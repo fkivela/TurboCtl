@@ -19,7 +19,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'TurboCtl'
-copyright = '2019 - 2021, University of Helsinki Fusor Team'
+copyright = '2019 - 2023, University of Helsinki Fusor Team'
 author = 'Feliks Kivelä'
 
 # -- General configuration ---------------------------------------------------

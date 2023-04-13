@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
     <title>advanced_tui &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -32,47 +34,47 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-turboctl.ui.advanced_tui">
-<span id="advanced-tui"></span><h1><a class="reference internal" href="#module-turboctl.ui.advanced_tui" title="turboctl.ui.advanced_tui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advanced_tui</span></code></a><a class="headerlink" href="#module-turboctl.ui.advanced_tui" title="Permalink to this headline">¶</a></h1>
+  <section id="module-turboctl.ui.advanced_tui">
+<span id="advanced-tui"></span><h1><a class="reference internal" href="#module-turboctl.ui.advanced_tui" title="turboctl.ui.advanced_tui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advanced_tui</span></code></a><a class="headerlink" href="#module-turboctl.ui.advanced_tui" title="Permalink to this heading">¶</a></h1>
 <p>This module defines the <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a> class.</p>
 <p><a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a> uses <a class="reference external" href="http://urwid.org/">urwid</a>.
 If urwid hasn’t been installed,
 <a class="reference internal" href="command_line_ui.html#turboctl.ui.command_line_ui.CommandLineUI" title="turboctl.ui.command_line_ui.CommandLineUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommandLineUI</span></code></a> should be used instead.</p>
 <dl class="py class">
-<dt id="turboctl.ui.advanced_tui.AdvancedTUI">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.ui.advanced_tui.</code><code class="sig-name descname">AdvancedTUI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">script</span></em>, <em class="sig-param"><span class="n">inputfile</span></em>, <em class="sig-param"><span class="n">outputfile</span></em>, <em class="sig-param"><span class="n">palette</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.ui.advanced_tui.AdvancedTUI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.ui.advanced_tui.</span></span><span class="sig-name descname"><span class="pre">AdvancedTUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>A text-based user interface combining a terminal-style
 command line interface and a text screen.</p>
 <dl class="py attribute">
-<dt id="turboctl.ui.advanced_tui.AdvancedTUI.display">
-<code class="sig-name descname">display</code><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.ui.advanced_tui.AdvancedTUI.display">
+<span class="sig-name descname"><span class="pre">display</span></span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="Permalink to this definition">¶</a></dt>
 <dd><p>A text field for presenting information to the user.
 Use <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="turboctl.ui.advanced_tui.AdvancedTUI.display"><code class="xref py py-attr docutils literal notranslate"><span class="pre">display</span></code></a><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Text.set_text" title="(in Urwid v2.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.set_text()</span></code></a> to change its contents.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Text" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Text</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface">
-<code class="sig-name descname">command_line_interface</code><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface">
+<span class="sig-name descname"><span class="pre">command_line_interface</span></span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.command_line_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>A command-line interface for issuing commands, located
 below <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI.display" title="turboctl.ui.advanced_tui.AdvancedTUI.display"><code class="xref py py-attr docutils literal notranslate"><span class="pre">display</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="widgets.html#turboctl.ui.widgets.ScrollableCommandLines" title="turboctl.ui.widgets.ScrollableCommandLines"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScrollableCommandLines</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.ui.advanced_tui.AdvancedTUI.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">script</span></em>, <em class="sig-param"><span class="n">inputfile</span></em>, <em class="sig-param"><span class="n">outputfile</span></em>, <em class="sig-param"><span class="n">palette</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.ui.advanced_tui.AdvancedTUI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.ui.advanced_tui.AdvancedTUI" title="turboctl.ui.advanced_tui.AdvancedTUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdvancedTUI</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>script</strong> – The program that this UI controls.
 It should be wrapped in a callable object so that
@@ -97,8 +99,8 @@ documentation of
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.ui.advanced_tui.AdvancedTUI.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.run" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.ui.advanced_tui.AdvancedTUI.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.advanced_tui.AdvancedTUI.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the program and the UI loop in parallel threads.
 The UI loop beaks automatically when the program ends.</p>
 <div class="admonition warning">
@@ -117,7 +119,7 @@ exited.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -181,12 +183,12 @@ exited.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -200,10 +202,10 @@ exited.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 - 2021, University of Helsinki Fusor Team.
+      &copy;2019 - 2023, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

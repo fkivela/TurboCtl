@@ -3,6 +3,7 @@ TODO
 Soon:
 
 Later:
+- Make sure only one user can control the pump at a time.
 - Update test_ui
 - Make sure all tests are ok and can be run automatically at once
 - Make sure the program crashes elegantly when e.g. it cannot connect to the

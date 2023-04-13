@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
     <title>virtualpump &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -32,72 +34,72 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-turboctl.virtualpump.virtualpump">
-<span id="virtualpump"></span><h1><a class="reference internal" href="#module-turboctl.virtualpump.virtualpump" title="turboctl.virtualpump.virtualpump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a><a class="headerlink" href="#module-turboctl.virtualpump.virtualpump" title="Permalink to this headline">¶</a></h1>
+  <section id="module-turboctl.virtualpump.virtualpump">
+<span id="virtualpump"></span><h1><a class="reference internal" href="#module-turboctl.virtualpump.virtualpump" title="turboctl.virtualpump.virtualpump"><code class="xref py py-mod docutils literal notranslate"><span class="pre">virtualpump</span></code></a><a class="headerlink" href="#module-turboctl.virtualpump.virtualpump" title="Permalink to this heading">¶</a></h1>
 <p>This module can be used to simulate the I/O behaviour of a TURBOVAC
 pump and thus enable testing the program without access to an actual pump.</p>
 <dl class="py class">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump">
-<em class="property">class </em><code class="sig-prename descclassname">turboctl.virtualpump.virtualpump.</code><code class="sig-name descname">VirtualPump</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.virtualpump.virtualpump.</span></span><span class="sig-name descname"><span class="pre">VirtualPump</span></span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class simulates a TURBOVAC pump and tries to respond to
 signals the same way a physical pump would. This makes it possible
 to test the <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> package without connecting to a physical pump.</p>
 <dl class="py attribute">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.connection">
-<code class="sig-name descname">connection</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.connection">
+<span class="sig-name descname"><span class="pre">connection</span></span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulates the serial connection.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="virtualconnection.html#turboctl.virtualpump.virtualconnection.VirtualConnection" title="turboctl.virtualpump.virtualconnection.VirtualConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualConnection</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.parameter_component">
-<code class="sig-name descname">parameter_component</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameter_component" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.parameter_component">
+<span class="sig-name descname"><span class="pre">parameter_component</span></span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.parameter_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles access to pump parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ParameterComponent" title="turboctl.virtualpump.parameter_component.ParameterComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterComponent</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component">
-<code class="sig-name descname">hardware_component</code><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.hardware_component">
+<span class="sig-name descname"><span class="pre">hardware_component</span></span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.hardware_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulates pump hardware.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="hardware_component.html#turboctl.virtualpump.hardware_component.HardwareComponent" title="turboctl.virtualpump.hardware_component.HardwareComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">HardwareComponent</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump" title="turboctl.virtualpump.virtualpump.VirtualPump"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualPump</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.__enter__">
-<code class="sig-name descname">__enter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__enter__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__enter__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of a <code class="docutils literal notranslate"><span class="pre">with</span></code> block; returns
 <em>self</em>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.__exit__">
-<code class="sig-name descname">__exit__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">traceback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__exit__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.__exit__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called upon exiting a <code class="docutils literal notranslate"><span class="pre">with</span></code> block; calls
 <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.stop" title="turboctl.virtualpump.virtualpump.VirtualPump.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close parallel threads by calling
 <a class="reference internal" href="#turboctl.virtualpump.virtualpump.VirtualPump.connection" title="turboctl.virtualpump.virtualpump.VirtualPump.connection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">connection</span></code></a><a class="reference internal" href="virtualconnection.html#turboctl.virtualpump.virtualconnection.VirtualConnection.close" title="turboctl.virtualpump.virtualconnection.VirtualConnection.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close()</span></code></a>
 and
@@ -105,28 +107,28 @@ and
 </dd></dl>
 
 <dl class="py method">
-<dt id="turboctl.virtualpump.virtualpump.VirtualPump.process">
-<code class="sig-name descname">process</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bytes_in</span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.process" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="turboctl.virtualpump.virtualpump.VirtualPump.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.virtualpump.virtualpump.VirtualPump.process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process incoming data.</p>
 <p>This function processes the data sent to the virtual pump by
 interpreting it as a telegram and performing any commands
 specified by it (such as changing parameter values).
 A reply telegram is then formed and its contents returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bytes_in</strong> – The telegram sent to the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bytes_in</strong> – The telegram sent to the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The telegram sent back from the pump as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.
 If <em>bytes_in</em> cannot be interpreted as a valid telegram,
-the return value will be an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
+the return value will be an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -187,12 +189,12 @@ the return value will be an empty <a class="reference external" href="https://do
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -206,10 +208,10 @@ the return value will be an empty <a class="reference external" href="https://do
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 - 2021, University of Helsinki Fusor Team.
+      &copy;2019 - 2023, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

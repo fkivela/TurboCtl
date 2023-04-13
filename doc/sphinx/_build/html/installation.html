@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
     <title>Installation &#8212; TurboCtl  documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,10 +34,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="dependencies">
-<span id="id1"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<section id="dependencies">
+<span id="id1"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
 <p>TurboCtl requires Python 3.8, and will not run on older Python versions
 (it was tested with version 3.8.5).
 It is intended to be used on a Linux operating system, and probably won’t work
@@ -51,25 +53,25 @@ external libraries:</p>
 </div></blockquote>
 <p>TurboCtl can also run without Urwid by using an alternative user interface
 (see <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details).</p>
-</div>
-<div class="section" id="the-turboctl-directory">
-<h2>The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-turboctl-directory">
+<h2>The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this heading">¶</a></h2>
 <p>TurboCtl doesn’t include an installation script; simply download the
 <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory to a location of your choosing.
 In order to access the <a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package and the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code>
 script, the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory  should be added to <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and
 <code class="docutils literal notranslate"><span class="pre">$PATH</span></code> or made the working directory.</p>
-</div>
-<div class="section" id="the-dialout-group">
-<h2>The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group<a class="headerlink" href="#the-dialout-group" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-dialout-group">
+<h2>The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group<a class="headerlink" href="#the-dialout-group" title="Permalink to this heading">¶</a></h2>
 <p>In order to form a serial connection, the user running TurboCtl needs to be
 part of the <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group. If they aren’t already, they can be added with
 the command</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">adduser</span> <span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span> <span class="n">dialout</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -113,12 +115,12 @@ the command</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -132,10 +134,10 @@ the command</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 - 2021, University of Helsinki Fusor Team.
+      &copy;2019 - 2023, University of Helsinki Fusor Team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
