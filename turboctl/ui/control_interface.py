@@ -173,7 +173,12 @@ class ControlInterface():
         query, reply = api.status(self._connection, pump_on=self.status.pump_on)
         self._update_status(reply)
         return query, reply
-                
+
+    def reset_error(self):
+        query, reply = api.reset_error(self._connection)
+        self._update_status(reply)
+        return query, reply
+
     def read_parameter(self, number, index=0):
         """Read the value of an index of a parameter.
         

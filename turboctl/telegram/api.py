@@ -38,7 +38,13 @@ def send(connection, telegram):
     reply = TelegramBuilder().from_bytes(reply_bytes).build()
     return TelegramReader(telegram, 'query'), TelegramReader(reply, 'reply')
 
-    
+def reset_error(connection):
+    builder = TelegramBuilder()
+    clear_error = [ControlBits.COMMAND, ControlBits.RESET_ERROR]
+    builder.set_flag_bits(clear_error)
+    query = builder.build()
+    return send(connection, query)
+
 def status(connection, pump_on=True):
     """Request pump status.
     
