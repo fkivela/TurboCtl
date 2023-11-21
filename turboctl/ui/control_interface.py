@@ -5,7 +5,7 @@ from typing import Callable
 
 import serial
 
-from turboctl.telegram import api
+from turboctl.telegram import api, codes
 
 
 @dataclass
@@ -24,7 +24,7 @@ class Status:
     voltage: float = 0.0
     """The intermediate circuit voltage in V."""
     
-    pump_on: bool = True
+    pump_on: bool = None
     """A boolean flag to keep track whether the pump is on or off."""
     
     status_bits: list = field(default_factory=list)
@@ -159,12 +159,12 @@ class ControlInterface():
     def pump_on(self):
         """Turn the pump on."""
         self.status.pump_on = True
-        return self.get_status()
+        return self.apply_state()
     
     def pump_off(self):
         """Turn the pump off."""
         self.status.pump_on = False
-        return self.get_status()
+        return self.apply_state()
 
     def get_status(self):
         """Ask pump status by sending an empty telegram."""
@@ -235,3 +235,7 @@ class ControlInterface():
         self.status.current = reply.current / 10
         self.status.voltage = reply.voltage
         self.status.status_bits = reply.flag_bits
+        if codes.StatusBits.OPERATION in reply.flag_bits:
+            self.status.pump_on = True
+        else:
+            self.status.pump_on = False

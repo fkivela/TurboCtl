@@ -47,7 +47,7 @@ def reset_error(connection):
     query = builder.build()
     return send(connection, query)
 
-def status(connection, pump_on):
+def status(connection, pump_on=None):
     """Request pump status.
     
     This function sends an empty telegram to the pump, which causes it to send
