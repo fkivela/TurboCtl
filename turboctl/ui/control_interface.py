@@ -170,7 +170,12 @@ class ControlInterface():
         """Ask pump status by sending an empty telegram."""
         # This is named "get_status" instead of "status", since "status" is
         # already an attribute.
-        query, reply = api.status(self._connection, pump_on=self.status.pump_on)
+        query, reply = api.status(self._connection)
+        self._update_status(reply)
+        return query, reply
+
+    def apply_state(self):
+        query, reply = api.status(self._connection, pump_on = self.status.pump_on)
         self._update_status(reply)
         return query, reply
                 
