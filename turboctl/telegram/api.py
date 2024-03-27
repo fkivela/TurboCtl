@@ -25,6 +25,7 @@ from turboctl.telegram.telegram import (Telegram, TelegramBuilder,
 
 
 _PUMP_ON_BITS = [ControlBits.COMMAND, ControlBits.ON]
+_PUMP_OFF_BITS = [ControlBits.COMMAND]
 
            
 def send(connection, telegram):
@@ -38,8 +39,15 @@ def send(connection, telegram):
     reply = TelegramBuilder().from_bytes(reply_bytes).build()
     return TelegramReader(telegram, 'query'), TelegramReader(reply, 'reply')
 
-    
-def status(connection, pump_on=True):
+
+def reset_error(connection):
+    builder = TelegramBuilder()
+    clear_error = [ControlBits.COMMAND, ControlBits.RESET_ERROR]
+    builder.set_flag_bits(clear_error)
+    query = builder.build()
+    return send(connection, query)
+
+def status(connection, pump_on=None):
     """Request pump status.
     
     This function sends an empty telegram to the pump, which causes it to send
@@ -48,15 +56,14 @@ def status(connection, pump_on=True):
     This can also be used for turning the pump on or off by setting *pump_on*
     to ``True`` or ``False``.
     """
-    
     builder = TelegramBuilder()
-    
-    if pump_on:
-        builder.set_flag_bits(_PUMP_ON_BITS)
-    
+    match pump_on:
+        case False:
+            builder.set_flag_bits(_PUMP_OFF_BITS)
+        case True:
+            builder.set_flag_bits(_PUMP_ON_BITS)
     query = builder.build()
     return send(connection, query)
-
             
 def _access_parameter(connection, mode, number, value, index, pump_on):
     """This auxiliary function provides functionality for both reading and

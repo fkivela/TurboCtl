@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "turboctl"
+description = "TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum pump."
+keywords = ["RS-232", "Turbovac"]
+readme = "README.rst"
+authors = [
+    {name = "Feliks Kivelä"},
+]
+requires-python = ">=3.8"
+dependencies = ['pyserial', 'urwid', 'tabulate']
+license = {text = "GPL-2.0-or-later"}
+version = "1.0.1"
+
+[project.urls]
+Homepage = "https://github.com/fkivela/TurboCtl"
+
+[project.scripts]
+turboctl = "turboctl.__main__:main"
+
+[tool.setuptools.packages.find]
