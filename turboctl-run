@@ -1,2 +1,2 @@
 # Run turboctl with given command line arguments.
-/usr/bin/env python3 $(dirname $0)/turboctl $@
+/usr/bin/env python3 "$(dirname "$0")/turboctl" $@
