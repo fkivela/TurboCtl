@@ -10,9 +10,9 @@ readme = "README.rst"
 authors = [
     {name = "Feliks Kivelä"},
 ]
-requires-python = ">=3.8"
-dependencies = ['pyserial', 'urwid', 'tabulate']
-license = {text = "GPL-2.0-or-later"}
+requires-python = ">=3.10"
+dependencies = ["pyserial", "urwid", "tabulate"]
+license = {text = "GPL-3.0-or-later"}
 version = "1.0.1"
 
 [project.urls]

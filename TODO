@@ -1,6 +1,12 @@
 TODO
 
 Soon:
+- Fix polling
+- Make the docs accessible via the UI
+- Update version number, make the version number dynamic in pyproject.toml, and add a version parameter to the module
+- Test installing TurboCtl via pip
+- Add TurboCtl to PyPI and conda-forge
+- Update installation instructions
 
 Later:
 - Make sure only one user can control the pump at a time.
