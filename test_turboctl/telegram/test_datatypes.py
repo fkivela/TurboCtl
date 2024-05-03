@@ -41,7 +41,7 @@ def values_and_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
         value = draw(st.floats(width=bits))
     
     elif class_ == Bin:
-        value = draw(st.from_regex(f'\A[01]{{{bits}}}\Z'))
+        value = draw(st.from_regex(f'\\A[01]{{{bits}}}\\Z'))
         
     return value, bits
 
@@ -81,7 +81,7 @@ def values_and_invalid_bits(draw, class_, min_bits=0, max_bits=MAX_BITS):
     
     elif class_ == Bin:
         length = draw(st.integers(min_value=bits + 1, max_value=MAX_BITS + 2))
-        value = draw(st.from_regex(f'\A[01]{{{length}}}\Z'))
+        value = draw(st.from_regex(f'\\A[01]{{{length}}}\\Z'))
 
     return value, bits
 

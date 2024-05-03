@@ -532,7 +532,7 @@ def _check_bin(value, bits=None):
         raise ValueError(
             f'bits != len(value); bits={bits}, value={repr(value)}')
 
-    regex=f'\A[01]{{{bits}}}\Z'
+    regex=f'\\A[01]{{{bits}}}\\Z'
     if not re.match(regex, value):
         raise ValueError(
             f'{repr(value)} is not a {bits} bit binary string')
