@@ -3,10 +3,12 @@
 import ast
 import inspect
 import os
+import pathlib
 # Importing readline adds command editing etc. to the input function.
 import readline  # pylint: disable=unused-import
 import sys
 import textwrap
+import webbrowser
 
 from turboctl.telegram.parser import PARAMETERS, ERRORS, WARNINGS
 from turboctl.ui.control_interface import ControlInterface
@@ -84,7 +86,8 @@ class CommandLineUI:
                     ('info'   , ['i']),
                     ('exit'   , ['e', 'q', 'x']),
                     ('help'   , ['h']),
-                    ('debug'  , ['d']),
+                    ('docs'   , ['d']),        
+                    ('debug'  , ['b']),
                     ('verbose', ['v']),
                 ]
     """
@@ -100,7 +103,8 @@ class CommandLineUI:
         ('info'   , ['i']),
         ('exit'   , ['e', 'q', 'x']),
         ('help'   , ['h']),
-        ('debug'  , ['d']),
+        ('docs'   , ['d']),        
+        ('debug'  , ['b']),
         ('verbose', ['v'])
     ]
     # pylint: enable=bad-whitespace
@@ -303,7 +307,17 @@ class CommandLineUI:
                       + textwrap.indent(description_str, self.indent))
 
         self.print(string)
-        
+
+    def cmd_docs(self):
+        """Open TurboCtl documentation in a browser."""
+        # Get the full path to README.html.
+        # README.html is in the main TurboCtl directory which should be in
+        # $PATH.
+        path = pathlib.Path('README.html').resolve()
+        # new=2 makes the page open in a new tab, though this seems to happen
+        # regardless.
+        webbrowser.open('file://' + str(path), new=2)
+
     def _helpstring(self, cmdname):
         """Return a help message describing the usage of *cmdname*."""
         method = self._get_method(cmdname)
