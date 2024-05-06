@@ -1,8 +1,6 @@
 TODO
 
 Soon:
-- Fix polling
-- Simulate pump turning off after 10 seconds
 - Recompile docs
 - Make the docs accessible via the UI
 - Go over the reset error command

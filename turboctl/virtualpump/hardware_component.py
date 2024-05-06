@@ -77,6 +77,7 @@ class HardwareComponent():
             
         frequency:
             The exact frequency of the pump as a :class:`float`.
+
             This is needed to correctly simulate gradual changes in the
             frequency, because the frequency parameter only saves integer
             values.
@@ -84,8 +85,19 @@ class HardwareComponent():
         is_on:
             A :class:`bool` flag to keep track of whether the pump is on
             or off.
+
+        shutoff_time:
+            The automatic shutoff interval of the pump (in seconds).
+
+            The pump automatically turns off after ``self.shutoff_time``
+            seconds have elapsed since the last "pump on" command.
+            The real pump has a shutoff time of 10 seconds, but the value of
+            this attribute can be lowered for testing purposes. 
+
+        on_time:
+            How long (in seconds) has elapsed since the last "pump on" command.
     """
-    
+
     TEMPERATURE = 30
     """The pump reports this constant temperature when it's on.
     The unit is °C."""
@@ -129,7 +141,9 @@ class HardwareComponent():
         self.frequency = 0.0
         
         # The pump starts in an off state.
-        self.is_on = False 
+        self.is_on = False
+        self.shutoff_time = 10
+        self.on_time = 0
         # This sets some parameters to the off state.
         self.off()
                 
@@ -222,6 +236,7 @@ class HardwareComponent():
     def on(self):
         """Turn the pump on and update parameters accordingly."""
         self.is_on = True
+        self.on_time = time.time()
         self.variables.temperature = self.TEMPERATURE
         self.variables.current = self.CURRENT
         self.variables.voltage = self.VOLTAGE
@@ -268,11 +283,19 @@ class HardwareComponent():
                 
     def _run(self, lock):
         """Run the parallel thread by continuously updating the 
-        frequency.
+        pump status.
         """
         while not self._stop_flag.is_set():
             time.sleep(self.step)
             lock.acquire()
+
+            # Turn the pump off if a long enough time has elapsed since the
+            # last "pump on" command.  
+            timed_shutoff = time.time() - self.on_time > self.shutoff_time
+            if self.is_on and timed_shutoff:
+                self.off()
+
+            # Update the frequency.
             self._change_frequency()
             lock.release()
 
