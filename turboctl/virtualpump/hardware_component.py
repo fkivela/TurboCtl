@@ -164,17 +164,22 @@ class HardwareComponent():
         
     def _handle_control_bits(self, query):
         """Apply the effects of control bits in *query*.
-        
+
         Currently only the COMMAND and ON control bits are
         recognized; all others are ignored.
         """
         on_command = (ControlBits.COMMAND in query.flag_bits and
                       ControlBits.ON in query.flag_bits)
+
+        off_command = (ControlBits.COMMAND in query.flag_bits and
+                       ControlBits.ON not in query.flag_bits)
+
         if on_command:
             self.on()
-        else:
+
+        if off_command:
             self.off()
-            
+
     def _handle_status_bits(self, query, reply):
         """Write appropriate status bits to *reply*.
         

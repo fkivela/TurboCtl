@@ -119,7 +119,7 @@ class CommandLineUI:
         Args:
             port:
                 This is passed to the initializer of :attr:`control_interface`.
-            poll:
+            auto_update:
                 This is also passed to :attr:`control_interface`.
             inputfile:
                 The value of :attr:`inputfile`.

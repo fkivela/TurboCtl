@@ -22,6 +22,7 @@ palette = [('green', 'light green', ''),
 
 red_button = ('red', '⏺')
 green_button = ('green', '⏺')
+grey_button = ('grey', '⏺')
 
 
 def status_screen(status):
@@ -40,25 +41,48 @@ def status_screen(status):
         The format is explained
         `here <http://urwid.org/manual/displayattributes.html
         ?highlight=display%20attributes#text-markup>`_.
-    """    
-    onoff_str = 'Pump ' + 'on' if status.pump_on else 'off'
-    button = green_button if status.pump_on else red_button
-    
-    descriptions = (member.description for member in status.status_bits)        
-    lines = ('    ' + s for s in descriptions)
-        
-    if lines:
-        condition_str = 'Active status conditions:\n' + '\n'.join(lines)
+    """
+    match status.pump_on:
+        case None:
+            onoff_str = 'Pump status unknown'
+            button = grey_button
+        case True:
+            onoff_str = 'Pump on'
+            button = green_button
+        case False:
+            onoff_str = 'Pump off'
+            button = red_button
+        case _:
+            raise ValueError(
+                f'status.pump_on should be None, True or False, '
+                f'was {status.pump_on}')
+
+    if status.status_bits is None:
+        lines = None
     else:
-        condition_str = 'No active status conditions'
+        descriptions = (member.description for member in status.status_bits)        
+        lines = ('    ' + s for s in descriptions)
+
+    match lines:
+        case None:
+            condition_str = 'Status conditions unknown'
+        case []:
+            condition_str = 'No active status conditions'
+        case _:
+            condition_str = 'Active status conditions:\n' + '\n'.join(lines)        
+
+    def format_float(x, unit, format_str='{}'):
+        if x is None:
+            return 'unknown'
+        return f'{format_str.format(x)} {unit}'
 
     hardware_str = (
-        f'Frequency: {status.frequency} Hz\n'
-        f'Temperature: {status.temperature} °C\n'
-        f'Current: {status.current:.1f} A\n'
-        f'Voltage: {status.voltage} V'
+        'Frequency: ' + format_float(status.frequency, 'Hz') + '\n'
+        'Temperature: ' + format_float(status.temperature, '°C') + '\n'
+        'Current: ' + format_float(status.current, 'A', '{:.1f}') + '\n'
+        'Voltage: ' + format_float(status.voltage, 'V')
     )
-        
+
     text = ([
         onoff_str, ' ', button, '\n',
         condition_str, '\n',

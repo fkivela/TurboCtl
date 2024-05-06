@@ -2,7 +2,10 @@ TODO
 
 Soon:
 - Fix polling
+- Simulate pump turning off after 10 seconds
+- Recompile docs
 - Make the docs accessible via the UI
+- Go over the reset error command
 - Update version number, make the version number dynamic in pyproject.toml, and add a version parameter to the module
 - Add hypothesis and spyder as optional requirements as these are needed for development
 - Test installing TurboCtl via pip
