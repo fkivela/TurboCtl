@@ -2,6 +2,7 @@ TODO
 
 Soon:
 - Recompile docs
+- Fix double colons in docs.
 - Make the docs accessible via the UI
 - Go over the reset error command
 - Update version number, make the version number dynamic in pyproject.toml, and add a version parameter to the module

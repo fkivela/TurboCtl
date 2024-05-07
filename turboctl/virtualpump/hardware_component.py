@@ -87,15 +87,16 @@ class HardwareComponent():
             or off.
 
         shutoff_time:
-            The automatic shutoff interval of the pump (in seconds).
+            The automatic shutoff interval of the pump in seconds.
 
-            The pump automatically turns off after ``self.shutoff_time``
-            seconds have elapsed since the last "pump on" command.
+            The pump automatically turns off after :attr:`shutoff_time`
+            seconds have elapsed since the last :meth:`on` command.
             The real pump has a shutoff time of 10 seconds, but the value of
             this attribute can be lowered for testing purposes. 
 
         on_time:
-            How long (in seconds) has elapsed since the last "pump on" command.
+            How long (in seconds) has elapsed since the last :meth:`on`
+            command.
     """
 
     TEMPERATURE = 30

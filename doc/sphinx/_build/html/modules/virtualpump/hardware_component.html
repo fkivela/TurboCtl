@@ -59,10 +59,10 @@ at the same rate.</p></li>
 parameter, and cannot currently be set with the frequency field of
 a telegram.</p></li>
 <li><p>Currently this class only recognizes the <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> and <code class="docutils literal notranslate"><span class="pre">ON</span></code>
-control bits (see <a class="reference internal" href="../telegram/codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a>);
+control bits (see <a class="reference internal" href="../telegram/codes.html#id2" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a>);
 all others are ignored.</p></li>
 <li><p>The following status bits
-(see <a class="reference internal" href="../telegram/codes.html#turboctl.telegram.codes.StatusBits" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a>)
+(see <a class="reference internal" href="../telegram/codes.html#id5" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a>)
 are applied to the reply telegram:</p>
 <blockquote>
 <div><ul class="simple">
@@ -102,8 +102,8 @@ can be modified by this object.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="turboctl.virtualpump.hardware_component.HardwareComponent.frequency">
 <span class="sig-name descname"><span class="pre">frequency</span></span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="Permalink to this definition">¶</a></dt>
-<dd><p>The exact frequency of the pump as a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>.
-This is needed to correctly simulate gradual changes in the
+<dd><p>The exact frequency of the pump as a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>.</p>
+<p>This is needed to correctly simulate gradual changes in the
 frequency, because the frequency parameter only saves integer
 values.</p>
 </dd></dl>
@@ -111,8 +111,25 @@ values.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="turboctl.virtualpump.hardware_component.HardwareComponent.is_on">
 <span class="sig-name descname"><span class="pre">is_on</span></span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.is_on" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> flag to keep track of whether the pump is on
+<dd><p>A <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> flag to keep track of whether the pump is on
 or off.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.virtualpump.hardware_component.HardwareComponent.shutoff_time">
+<span class="sig-name descname"><span class="pre">shutoff_time</span></span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.shutoff_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The automatic shutoff interval of the pump in seconds.</p>
+<p>The pump automatically turns off after <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.shutoff_time" title="turboctl.virtualpump.hardware_component.HardwareComponent.shutoff_time"><code class="xref py py-attr docutils literal notranslate"><span class="pre">shutoff_time</span></code></a>
+seconds have elapsed since the last <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.on" title="turboctl.virtualpump.hardware_component.HardwareComponent.on"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on()</span></code></a> command.
+The real pump has a shutoff time of 10 seconds, but the value of
+this attribute can be lowered for testing purposes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.virtualpump.hardware_component.HardwareComponent.on_time">
+<span class="sig-name descname"><span class="pre">on_time</span></span><a class="headerlink" href="#turboctl.virtualpump.hardware_component.HardwareComponent.on_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>How long (in seconds) has elapsed since the last <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.on" title="turboctl.virtualpump.hardware_component.HardwareComponent.on"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on()</span></code></a>
+command.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -143,7 +160,7 @@ The unit is 0.1 V.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a>
+<li><p><strong>parameters</strong> – The same <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a>
 objects as used by <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ParameterComponent" title="turboctl.virtualpump.parameter_component.ParameterComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterComponent</span></code></a>.
 This is needed because some hardware components affect the
 values of parameters and vice versa.
@@ -151,7 +168,7 @@ Note that these need to be the actual parameters of the pump;
 dummy values cannot be used even for testing purposes, since
 all hardware-related parameters (see <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HWParameters" title="turboctl.virtualpump.hardware_component.HWParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HWParameters</span></code></a> for
 a list of those) need to be present for this class to function.</p></li>
-<li><p><strong>lock</strong> – A <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object that can be used to
+<li><p><strong>lock</strong> – A <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Lock</span></code></a> object that can be used to
 temporarily freeze the parallel thread which updates
 <a class="reference internal" href="#turboctl.virtualpump.hardware_component.HardwareComponent.frequency" title="turboctl.virtualpump.hardware_component.HardwareComponent.frequency"><code class="xref py py-attr docutils literal notranslate"><span class="pre">frequency</span></code></a>.
 The purpose of this is to prevent race conditions between that
@@ -347,7 +364,7 @@ warnings instead of errors.</p>
 <dd><p>Initializer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>parameters</strong> – A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects,
+<dd class="field-odd"><p><strong>parameters</strong> – A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference internal" href="parameter_component.html#turboctl.virtualpump.parameter_component.ExtendedParameter" title="turboctl.virtualpump.parameter_component.ExtendedParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedParameter</span></code></a> objects,
 which needs to include at least all the parameters which are
 attributes of this class.</p>
 </dd>
@@ -398,7 +415,7 @@ For all other attributes, the value of the parameter in
 will automatically be converted to a
 <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Data" title="turboctl.telegram.datatypes.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a> subclass instance.
 However, note that the type of <em>value</em> should match the type of the
-parameter; e.g. a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> can be converted into a <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> but
+parameter; e.g. a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> can be converted into a <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Float" title="turboctl.telegram.datatypes.Float"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a> but
 not into an <a class="reference internal" href="../telegram/datatypes.html#turboctl.telegram.datatypes.Uint" title="turboctl.telegram.datatypes.Uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uint</span></code></a>.</p>
 </dd></dl>
 

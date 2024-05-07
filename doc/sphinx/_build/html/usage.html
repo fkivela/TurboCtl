@@ -121,13 +121,13 @@ In both UI modes, command history can be accessed by using the up and down
 keys.</p>
 <p>Commands are given to the UI by writing the name of the command, followed by
 its arguments, all separated by spaces. The arguments are parsed with
-<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
+<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
 tuples and lists.
 Note that spaces are only accepted between arguments, so an argument of
 <code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code> is correctly interpreted as a list, but <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will raise
 an error.</p>
 <p>All arguments that cannot be parsed into other object types are interpreted as
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
 arguments.</p>
 <p>Most commands have at least one alias, which can be used instead of the longer
 proper command name.</p>

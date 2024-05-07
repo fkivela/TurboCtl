@@ -1,6 +1,6 @@
 import time
 import threading
-from dataclasses import dataclass, field 
+from dataclasses import dataclass
 from typing import Callable, Optional
 
 import serial
@@ -13,10 +13,11 @@ class Status:
     """This class stores information about the current status of the pump.
 
     The values are based on those reported by the pump; if a command is sent to
-    the pump to set a value to X, the value stored here should only be changed
-    once the pump has reported the new changed value.
+    the pump to set a value to *X*, the value stored here should only be
+    changed once the pump has reported the new changed value.
 
-    Values of None indicate unknown values that the pump hasn't reported yet.
+    Values of ``None`` indicate unknown values that the pump hasn't reported
+    yet.
     """
 
     frequency: Optional[float] = None
@@ -96,14 +97,14 @@ class ControlInterface():
             The default value is ``1``.
 
         on_command (bool):
-            If this is ``True``, automatic telegrams send the ``pump_on``
-            command to the pump instead of ``get_status''.
+            If this is ``True``, automatic telegrams send the :meth:`pump_on`
+            command to the pump instead of :meth:`get_status`.
 
-            See the ``auto_update`` argument of ``__init__`` for further
+            See the *auto_update* argument of :meth:`__init__` for further
             details.
             
-            The default value is ``None``, which gets updated by the ``status``
-            method to match the current state of the pump.
+            The default value is ``None``, which gets updated by the
+            :meth:`status` method to match the current state of the pump.
     """
 
     def __init__(self, port=None, auto_update=False):
@@ -122,11 +123,12 @@ class ControlInterface():
                 will only be updated whenever a command is sent by the user
                 calling a method of this class.
                 
-                If ``self.status.pump_on`` is ``True``, the automatic telegram
-                will be ``pump_on`` instead of ``get_status''.
+                If :attr:`status.pump_on <Status.pump_on>` is ``True``,
+                the automatic telegram will be :meth:`pump_on` instead of
+                :meth:`get_status`.
                 This is to prevent the pump from automatically switching off,
-                which it does if it hasn't received a ``pump_on`` command for
-                10 seconds. 
+                which it does if it hasn't received a :meth:`pump_on` command
+                for 10 seconds. 
         """
         self.status = Status()
         self.timestep = 1
@@ -186,7 +188,7 @@ class ControlInterface():
     def pump_on(self):
         """Turn the pump on.
 
-        This sets ``self.on_command`` to True.
+        This sets :attr:`on_command` to ``True``.
         """
         query, reply = api.status(self._connection, pump_on=True)
         # Only set set self.pump_on=True if the pump actually reports turning
@@ -198,7 +200,7 @@ class ControlInterface():
     def pump_off(self):
         """Turn the pump off.
 
-        This sets ``self.on_command`` to False.
+        This sets :attr:`on_command` to ``False``.
         """
         query, reply = api.status(self._connection, pump_on=False)
         self._update_status(reply)
@@ -208,8 +210,8 @@ class ControlInterface():
     def get_status(self, pump_on=None):
         """Ask pump status by sending an empty telegram.
         
-        If ``self.on_command`` is ``None``, this updates it to
-        ``self.status.pump_on``.
+        If :attr:`on_command` is ``None``, this updates its value to
+        :attr:`status.pump_on <Status.pump_on>`.
         This means that a pump that is on when TurboCtl is started stays on,
         and a pump that is off stays off.
         """

@@ -2,7 +2,6 @@
 
 import ast
 import inspect
-import os
 import pathlib
 # Importing readline adds command editing etc. to the input function.
 import readline  # pylint: disable=unused-import

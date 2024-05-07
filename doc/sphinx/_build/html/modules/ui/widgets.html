@@ -37,7 +37,7 @@
   <section id="module-turboctl.ui.widgets">
 <span id="widgets"></span><h1><a class="reference internal" href="#module-turboctl.ui.widgets" title="turboctl.ui.widgets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">widgets</span></code></a><a class="headerlink" href="#module-turboctl.ui.widgets" title="Permalink to this heading">¶</a></h1>
 <p>This module uses the <a class="reference external" href="http://urwid.org/">urwid</a> library to create
-widgets (see <a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Widget" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Widget</span></code></a>) for a text-based user interface
+widgets (see <a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Widget" title="(in Urwid v2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Widget</span></code></a>) for a text-based user interface
 containing a scrollable command line interface below a text screen.</p>
 <p>The docstring of each widget defined here tells whether it is a box,
 flow or fixed widget. The differences between these widget types are
@@ -177,7 +177,7 @@ object and prints it on the screen.</p>
 editing text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Edit" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Edit</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Edit" title="(in Urwid v2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Edit</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -337,7 +337,7 @@ are not saved at all.</p>
 widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Widget" title="(in Urwid v2.1)">urwid.Widget</a></p>
+<dd class="field-odd"><p><a class="reference external" href="http://urwid.org/reference/widget.html#urwid.Widget" title="(in Urwid v2.6)">urwid.Widget</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -368,7 +368,7 @@ objects that can scroll the widget (e.g. the scroll bar).</p>
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.widgets.Scroller.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render the visible portion of the scrollable widget,
 update <a class="reference internal" href="#turboctl.ui.widgets.Scroller.position" title="turboctl.ui.widgets.Scroller.position"><code class="xref py py-attr docutils literal notranslate"><span class="pre">position</span></code></a> and
-return an <a class="reference external" href="http://urwid.org/reference/canvas.html#urwid.Canvas" title="(in Urwid v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Canvas</span></code></a> object.</p>
+return an <a class="reference external" href="http://urwid.org/reference/canvas.html#urwid.Canvas" title="(in Urwid v2.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">urwid.Canvas</span></code></a> object.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -428,7 +428,7 @@ The <a class="reference internal" href="#turboctl.ui.widgets.Scroller" title="tu
 whenever it is rendered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -440,7 +440,7 @@ whenever it is rendered.</p>
 on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -455,7 +455,7 @@ Values below <code class="docutils literal notranslate"><span class="pre">0</spa
 to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -471,7 +471,7 @@ Values below <code class="docutils literal notranslate"><span class="pre">0</spa
 <a class="reference internal" href="#turboctl.ui.widgets.Position.max_absolute" title="turboctl.ui.widgets.Position.max_absolute"><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_absolute</span></code></a> to <a class="reference internal" href="#turboctl.ui.widgets.Position.max_absolute" title="turboctl.ui.widgets.Position.max_absolute"><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_absolute</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -522,7 +522,7 @@ scrolled.</p>
 bar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>single-character <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dd class="field-odd"><p>single-character <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -534,7 +534,7 @@ bar.</p>
 bar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>single-character <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dd class="field-odd"><p>single-character <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -585,7 +585,7 @@ Negative values are used to scroll towards the top of the
 scrollable widget, positive values towards the bottom.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -609,7 +609,7 @@ widget is scrolled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symbol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The character or string that is displayed on the
+<li><p><strong>symbol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The character or string that is displayed on the
 button.</p></li>
 <li><p><strong>step</strong> – The value of <a class="reference internal" href="#turboctl.ui.widgets.ScrollButton.step" title="turboctl.ui.widgets.ScrollButton.step"><code class="xref py py-attr docutils literal notranslate"><span class="pre">step</span></code></a>.</p></li>
 <li><p><strong>position</strong> – The value of <a class="reference internal" href="#turboctl.ui.widgets.ScrollButton.position" title="turboctl.ui.widgets.ScrollButton.position"><code class="xref py py-attr docutils literal notranslate"><span class="pre">position</span></code></a>.</p></li>
