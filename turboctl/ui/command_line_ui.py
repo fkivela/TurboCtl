@@ -80,13 +80,14 @@ class CommandLineUI:
                 [
                     ('pump'   , []),
                     ('status' , ['s']),
+                    ('reset'  , ['re']),
                     ('read'   , ['r']),
                     ('write'  , ['w']),
                     ('info'   , ['i']),
                     ('exit'   , ['e', 'q', 'x']),
                     ('help'   , ['h']),
                     ('docs'   , ['d']),        
-                    ('debug'  , ['b']),
+                    ('debug'  , ['db']),
                     ('verbose', ['v']),
                 ]
     """
@@ -97,13 +98,14 @@ class CommandLineUI:
     cmds_and_aliases = [
         ('pump'   , []),
         ('status' , ['s']),
+        ('reset' ,  ['re']),
         ('read'   , ['r']),
         ('write'  , ['w']),
         ('info'   , ['i']),
         ('exit'   , ['e', 'q', 'x']),
         ('help'   , ['h']),
         ('docs'   , ['d']),        
-        ('debug'  , ['b']),
+        ('debug'  , ['db']),
         ('verbose', ['v'])
     ]
     # pylint: enable=bad-whitespace
@@ -230,6 +232,11 @@ class CommandLineUI:
         
         self.print('Pump status:\n' + string)
         return query, reply
+
+    def cmd_reset(self):
+        """Reset the error status of the pump."""
+        self.print('Resetting error status')
+        return self.control_interface.get_status()
 
     def cmd_read(self, number, index=0):
         """Return the value of parameter *number*, index *index*."""        

@@ -226,7 +226,7 @@ class ControlInterface():
         return query, reply
 
     def reset_error(self):
-        #TODO
+        """Reset the error status of the pump."""
         query, reply = api.reset_error(self._connection)
         self._update_status(reply)
         return query, reply

@@ -40,13 +40,6 @@ def send(connection, telegram):
     return TelegramReader(telegram, 'query'), TelegramReader(reply, 'reply')
 
 
-def reset_error(connection):
-    builder = TelegramBuilder()
-    clear_error = [ControlBits.COMMAND, ControlBits.RESET_ERROR]
-    builder.set_flag_bits(clear_error)
-    query = builder.build()
-    return send(connection, query)
-
 def status(connection, pump_on=None):
     """Request pump status.
     
@@ -64,7 +57,20 @@ def status(connection, pump_on=None):
             builder.set_flag_bits(_PUMP_ON_BITS)
     query = builder.build()
     return send(connection, query)
-            
+
+
+def reset_error(connection):
+    """Reset the error status of the pump.
+    
+    This function sends a "reset error" command to the pump.
+    """
+    builder = TelegramBuilder()
+    clear_error = [ControlBits.COMMAND, ControlBits.RESET_ERROR]
+    builder.set_flag_bits(clear_error)
+    query = builder.build()
+    return send(connection, query)
+
+
 def _access_parameter(connection, mode, number, value, index, pump_on):
     """This auxiliary function provides functionality for both reading and
     writing parameter values, since the processes are very similar.

@@ -134,13 +134,14 @@ It has the following value:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">(</span><span class="s1">&#39;pump&#39;</span>   <span class="p">,</span> <span class="p">[]),</span>
     <span class="p">(</span><span class="s1">&#39;status&#39;</span> <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;reset&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;re&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;read&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;write&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;info&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;exit&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;help&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;docs&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]),</span>
-    <span class="p">(</span><span class="s1">&#39;debug&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;debug&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]),</span>
     <span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]),</span>
 <span class="p">]</span>
 </pre></div>
@@ -209,6 +210,12 @@ Otherwise, start another iteration from step 1.</p></li>
 <dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_status">
 <span class="sig-name descname"><span class="pre">cmd_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the status of the pump.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_reset">
+<span class="sig-name descname"><span class="pre">cmd_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the error status of the pump.</p>
 </dd></dl>
 
 <dl class="py method">
