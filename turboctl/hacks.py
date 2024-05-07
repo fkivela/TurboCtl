@@ -7,8 +7,12 @@ import urwid
 
 
 def monkeypatch_urwid():
-    """Urwid seems to have a bug that causes a memory leak.
-    This function monkey-patches that leak.
+    """Monkey-patch a bug in Urwid.
+
+    Urwid has a bug that causes a memory leak; the issue is documented here:
+    https://github.com/urwid/urwid/issues/451
+    The issue is still open on 2024-05-07 and apparently the simple fix here
+    breaks something else, but it seems to work for the purposes of TurboCtl. 
     """
 
     # The CanvasCache.store method, copied from urwid, with only one line
