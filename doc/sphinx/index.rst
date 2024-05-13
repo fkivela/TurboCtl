@@ -25,7 +25,7 @@ TurboCtl was written by Feliks Kivelä.
 The author can be contacted at firstname.lastname@aalto.fi
 (with the "ä" replaced by an "a").
 
-Copyright © 2019 - 2024 University of Helsinki Fusor Team.
+Copyright © |copyright|.
 
 Version
 -------

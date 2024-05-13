@@ -20,9 +20,17 @@
 
 project = 'TurboCtl'
 author = 'Feliks Kivelä'
-copyright = '2019 - 2023, University of Helsinki Fusor Team'
+
 from turboctl import __version__
-version = __version__ # This is automatically set up as a substitution; use it with |version|.
+version = __version__
+# This is automatically set up as a substitution; use it with |version|.
+# *version* is supposed to be used for 'x.y' and *release* for the full 'x.y.z' but we keep it simple. 
+
+from datetime import date
+copyright = f'2019-{date.today().year} University of Helsinki Fusor Team'
+# The copyright variable is automatically written to the HTML footer, but we need to set the substitution manually.
+# rst_epilog is appended to the end of every rst file.
+rst_epilog = f'\n.. |copyright| replace:: {copyright}'
 
 # -- General configuration ---------------------------------------------------
 
