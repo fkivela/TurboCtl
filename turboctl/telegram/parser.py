@@ -386,7 +386,7 @@ def _parse_number(string):
     no_capture = '?:'
     one_or_zero_times = '?'
     
-    index_numbers = f'\[{any_number}:{any_number}\]'
+    index_numbers = f'\\[{any_number}:{any_number}\\]'
     # [<number>:<number>]
     maybe_index_numbers = f'({no_capture}{index_numbers}){one_or_zero_times}'
     # [<number>:<number>] or nothing
@@ -549,7 +549,7 @@ def _remove_comments(line):
           
 def _is_empty(line):
     """Returns True if *line* consists only of whitespace."""
-    empty_regex = '^\s*$' # \s = whitespace character
+    empty_regex = '^\\s*$' # \s = whitespace character
     return bool(re.match(empty_regex, line))
               
         
