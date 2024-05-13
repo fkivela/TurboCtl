@@ -41,8 +41,11 @@ removed later.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="turboctl.hacks.monkeypatch_urwid">
 <span class="sig-prename descclassname"><span class="pre">turboctl.hacks.</span></span><span class="sig-name descname"><span class="pre">monkeypatch_urwid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.hacks.monkeypatch_urwid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Urwid seems to have a bug that causes a memory leak.
-This function monkey-patches that leak.</p>
+<dd><p>Monkey-patch a bug in Urwid.</p>
+<p>Urwid has a bug that causes a memory leak; the issue is documented here:
+<a class="reference external" href="https://github.com/urwid/urwid/issues/451">https://github.com/urwid/urwid/issues/451</a>
+The issue is still open on 2024-05-07 and apparently the simple fix here
+breaks something else, but it seems to work for the purposes of TurboCtl.</p>
 </dd></dl>
 
 </section>

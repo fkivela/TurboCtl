@@ -9,6 +9,7 @@ import sys
 import textwrap
 import webbrowser
 
+from turboctl import __version__
 from turboctl.telegram.parser import PARAMETERS, ERRORS, WARNINGS
 from turboctl.ui.control_interface import ControlInterface
 from turboctl.ui.table import table
@@ -57,8 +58,7 @@ class CommandLineUI:
 
         intro:
             A string displayed to the user upon starting the UI.
-            The default value is ``"Welcome to TurboCtl! Type 'help'
-            for a list of commands."``.
+            The default value is ``f"Welcome to TurboCtl v. {__version__}! Type 'help' for a list of commands."``.
 
         prompt:
             A string displayed to the user every time the UI
@@ -150,7 +150,8 @@ class CommandLineUI:
         self.control_interface = ControlInterface(port, auto_update)
         self.debug = False
         self.verbose = False
-        self.intro = "Welcome to TurboCtl! Type 'help' for a list of commands."
+        self.intro = (f"Welcome to TurboCtl v. {__version__}! "
+                      f"Type 'help' for a list of commands.")
         self.prompt = '>> '
         self._stop_flag = False
 

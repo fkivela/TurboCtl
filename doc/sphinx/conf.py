@@ -19,8 +19,10 @@
 # -- Project information -----------------------------------------------------
 
 project = 'TurboCtl'
-copyright = '2019 - 2023, University of Helsinki Fusor Team'
 author = 'Feliks Kivelä'
+copyright = '2019 - 2023, University of Helsinki Fusor Team'
+from turboctl import __version__
+version = __version__ # This is automatically set up as a substitution; use it with |version|.
 
 # -- General configuration ---------------------------------------------------
 
@@ -89,4 +91,3 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 
 html_static_path = ['_static']
-

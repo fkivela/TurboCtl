@@ -13,7 +13,7 @@ authors = [
 requires-python = ">=3.10"
 dependencies = ["pyserial", "urwid", "tabulate"]
 license = {text = "GPL-3.0-or-later"}
-version = "1.0.1"
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/fkivela/TurboCtl"
@@ -22,3 +22,6 @@ Homepage = "https://github.com/fkivela/TurboCtl"
 turboctl = "turboctl.__main__:main"
 
 [tool.setuptools.packages.find]
+
+[tool.setuptools.dynamic]
+version = {attr = "turboctl.__version__"}

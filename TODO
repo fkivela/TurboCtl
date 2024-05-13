@@ -1,7 +1,8 @@
 TODO
 
 Soon:
-- Update version number, make the version number dynamic in pyproject.toml, and add a version parameter to the module
+- Fix bug: crash when the first command is s
+- Add dynamical copyright information.
 - Add hypothesis and spyder as optional requirements as these are needed for development
 - Test installing TurboCtl via pip
 - Add TurboCtl to PyPI and conda-forge

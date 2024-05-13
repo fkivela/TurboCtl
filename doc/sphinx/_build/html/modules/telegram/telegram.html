@@ -359,8 +359,8 @@ error code regardless of parameter number or type.</p>
 <span class="sig-name descname"><span class="pre">set_flag_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramBuilder.set_flag_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the control or status bits.</p>
 <p><em>bits</em> should be an iterable of those
-<a class="reference internal" href="codes.html#id2" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> or
-<a class="reference internal" href="codes.html#id5" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a> members that should be
+<a class="reference internal" href="codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> or
+<a class="reference internal" href="codes.html#turboctl.telegram.codes.StatusBits" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a> members that should be
 included in the telegram.</p>
 </dd></dl>
 
@@ -509,7 +509,7 @@ a parameter access or response code to a human-readable string.</p>
 <dd><p>Return the parameter error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A member of the <a class="reference internal" href="codes.html#id0" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a>
+<dd class="field-odd"><p>A member of the <a class="reference internal" href="codes.html#turboctl.telegram.codes.ParameterError" title="turboctl.telegram.codes.ParameterError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterError</span></code></a>
 enum, or <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <a class="reference internal" href="#turboctl.telegram.telegram.TelegramReader.parameter_mode" title="turboctl.telegram.telegram.TelegramReader.parameter_mode"><code class="xref py py-attr docutils literal notranslate"><span class="pre">parameter_mode</span></code></a> isn’t <code class="docutils literal notranslate"><span class="pre">'error'</span></code>.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -522,8 +522,8 @@ enum, or <code class="docutils literal notranslate"><span class="pre">None</span
 <dt class="sig sig-object py" id="turboctl.telegram.telegram.TelegramReader.flag_bits">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flag_bits</span></span><a class="headerlink" href="#turboctl.telegram.telegram.TelegramReader.flag_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the control or status bits as a list of those
-<a class="reference internal" href="codes.html#id5" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a> or
-<a class="reference internal" href="codes.html#id2" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> members that are set to
+<a class="reference internal" href="codes.html#turboctl.telegram.codes.StatusBits" title="turboctl.telegram.codes.StatusBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusBits</span></code></a> or
+<a class="reference internal" href="codes.html#turboctl.telegram.codes.ControlBits" title="turboctl.telegram.codes.ControlBits"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlBits</span></code></a> members that are set to
 1 in the telegram.</p>
 </dd></dl>
 

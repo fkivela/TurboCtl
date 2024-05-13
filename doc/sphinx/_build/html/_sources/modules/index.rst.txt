@@ -11,6 +11,15 @@ into the following three subpackages:
     telegram/index.rst
     ui/index.rst
     virtualpump/index.rst
+
+The package also contains these auxiliary modules:
+
+.. toctree::
+
     hacks.rst
     main.rst
+
+and the :attr:`__version__ <turboctl.__version__>` variable:
+
+.. automodule:: turboctl
     
