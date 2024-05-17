@@ -1,11 +1,5 @@
-# Ignore __pycache__ folders and their contents.
+# Ignore these directories
 __pycache__
-
-# Ignore all pdf files
-.pdf
-
-# Ignore the .hypothesis folder
+doc/manuals
 .hypothesis
-
-# Ignore the turboctl.egg-info folder
 turboctl.egg-info
