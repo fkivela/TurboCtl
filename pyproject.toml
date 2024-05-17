@@ -11,9 +11,13 @@ authors = [
     {name = "Feliks Kivelä"},
 ]
 requires-python = ">=3.10"
-dependencies = ["pyserial", "urwid", "tabulate"]
+dependencies = ["pyserial", "tabulate"]
 license = {text = "GPL-3.0-or-later"}
 dynamic = ["version"]
+
+[project.optional-dependencies]
+GUI = ["urwid"]
+dev = ["hypothesis", "spyder"]
 
 [project.urls]
 Homepage = "https://github.com/fkivela/TurboCtl"
