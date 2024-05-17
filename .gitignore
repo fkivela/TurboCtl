@@ -6,3 +6,6 @@ __pycache__
 
 # Ignore the .hypothesis folder
 .hypothesis
+
+# Ignore the turboctl.egg-info folder
+turboctl.egg-info

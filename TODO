@@ -1,13 +1,14 @@
 TODO
 
 Soon:
+- Remove egg-info?
+- Remove manuals from GitHub
 - Select which files should be included in the distributed package
 - Add hypothesis and spyder as optional requirements as these are needed for development; also make urwid optional
 - Test installing TurboCtl via pip
-- Add script pyproject.toml; figure out how to best run TurboCtl
+- Add script to pyproject.toml; figure out how to best run TurboCtl
 - Update installation instructions
 - Update the command list in the usage docs
-- Remove manuals from GitHub
 - Add TurboCtl to PyPI and conda-forge
 
 Later:
