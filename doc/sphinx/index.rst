@@ -2,11 +2,7 @@ TurboCtl
 ========
 
 TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum
-pump. It was written in Python 3.8 and is intended for Linux operating systems.
-
-.. The documentation for TurboCtl is in html form.
-   If you can see this text, you are viewing the rst source code of this
-   file. The compiled HTML version can be found in README.html.
+pump. It was written in Python 3 and is intended for Linux operating systems.
 
 Documentation
 -------------
@@ -25,12 +21,12 @@ TurboCtl was written by Feliks Kivelä.
 The author can be contacted at firstname.lastname@aalto.fi
 (with the "ä" replaced by an "a").
 
-Copyright © |copyright|.
+Copyright © 2019-2024 University of Helsinki Fusor Team.
 
 Version
 -------
 
-This is version |version| of TurboCtl.
+This is version 1.0.2.dev2 of TurboCtl.
 
 License
 -------

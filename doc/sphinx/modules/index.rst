@@ -19,7 +19,7 @@ The package also contains these auxiliary modules:
     hacks.rst
     main.rst
 
-and the :attr:`__version__ <turboctl.__version__>` variable:
+and the following variables:
 
 .. automodule:: turboctl
-    
+

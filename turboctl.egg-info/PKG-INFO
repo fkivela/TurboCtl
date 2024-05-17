@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: turboctl
+Version: 1.0.2.dev2
+Summary: TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum pump.
+Author: Feliks Kivelä
+License: GPL-3.0-or-later
+Project-URL: Homepage, https://github.com/fkivela/TurboCtl
+Keywords: RS-232,Turbovac
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+Requires-Dist: pyserial
+Requires-Dist: urwid
+Requires-Dist: tabulate
+
+TurboCtl
+========
+
+TurboCtl is a RS-232 controller for a Leybold TURBOVAC i or iX turbovacuum
+pump. It was written in Python 3 and is intended for Linux operating systems.
+
+Documentation
+-------------
+
+TurboCtl includes HTML documentation generated with Sphinx.
+You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
+
+Author
+------
+
+TurboCtl was written by Feliks Kivelä.
+The author can be contacted at firstname.lastname@aalto.fi
+(with the "ä" replaced by an "a").
+
+Copyright © 2019-2024 University of Helsinki Fusor Team.
+
+Version
+-------
+
+This is version 1.0.2.dev2 of TurboCtl.
+
+License
+-------
+
+TurboCtl is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.

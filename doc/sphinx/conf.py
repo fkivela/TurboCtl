@@ -17,20 +17,13 @@
 # The TurboCtl directory should already be in $PATH.
 
 # -- Project information -----------------------------------------------------
+import turboctl
 
 project = 'TurboCtl'
 author = 'Feliks Kivelä'
-
-from turboctl import __version__
-version = __version__
-# This is automatically set up as a substitution; use it with |version|.
-# *version* is supposed to be used for 'x.y' and *release* for the full 'x.y.z' but we keep it simple. 
-
-from datetime import date
-copyright = f'2019-{date.today().year} University of Helsinki Fusor Team'
-# The copyright variable is automatically written to the HTML footer, but we need to set the substitution manually.
-# rst_epilog is appended to the end of every rst file.
-rst_epilog = f'\n.. |copyright| replace:: {copyright}'
+version = turboctl.__version__
+copyright = turboctl.copyright
+# The copyright variable is automatically written to the HTML footer.
 
 # -- General configuration ---------------------------------------------------
 
