@@ -1,2 +1,0 @@
-[console_scripts]
-turboctl = turboctl.__main__:main
