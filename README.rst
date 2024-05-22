@@ -8,7 +8,7 @@ Documentation
 -------------
 
 TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
+You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/turboctl/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
 
 Author
 ------
@@ -22,7 +22,7 @@ Copyright © 2019-2024 University of Helsinki Fusor Team.
 Version
 -------
 
-This is version 1.0.2.dev4 of TurboCtl.
+This is version 1.0.2.dev7 of TurboCtl.
 
 License
 -------

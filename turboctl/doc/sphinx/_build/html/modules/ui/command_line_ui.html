@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>command_line_ui &#8212; TurboCtl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="widgets" href="widgets.html" />
+    <link rel="prev" title="table" href="table.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-turboctl.ui.command_line_ui">
+<span id="command-line-ui"></span><h1><a class="reference internal" href="#module-turboctl.ui.command_line_ui" title="turboctl.ui.command_line_ui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_line_ui</span></code></a><a class="headerlink" href="#module-turboctl.ui.command_line_ui" title="Permalink to this heading">¶</a></h1>
+<p>A simple command-line user interface for controlling the pump.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">turboctl.ui.command_line_ui.</span></span><span class="sig-name descname"><span class="pre">CommandLineUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple command-line UI.</p>
+<p>Instances of this class should be closed after they are no longer
+needed by calling <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a><a class="reference internal" href="control_interface.html#turboctl.ui.control_interface.ControlInterface.close" title="turboctl.ui.control_interface.ControlInterface.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close()</span></code></a>
+or using a <code class="docutils literal notranslate"><span class="pre">with</span></code> block. Otherwise the parallel thread created by
+<a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a> may continue to run in the background and
+consume resources.</p>
+<p>This class contains several methods with names following the pattern
+<code class="docutils literal notranslate"><span class="pre">cmd_&lt;command&gt;</span></code>.
+These methods correspond to the commands a user can give to the
+UI: when the command string <code class="docutils literal notranslate"><span class="pre">'example'</span></code> is entered, the <code class="docutils literal notranslate"><span class="pre">cmd_example()</span></code>
+method is called.
+Because messages printed by the <code class="docutils literal notranslate"><span class="pre">help</span></code> command use the
+docstrings of these methods in an unaltered form, the docstrings
+are written in plain text and cannot contain any reStructuredText
+syntax that isn’t easily readable by humans.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.inputfile">
+<span class="sig-name descname"><span class="pre">inputfile</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A file-like object for receiving input.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.outputfile">
+<span class="sig-name descname"><span class="pre">outputfile</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A file-like object for writing output.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setting this to <code class="docutils literal notranslate"><span class="pre">True</span></code> activates the debug mode;
+the default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_debug" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_debug"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_debug()</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setting this to <code class="docutils literal notranslate"><span class="pre">True</span></code> increases the verbosity of the output of
+commands; the default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+See <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_verbose()</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.control_interface">
+<span class="sig-name descname"><span class="pre">control_interface</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="control_interface.html#turboctl.ui.control_interface.ControlInterface" title="turboctl.ui.control_interface.ControlInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlInterface</span></code></a> object
+used for sending commands to the pump.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.intro">
+<span class="sig-name descname"><span class="pre">intro</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.intro" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string displayed to the user upon starting the UI.
+The default value is <code class="docutils literal notranslate"><span class="pre">f&quot;Welcome</span> <span class="pre">to</span> <span class="pre">TurboCtl</span> <span class="pre">v.</span> <span class="pre">{__version__}!</span> <span class="pre">Type</span> <span class="pre">'help'</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">commands.&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.prompt">
+<span class="sig-name descname"><span class="pre">prompt</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.prompt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string displayed to the user every time the UI
+requests input. The default value is <code class="docutils literal notranslate"><span class="pre">'&gt;&gt;</span> <span class="pre">'</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.indent">
+<span class="sig-name descname"><span class="pre">indent</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class attribute.
+A string used to indent text blocks.
+The default value is <code class="docutils literal notranslate"><span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></code> (four spaces).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmds_and_aliases">
+<span class="sig-name descname"><span class="pre">cmds_and_aliases</span></span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmds_and_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class attribute.
+A list of tuples, where index 0 of each tuple contains
+the name of a command accepted by the UI, and index 1
+contains a list of aliases for that command.
+It has the following value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;pump&#39;</span>   <span class="p">,</span> <span class="p">[]),</span>
+    <span class="p">(</span><span class="s1">&#39;status&#39;</span> <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;reset&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;re&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;read&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;write&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;info&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;exit&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;help&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;docs&#39;</span>   <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;debug&#39;</span>  <span class="p">,</span> <span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new CommandLineUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> – This is passed to the initializer of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a>.</p></li>
+<li><p><strong>auto_update</strong> – This is also passed to <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a>.</p></li>
+<li><p><strong>inputfile</strong> – The value of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a>.
+If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p></li>
+<li><p><strong>outputfile</strong> – The value of <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a>.
+If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the value is <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.__enter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called upon entering a <code class="docutils literal notranslate"><span class="pre">with</span></code> block; returns <em>self</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.__exit__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called upon exiting a <code class="docutils literal notranslate"><span class="pre">with</span></code> block;
+calls <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.control_interface" title="turboctl.ui.command_line_ui.CommandLineUI.control_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_interface</span></code></a><a class="reference internal" href="control_interface.html#turboctl.ui.control_interface.ControlInterface.close" title="turboctl.ui.control_interface.ControlInterface.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">.close()</span></code></a>.</p>
+<p>The arguments are ignored.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the UI.</p>
+<p>This function runs the following algorithm:</p>
+<ol class="arabic simple">
+<li><p>Print <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.prompt" title="turboctl.ui.command_line_ui.CommandLineUI.prompt"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prompt</span></code></a> and wait for user input.</p></li>
+<li><p>Parse the input string into a command and its arguments by
+splitting it at whitespace.</p></li>
+<li><p>Call a method with the name <code class="docutils literal notranslate"><span class="pre">cmd_&lt;the</span> <span class="pre">given</span> <span class="pre">command&gt;</span></code>.
+The method will execute the command and print its output.
+If no method with that name exists, print an error message
+and start again from step 1.</p></li>
+<li><p>If the method was <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_exit" title="turboctl.ui.command_line_ui.CommandLineUI.cmd_exit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmd_exit()</span></code></a>, break the loop.
+Otherwise, start another iteration from step 1.</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_pump">
+<span class="sig-name descname"><span class="pre">cmd_pump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the pump on or off.</p>
+<p>Values of ‘1’, ‘True’ and ‘on’ turn the pump on;
+‘0’, ‘False’ and ‘off’ turn it off.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_status">
+<span class="sig-name descname"><span class="pre">cmd_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the pump.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_reset">
+<span class="sig-name descname"><span class="pre">cmd_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the error status of the pump.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_read">
+<span class="sig-name descname"><span class="pre">cmd_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of parameter <em>number</em>, index <em>index</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_write">
+<span class="sig-name descname"><span class="pre">cmd_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <em>value</em> to parameter <em>number</em>, index <em>index</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_info">
+<span class="sig-name descname"><span class="pre">cmd_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">letter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numbers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display information about parameters, errors, or warnings.</p>
+<p><em>letter</em> should be ‘p’, ‘e’, or ‘w’ depending on whether <em>numbers</em>
+refer to parameters, errors, or warnings.</p>
+<p><em>numbers</em> should be a list or a tuple of the numbers of those
+parameters/errors/warnings that should be displayed. It can also be a
+single number or ‘all’, if only a single parameter/error/warning or all
+of them should be listed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_help">
+<span class="sig-name descname"><span class="pre">cmd_help</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a help message.</p>
+<p><em>value</em> should be the name or an alias of the command that
+should be described.
+If no <em>value</em> is specified, all commands are listed and
+described.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_docs">
+<span class="sig-name descname"><span class="pre">cmd_docs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open TurboCtl documentation in a browser.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_exit">
+<span class="sig-name descname"><span class="pre">cmd_exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit the UI.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_debug">
+<span class="sig-name descname"><span class="pre">cmd_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate the debug mode.</p>
+<p>Values of ‘1’, ‘True’ and ‘on’ activate the debug mode;
+‘0’, ‘False’ and ‘off’ deactivate it.</p>
+<p>In normal operation, TypeErrors and ValueErrors
+raised during the execution of commands are caught to prevent
+users from crashing the program with invalid commands.
+Activating the debug mode disables this error-catching in order
+to make debugging easier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose">
+<span class="sig-name descname"><span class="pre">cmd_verbose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.cmd_verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate the verbose mode.</p>
+<p>Values of ‘1’, ‘True’ and ‘on’ activate the verbose mode;
+‘0’, ‘False’ and ‘off’ deactivate it.</p>
+<p>When the verbose mode is on, commands that send telegrams to the pump
+will print all the contents of the telegram and the reply to the
+screen.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.input">
+<span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask the user for input.</p>
+<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#input" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">input()</span></code></a> function,
+but uses <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> and <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a> instead of
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
+<p>The line editing functionality provided by the <a class="reference external" href="https://docs.python.org/3/library/readline.html#module-readline" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code></a>
+module works with this method only if <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> is
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="turboctl.ui.command_line_ui.CommandLineUI.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">objects</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#turboctl.ui.command_line_ui.CommandLineUI.print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print text to the UI.</p>
+<p>This method works like the built-in <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function,
+but uses <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.inputfile" title="turboctl.ui.command_line_ui.CommandLineUI.inputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inputfile</span></code></a> and <a class="reference internal" href="#turboctl.ui.command_line_ui.CommandLineUI.outputfile" title="turboctl.ui.command_line_ui.CommandLineUI.outputfile"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outputfile</span></code></a> instead of
+<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>, and doesn’t include
+the <em>file</em> and <em>flush</em> arguments.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">TurboCtl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../modules.html">Packages and modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">turboctl</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../telegram/index.html">telegram</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">ui</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="control_interface.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">control_interface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="table.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">table</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_line_ui</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="widgets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">widgets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="advanced_tui.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advanced_tui</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="queuefile.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">queuefile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="status_format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">status_format</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../virtualpump/index.html">virtualpump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hacks.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../errata.html">Errata to the user manual</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../modules.html">Packages and modules</a><ul>
+  <li><a href="../index.html">turboctl</a><ul>
+  <li><a href="index.html">ui</a><ul>
+      <li>Previous: <a href="table.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">table</span></code></a></li>
+      <li>Next: <a href="widgets.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">widgets</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2024 University of Helsinki Fusor Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/modules/ui/command_line_ui.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

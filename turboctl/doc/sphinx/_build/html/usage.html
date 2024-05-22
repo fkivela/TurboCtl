@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Usage &#8212; TurboCtl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Packages and modules" href="modules.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h1>
+<section id="running-the-program">
+<h2>Running the program<a class="headerlink" href="#running-the-program" title="Permalink to this heading">¶</a></h2>
+<p>Installing TurboCtl via pip sets up a <code class="docutils literal notranslate"><span class="pre">turboctl</span></code> command so that TurboCtl can be run with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ turboctl &lt;args&gt;
+</pre></div>
+</div>
+<p>from any directory.</p>
+<p>If you performed a manual install by downloading TurboCtl from GitHub, you can do the same with the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code> script found in the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ path/to/TurboCtl/turboctl-run &lt;args&gt;
+</pre></div>
+</div>
+<p>Note that this script isn’t automatically accessible from an arbitrary directory, so you need to provide the full path when running the command, add the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory to you <code class="docutils literal notranslate"><span class="pre">$PATH</span></code> shell variable, or have <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> as your working directory.</p>
+<p>Behind the scenes both of these methods run the <a class="reference internal" href="modules/main.html"><span class="doc">__main__.py</span></a> script inside the <a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package.
+<a class="reference internal" href="modules/main.html"><span class="doc">__main__.py</span></a> can be run directly without any auxiliary scripts with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python path/to/TurboCtl/turboctl &lt;args&gt;
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">python</span></code> command might be set up under a different name such as <code class="docutils literal notranslate"><span class="pre">python3</span></code> on your system.</p>
+</section>
+<section id="command-line-arguments">
+<h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this heading">¶</a></h2>
+<p>Regardless of the command used to run it, TurboCtl accepts the following command-line arguments:</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-h">
+<span id="cmdoption-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a help message that lists all command-line arguments.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-p">
+<span id="cmdoption-port"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--port</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;port&gt;</span></span><a class="headerlink" href="#cmdoption-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the port used for the serial connection.</p>
+<p>If this argument isn’t supplied, the default port <code class="docutils literal notranslate"><span class="pre">/dev/ttyACM0</span></code> will be used.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-v">
+<span id="cmdoption-virtual"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--virtual</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run TurboCtl with a virtual pump.</p>
+<p>If this argument is supplied, instead of sending messages to a real pump, TurboCtl creates a simulated, virtual one and sends messages to that.
+This makes it possible to test TurboCtl easily without having to connect to a real pump.
+This option is incompatible with <a class="reference internal" href="#cmdoption-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-s">
+<span id="cmdoption-simple"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--simple</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run TurboCtl with a simple command-line interface that doesn’t require Urwid.</p>
+<p>If TurboCtl is run without the <a class="reference internal" href="#cmdoption-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a> argument, a more advanced UI will be used.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-n">
+<span id="cmdoption-no-poll"></span><span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-poll</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don’t send automatic telegrams to the pump.</p>
+<p>The pump automatically turns off if it doesn’t receive any commands for about 10 seconds.
+Normally TurboCtl sends automatic telegrams to the pump at regular intervals in order to prevent this from happening, and also to keep the status screen in the advanced UI updated.
+This argument prevents these automatic telegrams from being sent.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-t">
+<span id="cmdoption-test"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--test</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instead of running the TurboCtl program, run all automatic tests for it.</p>
+</dd></dl>
+
+</section>
+<section id="the-user-interface">
+<h2>The user interface<a class="headerlink" href="#the-user-interface" title="Permalink to this heading">¶</a></h2>
+<p>The simple UI (which is used when the <a class="reference internal" href="#cmdoption-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a> argument has been given) consists of a basic command line interface that runs in the Linux terminal.</p>
+<img alt="_images/simple_UI.png" src="_images/simple_UI.png" />
+<p>The more advanced UI takes over the entire terminal screen, and features a screen displaying the current status of the pump in addition to the command-line interface.</p>
+<img alt="_images/advanced_UI.png" src="_images/advanced_UI.png" />
+<p>In the advanced UI, the area of the command-line interfacew can be scrolled by
+using the mouse wheel, or by clicking on or dragging the custom scroll bar on
+the right side of the area.
+In the simple UI, scrolling is done with the mouse wheel or by using
+the built-in terminal scroll bar.
+In both UI modes, command history can be accessed by using the up and down
+keys.</p>
+<p>Commands are given to the UI by writing the name of the command, followed by
+its arguments, all separated by spaces. The arguments are parsed with
+<a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.literal_eval" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code></a> which recognizes some basic Python objects such as
+tuples and lists.
+Note that spaces are only accepted between arguments, so an argument of
+<code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code> is correctly interpreted as a list, but <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will raise
+an error.</p>
+<p>All arguments that cannot be parsed into other object types are interpreted as
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> objects, so it isn’t necessary to use quotes around string
+arguments.</p>
+<p>Most commands have at least one alias, which can be used instead of the longer
+proper command name.</p>
+</section>
+<section id="command-list">
+<h2>Command list<a class="headerlink" href="#command-list" title="Permalink to this heading">¶</a></h2>
+<p>The following is a list of all the commands recognized by the UI.
+The same list can be displayed in the UI by issuing the <a class="reference internal" href="#cmdoption-arg-help"><code class="xref std std-option docutils literal notranslate"><span class="pre">help</span></code></a> command.
+Commas separate the full name of the command from its aliases.
+Angle brackets <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code> indicate required arguments, while square brackets <code class="docutils literal notranslate"><span class="pre">[]</span></code> display optional arguments with their default values.</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-pump">
+<span class="sig-name descname"><span class="pre">pump</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;value&gt;</span></span><a class="headerlink" href="#cmdoption-arg-pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the pump on or off.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> turn the pump on;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> turn it off.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-status">
+<span id="cmdoption-arg-s"></span><span class="sig-name descname"><span class="pre">status</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">s</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-arg-status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the pump.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-reset">
+<span id="cmdoption-arg-re"></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">re</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-arg-reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the error status of the pump.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-read">
+<span id="cmdoption-arg-r"></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">r</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;number&gt;</span> <span class="pre">[index=0]</span></span><a class="headerlink" href="#cmdoption-arg-read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of parameter <em>number</em>, index <em>index</em>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-write">
+<span id="cmdoption-arg-w"></span><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">w</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;number&gt;</span> <span class="pre">&lt;value&gt;</span> <span class="pre">[index=0]</span></span><a class="headerlink" href="#cmdoption-arg-write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <em>value</em> to parameter <em>number</em>, index <em>index</em>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-info">
+<span id="cmdoption-arg-i"></span><span class="sig-name descname"><span class="pre">info</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;letter&gt;</span> <span class="pre">&lt;number&gt;</span></span><a class="headerlink" href="#cmdoption-arg-info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display information about parameters, errors, or warnings.</p>
+<p><em>letter</em> should be <code class="docutils literal notranslate"><span class="pre">'p'</span></code>, <code class="docutils literal notranslate"><span class="pre">'e'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'w'</span></code> depending on whether
+<em>numbers</em> refer to parameters, errors, or warnings.</p>
+<p><em>numbers</em> should be a list or a tuple of the numbers of those
+parameters/errors/warnings that should be displayed. It can also be a
+single number or <code class="docutils literal notranslate"><span class="pre">'all'</span></code>, if only a single parameter/error/warning or all
+of them should be listed.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-exit">
+<span id="cmdoption-arg-e"></span><span id="cmdoption-arg-q"></span><span id="cmdoption-arg-x"></span><span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">e</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">q</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">x</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-arg-exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit the UI.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-help">
+<span id="cmdoption-arg-h"></span><span class="sig-name descname"><span class="pre">help</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">h</span></span><span class="sig-prename descclassname"> <span class="pre">[value=None]</span></span><a class="headerlink" href="#cmdoption-arg-help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a help message.</p>
+<p><em>value</em> should be the name or an alias of the command that
+should be described.
+If no <em>value</em> is specified, all commands are listed and
+described.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-docs">
+<span id="cmdoption-arg-d"></span><span class="sig-name descname"><span class="pre">docs</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">d</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-arg-docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open TurboCtl documentation in a browser.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-debug">
+<span id="cmdoption-arg-db"></span><span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">db</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;value&gt;</span></span><a class="headerlink" href="#cmdoption-arg-debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate the debug mode.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> activate the debug mode;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> deactivate it.</p>
+<p>In normal operation, TypeErrors and ValueErrors
+raised during the execution of commands are caught to prevent
+users from crashing the program with invalid commands.
+Activating the debug mode disables this error-catching in order
+to make debugging easier.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-arg-verbose">
+<span id="cmdoption-arg-v"></span><span class="sig-name descname"><span class="pre">verbose</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">v</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;value&gt;</span></span><a class="headerlink" href="#cmdoption-arg-verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate the verbose mode.</p>
+<p>Values of <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'True'</span></code> and <code class="docutils literal notranslate"><span class="pre">'on'</span></code> activate the verbose mode;
+<code class="docutils literal notranslate"><span class="pre">'0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'False'</span></code> and <code class="docutils literal notranslate"><span class="pre">'off'</span></code> deactivate it.</p>
+<p>When the verbose mode is on, commands that send telegrams to the pump
+will print all the contents of the telegram and the reply to the
+screen.</p>
+</dd></dl>
+
+</section>
+<section id="using-screen">
+<h2>Using Screen<a class="headerlink" href="#using-screen" title="Permalink to this heading">¶</a></h2>
+<p>As mentioned above, the pump turns off if it doesn’t receive any messages
+for about 10 seconds. If TurboCtl is run without the <a class="reference internal" href="#cmdoption-n"><code class="xref std std-option docutils literal notranslate"><span class="pre">-n</span></code></a> argument, it will
+send automatic messages which keep the pump on, but the pump will turn off soon
+after TurboCtl is closed.</p>
+<p>If TurboCtl is used on a local computer, it can simply be left running in the
+background. However, if TurboCtl is run over an SSH connection, it cannot be
+left running after the connection has been closed without using a third-party
+program. An easy way to accomplish this is to use <a class="reference external" href="https://www.gnu.org/software/screen/">Screen</a>. This is done as
+follows:</p>
+<ul class="simple">
+<li><p>Install Screen with your package manager. For example, on operating systems
+based on Debian or Ubuntu, this is done with the command
+<code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">screen</span></code>.</p></li>
+<li><p>Log into your remote machine via SSH.</p></li>
+<li><p>Start Screen by issuing the <code class="docutils literal notranslate"><span class="pre">screen</span></code> command.</p></li>
+<li><p>Launch TurboCtl and use it as you would normally.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl-A</span></code> and then <code class="docutils literal notranslate"><span class="pre">Ctrl-D</span></code> to detach the Screen session where you
+are running TurboCtl. This will leave TurboCtl running in the background even
+after you close the SSH connection.</p></li>
+<li><p>Whenever you log back into your remote machine, you can resume the old Screen
+session with <code class="docutils literal notranslate"><span class="pre">screen</span> <span class="pre">-r</span></code>. You can end the screen session by closing
+TurboCtl and then giving the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command. Note that due to a bug
+the advanced UI screen of TurboCtl will disappear only after the Screen
+session is closed, even though it should disappear immediately
+after closing TurboCtl.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TurboCtl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-program">Running the program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-arguments">Command-line arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-user-interface">The user interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-list">Command list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-screen">Using Screen</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Packages and modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errata.html">Errata to the user manual</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="modules.html" title="next chapter">Packages and modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2024 University of Helsinki Fusor Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

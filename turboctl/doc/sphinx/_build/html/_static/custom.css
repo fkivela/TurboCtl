@@ -1,0 +1,13 @@
+/*
+Exceptions to the CSS stylesheet of the Alabaster theme can be defined here.
+The Alabaster CSS stylesheet can be found here: https://github.com/bitprophet/alabaster/blob/master/alabaster/static/alabaster.css_t 
+The documentation must be rebuilt with 'make clean html' for changes to this to be implemented.
+*/
+
+/*
+Remove underlines from references to code objects; these hurt readability.
+The underline will still appear when the mouse is hovered over the link.
+*/
+a.reference {
+    border-bottom: none;
+}

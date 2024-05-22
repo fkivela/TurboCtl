@@ -2,7 +2,7 @@
 
 import ast
 import inspect
-import pathlib
+from pathlib import Path
 # Importing readline adds command editing etc. to the input function.
 import readline  # pylint: disable=unused-import
 import sys
@@ -317,13 +317,19 @@ class CommandLineUI:
 
     def cmd_docs(self):
         """Open TurboCtl documentation in a browser."""
-        # Get the full path to README.html.
-        # README.html is in the main TurboCtl directory which should be in
-        # $PATH.
-        path = pathlib.Path('README.html').resolve()
+        # Get the full path of the current file.
+        path = Path(__file__).resolve()
+        # Cut the parts after turboctl.
+        parts = path.parts
+        index = parts.index('turboctl')
+        new_parts = parts[:index + 1]
+        turboctl_path = Path(*new_parts)
+        # Fill in the path to index.html.
+        # We use this instead of README.html because the readme isn't included when TurboCtl is installed via pip.
+        readme_path = turboctl_path / Path('doc/sphinx/_build/html/index.html')
         # new=2 makes the page open in a new tab, though this seems to happen
         # regardless.
-        webbrowser.open('file://' + str(path), new=2)
+        webbrowser.open('file://' + str(readme_path), new=2)
 
     def _helpstring(self, cmdname):
         """Return a help message describing the usage of *cmdname*."""

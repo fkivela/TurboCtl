@@ -51,7 +51,7 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 # This version displays correctly in GitHub and PyPI, which don't support
 # Sphinx.
 raw_rst_docs = """TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser."""
+You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/turboctl/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser."""
 
 
 # This version is used for the index page of the HTML docs.
@@ -71,7 +71,7 @@ with open('README.rst', 'w') as file:
 
 
 # Write the HTML docs index.
-with open('doc/sphinx/index.rst', 'w') as file:
+with open('turboctl/doc/sphinx/index.rst', 'w') as file:
     file.write(body.format(documentation=sphinx_docs,
                            project_copyright=turboctl.copyright,
                            version=turboctl.__version__))
