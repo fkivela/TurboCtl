@@ -16,8 +16,8 @@ license = {text = "GPL-3.0-or-later"}
 dynamic = ["version"]
 
 [project.optional-dependencies]
-GUI = ["urwid"]
-dev = ["hypothesis", "spyder"]
+urwid = ["urwid"]
+tests = ["hypothesis"]
 
 [project.urls]
 Homepage = "https://github.com/fkivela/TurboCtl"

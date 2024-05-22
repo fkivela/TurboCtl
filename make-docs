@@ -2,9 +2,11 @@
 # Compile the TurboCtl documentation.
 
 # Add the TurboCtl directory to $PYTHONPATH.
-# The export is important; it carries the updated value of PYTHONPATH over to the subshell we make below.
-TurboCtl_path=$(dirname "$0")
-export PYTHONPATH=$(add-to-path "$TurboCtl_path" PYTHONPATH)
+# readlink -f resolves . into an absolute path.
+# Quotes are needed around the path variables as they may contain spaces.
+# The export carries the updated value of PYTHONPATH over to the subshell we make below.
+TurboCtl_path="$(dirname "$(readlink -f "$0")")"
+export PYTHONPATH="$("$TurboCtl_path"/add-to-path "$TurboCtl_path" PYTHONPATH)"
 
 # Compile docs.
 # The parentheses create a new subshell so that we don't need to change the directory of the parent shell.

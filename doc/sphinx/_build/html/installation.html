@@ -36,31 +36,33 @@
             
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
-<section id="dependencies">
-<span id="id1"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
-<p>TurboCtl requires Python 3.8, and will not run on older Python versions
-(it was tested with version 3.8.5).
-It is intended to be used on a Linux operating system, and probably won’t work
-on other systems such as Windows without some tweaks.</p>
-<p>In addition to the Python standard library, TurboCtl uses the following
-external libraries:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><a class="reference external" href="https://pypi.org/project/pyserial/">pySerial</a> (tested with version 3.5)</p></li>
-<li><p><a class="reference external" href="https://pypi.org/project/tabulate/">tabulate</a> (tested with version 0.8.7)</p></li>
-<li><p><a class="reference external" href="http://urwid.org/">Urwid</a> (tested with version 2.1.2).</p></li>
-</ul>
-</div></blockquote>
-<p>TurboCtl can also run without Urwid by using an alternative user interface
-(see <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details).</p>
+<section id="installation-with-pip">
+<h2>Installation with pip<a class="headerlink" href="#installation-with-pip" title="Permalink to this heading">¶</a></h2>
+<p>TurboCtl is available on <a class="reference external" href="https://pypi.org/project/turboctl/">PyPI</a> and can be installed with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">turboctl</span><span class="p">[</span><span class="n">urwid</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This installs TurboCtl with a fancier UI that uses <a class="reference external" href="http://urwid.org/">Urwid</a>.</p>
+<p>Running</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">turboctl</span>
+</pre></div>
+</div>
+<p>performs a minimal installation of TurboCtl without Urwid.
+If you use this option, you can only run TurboCtl with the <a class="reference internal" href="usage.html#cmdoption-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a> flag (see <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details).</p>
+<p>In order to run the automatic tests included in TurboCtl (the <a class="reference internal" href="usage.html#cmdoption-t"><code class="xref std std-option docutils literal notranslate"><span class="pre">-t</span></code></a> flag), you also need the <a class="reference external" href="https://hypothesis.readthedocs.io/en/latest/">Hypothesis</a> library, which can be included in the installation with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">turboctl</span><span class="p">[</span><span class="n">tests</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">turboctl</span><span class="p">[</span><span class="n">tests</span><span class="p">,</span><span class="n">urwid</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>depending on whether you want to also include Urwid or not.</p>
 </section>
-<section id="the-turboctl-directory">
-<h2>The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory<a class="headerlink" href="#the-turboctl-directory" title="Permalink to this heading">¶</a></h2>
-<p>TurboCtl doesn’t include an installation script; simply download the
-<code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory to a location of your choosing.
-In order to access the <a class="reference internal" href="modules/index.html"><span class="doc">turboctl</span></a> package and the <code class="docutils literal notranslate"><span class="pre">turboctl-run</span></code>
-script, the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory  should be added to <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and
-<code class="docutils literal notranslate"><span class="pre">$PATH</span></code> or made the working directory.</p>
+<section id="installation-from-github">
+<h2>Installation from GitHub<a class="headerlink" href="#installation-from-github" title="Permalink to this heading">¶</a></h2>
+<p>You can also download TurboCtl directly from <a class="reference external" href="https://github.com/fkivela/TurboCtl">GitHub</a>, but you’ll need to manually install its dependencies.
+See the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file in the <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory for a list of them.</p>
 </section>
 <section id="the-dialout-group">
 <h2>The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group<a class="headerlink" href="#the-dialout-group" title="Permalink to this heading">¶</a></h2>
@@ -92,8 +94,8 @@ the command</p>
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-turboctl-directory">The <code class="docutils literal notranslate"><span class="pre">TurboCtl</span></code> directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-with-pip">Installation with pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-from-github">Installation from GitHub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-dialout-group">The <code class="docutils literal notranslate"><span class="pre">dialout</span></code> group</a></li>
 </ul>
 </li>

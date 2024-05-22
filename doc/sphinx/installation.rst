@@ -1,39 +1,46 @@
 Installation
 ============
 
-.. _dependencies:
+Installation with pip
+---------------------
 
-Dependencies
-------------
+TurboCtl is available on PyPI_ and can be installed with the command
 
-TurboCtl requires Python 3.8, and will not run on older Python versions
-(it was tested with version 3.8.5).
-It is intended to be used on a Linux operating system, and probably won't work
-on other systems such as Windows without some tweaks. 
+::
 
-In addition to the Python standard library, TurboCtl uses the following
-external libraries:
+    pip install turboctl[urwid]
 
-    - pySerial_ (tested with version 3.5)
-    - tabulate_ (tested with version 0.8.7)
-    - Urwid_ (tested with version 2.1.2).
-    
-TurboCtl can also run without Urwid by using an alternative user interface
-(see :doc:`usage` for details).
+This installs TurboCtl with a fancier UI that uses Urwid_.
+
+Running
+
+::
+
+    pip install turboctl
+
+performs a minimal installation of TurboCtl without Urwid.
+If you use this option, you can only run TurboCtl with the :option:`-s` flag (see :doc:`usage` for details).
+
+In order to run the automatic tests included in TurboCtl (the :option:`-t` flag), you also need the Hypothesis_ library, which can be included in the installation with 
+
+::
+
+    pip install turboctl[tests]
+
+or
+
+::
+
+    pip install turboctl[tests,urwid]
+
+depending on whether you want to also include Urwid or not.
 
 
-The ``TurboCtl`` directory
---------------------------
+Installation from GitHub
+------------------------
 
-TurboCtl doesn't include an installation script; simply download the
-``TurboCtl`` directory to a location of your choosing.
-In order to access the :doc:`modules/index` package and the ``turboctl-run``
-script, the ``TurboCtl`` directory  should be added to ``$PYTHONPATH`` and
-``$PATH`` or made the working directory.
-
-.. _pySerial: https://pypi.org/project/pyserial/
-.. _tabulate: https://pypi.org/project/tabulate/
-.. _Urwid: http://urwid.org/
+You can also download TurboCtl directly from GitHub_, but you'll need to manually install its dependencies.
+See the ``pyproject.toml`` file in the ``TurboCtl`` directory for a list of them.
 
 
 The ``dialout`` group
@@ -47,3 +54,8 @@ the command
 
     sudo adduser <username> dialout
 
+
+.. _PyPI: https://pypi.org/project/turboctl/
+.. _Urwid: http://urwid.org/
+.. _Hypothesis: https://hypothesis.readthedocs.io/en/latest/
+.. _GitHub: https://github.com/fkivela/TurboCtl

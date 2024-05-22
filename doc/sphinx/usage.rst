@@ -4,85 +4,81 @@ Usage
 Running the program
 -------------------
 
-The TurboCtl program is run via the :doc:`__main__.py <modules/main>` script
-inside the :doc:`modules/index` package. This is done with the command
+Installing TurboCtl via pip sets up a ``turboctl`` command so that TurboCtl can be run with
 
 ::
 
-    $ python path/to/turboctl -args
+    $ turboctl <args>
 
-This only works if the ``python`` command is set to run a Python version that
-TurboCtl is compatible with; i.e. Python 3.8 or newer. If this is not the case,
-substitute ``python`` for a command that runs a compatible version of Python,
-e.g. ``python3`` or ``python3.8``.
+from any directory.
 
-Because this command requires providing the relative or absolute path of the
-:doc:`modules/index` package every time it is used, TurboCtl also provides a
-shell script which automatically fills in the path before calling the command.
-If the ``TurboCtl`` directory has been added to ``$PATH``, the shell script
-can be run from any directory with
+If you performed a manual install by downloading TurboCtl from GitHub, you can do the same with the ``turboctl-run`` script found in the ``TurboCtl`` directory:
 
 ::
 
-    $ turboctl-run -args
-    
-The script uses the ``/usr/bin/env python3`` command to run the program. If
-the ``python3`` command is set to use an older Python 3 version that isn't
-compatible with TurboCtl, the script should be edited to use a specific newer
-version (e.g. ``python3.8``) instead. The script is located in
-``TurboCtl/turboctl-run``.
+    $ path/to/TurboCtl/turboctl-run <args>
 
-Both of these commands accept the following command-line arguments:
+Note that this script isn't automatically accessible from an arbitrary directory, so you need to provide the full path when running the command, add the ``TurboCtl`` directory to you ``$PATH`` shell variable, or have ``TurboCtl`` as your working directory.
 
--h, --help          Show a help message that lists all command-line arguments.
+Behind the scenes both of these methods run the :doc:`__main__.py <modules/main>` script inside the :doc:`modules/index` package.
+:doc:`__main__.py <modules/main>` can be run directly without any auxiliary scripts with 
 
--p, --port port     Define the port used for the serial connection.
+::
 
-                    If this argument isn't supplied, the default port
-                    ``/dev/ttyACM0`` will be used. 
+    $ python path/to/TurboCtl/turboctl <args>
 
--v, --virtual       Run HVCtl with a virtual pump. 
+Note that the ``python`` command might be set up under a different name such as ``python3`` on your system. 
 
-                    If this argument is supplied, instead of sending messages
-                    to a real pump, TurboCtl creates a simulated, virtual one
-                    and sends messages to that.
-                    This makes it possible to test TurboCtl easily without
-                    having to connect to a real pump.     
-                    This option is incompatible with ``-p``.
 
--s, --simple        Run TurboCtl with a simple command-line interface that
-                    doesn't require :ref:`urwid <dependencies>`.
+Command-line arguments
+----------------------
+
+Regardless of the command used to run it, TurboCtl accepts the following command-line arguments:
+
+.. option:: -h, --help          
                     
-                    If TurboCtl is run without the ``-s`` argument, a more
-                    advanced UI will be used.
-                    
--n, --no-poll       Don't send automatic telegrams to the pump.
-                    
-                    The pump automatically turns off if it doesn't receive any
-                    commands for about 10 seconds.
-                    Normally TurboCtl sends automatic telegrams to the pump at
-                    regular intervals in order to prevent this from happening,
-                    and also to keep the status screen in the advanced UI
-                    updated.
-                    This argument prevents these automatic telegrams from being
-                    sent.
+    Show a help message that lists all command-line arguments.
 
--t, --test          Instead of running the TurboCtl program, run all automatic
-                    tests for it.
+.. option:: -p, --port <port>
 
+    Define the port used for the serial connection.
+
+    If this argument isn't supplied, the default port ``/dev/ttyACM0`` will be used. 
+
+.. option:: -v, --virtual
+
+    Run TurboCtl with a virtual pump. 
+
+    If this argument is supplied, instead of sending messages to a real pump, TurboCtl creates a simulated, virtual one and sends messages to that.
+    This makes it possible to test TurboCtl easily without having to connect to a real pump.     
+    This option is incompatible with :option:`-p`.
+
+.. option:: -s, --simple
+
+    Run TurboCtl with a simple command-line interface that doesn't require Urwid.
+                    
+    If TurboCtl is run without the :option:`-s` argument, a more advanced UI will be used.
+                    
+.. option:: -n, --no-poll
+
+    Don't send automatic telegrams to the pump.
+                    
+    The pump automatically turns off if it doesn't receive any commands for about 10 seconds.
+    Normally TurboCtl sends automatic telegrams to the pump at regular intervals in order to prevent this from happening, and also to keep the status screen in the advanced UI updated.
+    This argument prevents these automatic telegrams from being sent.
+
+.. option:: -t, --test
+
+    Instead of running the TurboCtl program, run all automatic tests for it.
 
 The user interface
 ------------------
 
-The simple UI (which is used when the ``-s`` argument has been given),
-consists of a simple command line interface that runs in the Linux
-terminal.
+The simple UI (which is used when the :option:`-s` argument has been given) consists of a basic command line interface that runs in the Linux terminal.
 
 .. image:: simple_UI.png
 
-The more advanced UI takes over the entire terminal screen, and features a
-simple screen displaying the current status of the pump in addition to the
-command-line interface.
+The more advanced UI takes over the entire terminal screen, and features a screen displaying the current status of the pump in addition to the command-line interface.
 
 .. image:: advanced_UI.png
 
@@ -113,31 +109,36 @@ proper command name.
 Command list
 ------------
 
-The following is a list of all the commands recognized by the UI. The same
-list can be displayed in the UI by issuing the ``help`` command.
+The following is a list of all the commands recognized by the UI.
+The same list can be displayed in the UI by issuing the :option:`help` command.
+Commas separate the full name of the command from its aliases.
+Angle brackets ``<>`` indicate required arguments, while square brackets ``[]`` display optional arguments with their default values.
 
-**pump <value>**
+.. option:: pump <value>
+
     Turn the pump on or off.
 
     Values of ``1``, ``'True'`` and ``'on'`` turn the pump on;
     ``'0'``, ``'False'`` and ``'off'`` turn it off.
 
-**status**
+.. option:: status, s
+
     Get the status of the pump.
 
-    Aliases: ``s``
+.. option:: reset, re
 
-**read <number> [index=0]**
+    Reset the error status of the pump.
+
+.. option:: read, r <number> [index=0]
+
     Return the value of parameter *number*, index *index*.
 
-    Aliases: ``r``
+.. option:: write, w <number> <value> [index=0]
 
-**write <number> <value> [index=0]**
     Write *value* to parameter *number*, index *index*.
 
-    Aliases: ``w``
+.. option:: info, i <letter> <number>
 
-**info <letter> <number>**
     Display information about parameters, errors, or warnings.
 
     *letter* should be ``'p'``, ``'e'``, or ``'w'`` depending on whether
@@ -146,16 +147,14 @@ list can be displayed in the UI by issuing the ``help`` command.
     *numbers* should be a list or a tuple of the numbers of those
     parameters/errors/warnings that should be displayed. It can also be a
     single number or ``'all'``, if only a single parameter/error/warning or all
-    of them should be listed. 
+    of them should be listed.
 
-    Aliases: ``i``
+.. option:: exit, e, q, x  
 
-**exit** 
     Exit the UI.
 
-    Aliases: ``e``, ``q``, ``x``
+.. option:: help, h [value=None]
 
-**help [value=None]**
     Display a help message.
 
     *value* should be the name or an alias of the command that
@@ -163,9 +162,12 @@ list can be displayed in the UI by issuing the ``help`` command.
     If no *value* is specified, all commands are listed and
     described.
 
-    Aliases: ``h``
+.. option:: docs, d
 
-**debug <value>**
+    Open TurboCtl documentation in a browser.
+
+.. option:: debug, db <value>
+
     Activate or deactivate the debug mode.
 
     Values of ``'1'``, ``'True'`` and ``'on'`` activate the debug mode;
@@ -177,9 +179,8 @@ list can be displayed in the UI by issuing the ``help`` command.
     Activating the debug mode disables this error-catching in order
     to make debugging easier.
 
-    Aliases: ``d``
+.. option:: verbose, v <value>
 
-**verbose <value>**
     Activate or deactivate the verbose mode.
 
     Values of ``'1'``, ``'True'`` and ``'on'`` activate the verbose mode;
@@ -189,14 +190,12 @@ list can be displayed in the UI by issuing the ``help`` command.
     will print all the contents of the telegram and the reply to the
     screen.
 
-    Aliases: ``v``
 
-    
 Using Screen
 ------------
 
 As mentioned above, the pump turns off if it doesn't receive any messages
-for about 10 seconds. If TurboCtl is run without the ``-n`` argument, it will
+for about 10 seconds. If TurboCtl is run without the :option:`-n` argument, it will
 send automatic messages which keep the pump on, but the pump will turn off soon
 after TurboCtl is closed.
 

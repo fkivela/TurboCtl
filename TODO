@@ -1,17 +1,22 @@
 TODO
 
 Soon:
-- Update installation instructions
-- Update the command list in the usage docs
+- Commit: Update installation instructions
+- Fix: the -d command doesn't work when installing from PyPI
 - Add a changelog to the docs
 - Add TurboCtl to PyPI
+- Make sure PyPI links & other instructions in the docs work
 
 Later:
 - Add TurboCtl to conda-forge
+- Add an error message when Urwid is not installed
+- Add a -d --docs command line option
 - Remove unnecessary dev files from the distributed package
 - Add an alias to the pump command
+- Update the usage pics
 - Update tests
 - Fix double colons in Sphinx-generated parameter lists.
+- Reformat alias lists to match the usage page.
 - Make sure the program crashes elegantly when e.g. it cannot connect to the
   pump.
 - Add commands to set the setpoint (most important), save data, read errors

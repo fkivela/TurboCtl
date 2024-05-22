@@ -4,7 +4,7 @@ readme:
 	python make_readme.py
 
 docs: readme
-	make-docs
+	./make-docs
 
 build: docs
 	rm dist/*
