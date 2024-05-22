@@ -12,3 +12,6 @@ build: docs
 
 test_upload: build
 	python -m twine upload --repository testpypi dist/*
+
+upload: build
+	python -m twine upload dist/*
