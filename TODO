@@ -1,7 +1,8 @@
 TODO
 
 Soon:
-- Tst installing TurboCtl with different optional dependencies
+- Merge with master & push
+- Make a GitHub release?
 - Add TurboCtl to PyPI
 - Make sure PyPI links & other instructions in the docs work
 
