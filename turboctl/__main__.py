@@ -152,4 +152,6 @@ def get_ui(command_line_ui):
 
     return ui
 
-main()
+
+if __name__ == '__main__':
+    main()
