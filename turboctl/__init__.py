@@ -1,7 +1,7 @@
 from datetime import date
 
 
-__version__ = '1.0.2.dev7'
+__version__ = '1.1.0.dev1'
 """The current version of the TurboCtl project."""
 
 

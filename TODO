@@ -1,8 +1,6 @@
 TODO
 
 Soon:
-- Fix: the -d command doesn't work when installing from PyPI
-- Add a changelog to the docs
 - Add TurboCtl to PyPI
 - Make sure PyPI links & other instructions in the docs work
 
