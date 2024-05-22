@@ -17,7 +17,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 urwid = ["urwid"]
-tests = ["hypothesis"]
+test = ["hypothesis"]
 
 [project.urls]
 Homepage = "https://github.com/fkivela/TurboCtl"

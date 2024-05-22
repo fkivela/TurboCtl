@@ -25,7 +25,7 @@ Copyright © 2019-2024 University of Helsinki Fusor Team.
 Version
 -------
 
-This is version 1.0.2.dev7 of TurboCtl.
+This is version 1.1.0.dev2 of TurboCtl.
 
 License
 -------

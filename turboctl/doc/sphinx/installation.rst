@@ -8,7 +8,7 @@ TurboCtl is available on PyPI_ and can be installed with the command
 
 ::
 
-    pip install turboctl[urwid]
+    pip install 'turboctl[urwid]'
 
 This installs TurboCtl with a fancier UI that uses Urwid_.
 
@@ -25,13 +25,13 @@ In order to run the automatic tests included in TurboCtl (the :option:`-t` flag)
 
 ::
 
-    pip install turboctl[tests]
+    pip install 'turboctl[tests]'
 
 or
 
 ::
 
-    pip install turboctl[tests,urwid]
+    pip install 'turboctl[tests,urwid]'
 
 depending on whether you want to also include Urwid or not.
 
