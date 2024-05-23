@@ -6,7 +6,6 @@ Changelog:
 
 Soon:
 - Add TurboCtl to Read the Docs:
-    - Move the doc directory back to TurboCtl
     - Remove built html docs from git
     - Version bump & changelog
     - Upload to PyPI

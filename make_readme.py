@@ -84,7 +84,7 @@ with open('README.rst', 'w') as file:
 
 
 # Write the HTML docs index.
-with open('turboctl/doc/sphinx/index.rst', 'w') as file:
+with open('doc/sphinx/index.rst', 'w') as file:
     file.write(body.format(documentation=sphinx_docs,
                            project_copyright=turboctl.copyright,
                            version=turboctl.__version__))

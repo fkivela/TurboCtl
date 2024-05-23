@@ -11,4 +11,4 @@ export PYTHONPATH="$("$TurboCtl_path"/add-to-path "$TurboCtl_path" PYTHONPATH)"
 # Compile docs.
 # The parentheses create a new subshell so that we don't need to change the directory of the parent shell.
 python make_readme.py
-(cd turboctl/doc/sphinx; make html)
+(cd doc/sphinx; make html)
