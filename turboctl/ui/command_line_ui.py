@@ -7,11 +7,11 @@ from pathlib import Path
 import readline  # pylint: disable=unused-import
 import sys
 import textwrap
-import webbrowser
 
 from turboctl import __version__
 from turboctl.telegram.parser import PARAMETERS, ERRORS, WARNINGS
 from turboctl.ui.control_interface import ControlInterface
+from turboctl.ui.docs import docs
 from turboctl.ui.table import table
 
 
@@ -317,19 +317,7 @@ class CommandLineUI:
 
     def cmd_docs(self):
         """Open TurboCtl documentation in a browser."""
-        # Get the full path of the current file.
-        path = Path(__file__).resolve()
-        # Cut the parts after turboctl.
-        parts = path.parts
-        index = parts.index('turboctl')
-        new_parts = parts[:index + 1]
-        turboctl_path = Path(*new_parts)
-        # Fill in the path to index.html.
-        # We use this instead of README.html because the readme isn't included when TurboCtl is installed via pip.
-        readme_path = turboctl_path / Path('doc/sphinx/_build/html/index.html')
-        # new=2 makes the page open in a new tab, though this seems to happen
-        # regardless.
-        webbrowser.open('file://' + str(readme_path), new=2)
+        docs()
 
     def _helpstring(self, cmdname):
         """Return a help message describing the usage of *cmdname*."""
