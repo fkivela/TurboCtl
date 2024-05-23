@@ -1,2 +1,3 @@
 # Requirements that Read the Docs needs for building the documentation
 turboctl
+sphinx==5.0.2
