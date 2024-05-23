@@ -1,6 +1,7 @@
 # Ignore these directories
 __pycache__
 doc/manuals
+doc/sphinx/_build
 .hypothesis
 dist
 turboctl.egg-info
