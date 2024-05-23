@@ -2,7 +2,10 @@
 import webbrowser
 
 
+URL = 'https://turboctl.readthedocs.io/en/latest/index.html'
+"""The URL of TurboCtl documentation."""
+
+
 def docs():
     """Open TurboCtl documentation in a web browser."""
-    url = 'https://turboctl.readthedocs.io/en/latest/index.html'
-    webbrowser.open(url, new=2)
+    webbrowser.open(URL, new=2)

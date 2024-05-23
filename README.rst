@@ -11,7 +11,7 @@ Documentation
 -------------
 
 TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/turboctl/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
+You can view the documentation in a correctly rendered form `here <https://turboctl.readthedocs.io/en/latest/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
 
 Author
 ------

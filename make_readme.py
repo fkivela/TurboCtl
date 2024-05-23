@@ -1,5 +1,6 @@
 """Write README.rst with and without Sphinx extensions."""
 import turboctl
+from turboctl.ui.docs import URL
 
 
 # This is the main text of the readme file.
@@ -53,8 +54,8 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # This version displays correctly in GitHub and PyPI, which don't support
 # Sphinx.
-raw_rst_docs = """TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <https://html-preview.github.io/?url=https://github.com/fkivela/TurboCtl/blob/master/turboctl/doc/sphinx/_build/html/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser."""
+raw_rst_docs = f"""TurboCtl includes HTML documentation generated with Sphinx.
+You can view the documentation in a correctly rendered form `here <{URL}>`_ or by downloading TurboCtl and opening ``README.html`` in a browser."""
 
 
 # This version is used for the index page of the HTML docs.
