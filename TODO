@@ -1,9 +1,14 @@
 TODO
 
+Changelog:
+    - Moved docs to Read the Docs
+    - Addded the -d command line argument
+
 Soon:
 - Add TurboCtl to Read the Docs:
     - Redirect doc links to RtD
     - Move the doc directory back to TurboCtl
+    - Remove built html docs from git
     - Version bump & changelog
     - Upload to PyPI
 
@@ -13,7 +18,6 @@ Soon:
 Later:
 - Add TurboCtl to conda-forge
 - Add an error message when Urwid is not installed
-- Add a -d --docs command line option
 - Remove unnecessary dev files from the distributed package
 - Add an alias to the pump command
 - Update the usage pics

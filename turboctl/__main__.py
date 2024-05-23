@@ -5,6 +5,7 @@ import sys
 
 from turboctl.ui import status_format
 from turboctl.ui.command_line_ui import CommandLineUI
+from turboctl.ui.docs import docs
 from turboctl.ui.queuefile import QueueFile
 from turboctl.virtualpump.virtualpump import VirtualPump
 from test_turboctl.run_tests.run_tests import run_tests
@@ -16,9 +17,12 @@ from test_turboctl.run_tests.run_tests import run_tests
 # The -h option displays an automatically generated help message.
 parser = argparse.ArgumentParser(description='This script runs TurboCtrl')
 
-# TurbCtl can be run in three modes: run tests (-t), run without urwid
-# (-s) or run with the regular UI (no letter).
+# TurbCtl can be run in four modes: show docs (-d), run tests (-t),
+# run without urwid (-s) or run with the regular UI (no letter).
 mode_group = parser.add_mutually_exclusive_group()
+mode_group.add_argument('-d', '--docs',
+                        help='open documentation in a web browser and exit',
+                        action='store_true')
 mode_group.add_argument('-t', '--test', help='run tests', action='store_true')
 mode_group.add_argument('-s', '--simple',
                         help="use a UI that doesn't require urwid", 
@@ -26,7 +30,7 @@ mode_group.add_argument('-s', '--simple',
 
 # Regardless of mode, TurboCtl can be run with a virtual pump (-v) 
 # or with a real pump (-p and port name). These options don't matter when
-# running tests. 
+# running in doc/test mode.
 vpump_group = parser.add_mutually_exclusive_group()
 vpump_group.add_argument('-v', '--virtual', help='use a virtual pump',
                          action='store_true')
@@ -34,7 +38,7 @@ vpump_group.add_argument('-p', '--port',
                          help='the address of the serial port device')
 
 # Automatic polling can be disabled with this argument in all modes (even
-# though this doesn't do anything in test mode).
+# though this doesn't do anything in doc/test mode).
 parser.add_argument('-n', '--no-poll',
                     help=('do not poll the status of the pump by sending '
                           'automatic telegrams'), 
@@ -47,7 +51,11 @@ args = parser.parse_args()
 
 def main():
     """Execute the script."""
-    
+
+    if args.docs:
+        docs()
+        return
+
     if args.test:
         run_tests()
         return

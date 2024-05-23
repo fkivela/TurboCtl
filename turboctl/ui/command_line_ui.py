@@ -316,7 +316,7 @@ class CommandLineUI:
         self.print(string)
 
     def cmd_docs(self):
-        """Open TurboCtl documentation in a browser."""
+        """Open TurboCtl documentation in a web browser."""
         docs()
 
     def _helpstring(self, cmdname):

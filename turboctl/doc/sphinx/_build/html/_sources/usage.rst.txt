@@ -39,6 +39,10 @@ Regardless of the command used to run it, TurboCtl accepts the following command
                     
     Show a help message that lists all command-line arguments.
 
+.. option:: -d, --docs          
+                    
+    Open TurboCtl documentation in a web browser.
+
 .. option:: -p, --port <port>
 
     Define the port used for the serial connection.
@@ -164,7 +168,7 @@ Angle brackets ``<>`` indicate required arguments, while square brackets ``[]`` 
 
 .. option:: docs, d
 
-    Open TurboCtl documentation in a browser.
+    Open TurboCtl documentation in a web browser.
 
 .. option:: debug, db <value>
 
