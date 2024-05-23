@@ -1,4 +1,4 @@
-"""Functionality for opening TurboCtl docs in a browser."""
+"""Functionality for opening TurboCtl documentation in a browser."""
 import webbrowser
 
 

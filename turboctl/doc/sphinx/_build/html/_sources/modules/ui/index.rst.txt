@@ -7,6 +7,7 @@ This subpackage contains the user interfaces of the TurboCtl program.
 
     control_interface.rst
     table.rst
+    docs.rst
     command_line_ui.rst
     widgets.rst
     advanced_tui.rst
