@@ -8,6 +8,7 @@ Soon:
 - Add TurboCtl to Read the Docs:
     - Redirect doc links to RtD
     - Add a docs page for the new docs module
+    - Add a homepage section to the readme
     - Move the doc directory back to TurboCtl
     - Remove built html docs from git
     - Version bump & changelog

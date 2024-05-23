@@ -10,8 +10,7 @@ pump. It was written in Python 3 and is intended for Linux operating systems.
 Documentation
 -------------
 
-TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <https://turboctl.readthedocs.io/en/latest/index.html>`_ or by downloading TurboCtl and opening ``README.html`` in a browser.
+You can view the TurboCtl documentation `here <https://turboctl.readthedocs.io/en/latest/index.html>`_.
 
 Author
 ------

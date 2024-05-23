@@ -54,8 +54,7 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # This version displays correctly in GitHub and PyPI, which don't support
 # Sphinx.
-raw_rst_docs = f"""TurboCtl includes HTML documentation generated with Sphinx.
-You can view the documentation in a correctly rendered form `here <{URL}>`_ or by downloading TurboCtl and opening ``README.html`` in a browser."""
+raw_rst_docs = f'You can view the TurboCtl documentation `here <{URL}>`_.'
 
 
 # This version is used for the index page of the HTML docs.
