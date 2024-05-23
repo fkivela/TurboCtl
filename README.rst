@@ -10,7 +10,7 @@ pump. It was written in Python 3 and is intended for Linux operating systems.
 Documentation
 -------------
 
-You can view the TurboCtl documentation `here <https://turboctl.readthedocs.io/en/latest/index.html>`_.
+You can view the TurboCtl documentation `here <https://turboctl.readthedocs.io/en/latest/index.html>`__.
 
 Author
 ------
@@ -25,12 +25,12 @@ GitHub
 ------
 
 The GitHub home page of the TurboCtl project can be found
-`here <https://github.com/fkivela/TurboCtl>`_.
+`here <https://github.com/fkivela/TurboCtl>`__.
 
 Version
 -------
 
-This is version 1.1.0.dev2 of TurboCtl.
+This is version 1.1.1.dev1 of TurboCtl.
 
 License
 -------

@@ -9,6 +9,9 @@ docs: readme
 build: docs
 	rm dist/*
 	python -m build
+ 
+check_upload: build
+	python -m twine check dist/*
 
 test_upload: build
 	python -m twine upload --repository testpypi dist/*

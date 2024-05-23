@@ -6,7 +6,6 @@ Changelog:
 
 Soon:
 - Add TurboCtl to Read the Docs:
-    - Add a homepage section to the readme
     - Add a docs page for the new docs module
     - Move the doc directory back to TurboCtl
     - Remove built html docs from git

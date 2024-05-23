@@ -33,7 +33,7 @@ GitHub
 ------
 
 The GitHub home page of the TurboCtl project can be found
-`here <https://github.com/fkivela/TurboCtl>`_.
+`here <https://github.com/fkivela/TurboCtl>`__.
 
 Version
 -------
@@ -56,11 +56,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
 """
+# Note the double underscores at the ends of links.
+# With a regular single underscore the duplicate link names won't be accepted
+# by PyPI.
 
 
 # This version displays correctly in GitHub and PyPI, which don't support
 # Sphinx.
-raw_rst_docs = f'You can view the TurboCtl documentation `here <{URL}>`_.'
+raw_rst_docs = f'You can view the TurboCtl documentation `here <{URL}>`__.'
 
 
 # This version is used for the index page of the HTML docs.

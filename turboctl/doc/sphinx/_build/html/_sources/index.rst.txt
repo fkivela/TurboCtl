@@ -31,12 +31,12 @@ GitHub
 ------
 
 The GitHub home page of the TurboCtl project can be found
-`here <https://github.com/fkivela/TurboCtl>`_.
+`here <https://github.com/fkivela/TurboCtl>`__.
 
 Version
 -------
 
-This is version 1.1.0.dev2 of TurboCtl.
+This is version 1.1.1.dev1 of TurboCtl.
 
 License
 -------
