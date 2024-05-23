@@ -29,6 +29,12 @@ The author can be contacted at firstname.lastname@aalto.fi
 
 Copyright © {project_copyright}.
 
+GitHub
+------
+
+The GitHub home page of the TurboCtl project can be found
+`here <https://github.com/fkivela/TurboCtl>`_.
+
 Version
 -------
 

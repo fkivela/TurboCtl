@@ -21,6 +21,12 @@ The author can be contacted at firstname.lastname@aalto.fi
 
 Copyright © 2019-2024 University of Helsinki Fusor Team.
 
+GitHub
+------
+
+The GitHub home page of the TurboCtl project can be found
+`here <https://github.com/fkivela/TurboCtl>`_.
+
 Version
 -------
 
