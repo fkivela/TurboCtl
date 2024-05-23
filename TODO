@@ -1,8 +1,8 @@
 TODO
 
 Soon:
+- Add a note warning that Sphinx links to specific sections of pages do not work in github-preview, or add docs to Readthedocs
 - Make a GitHub release?
-- Add TurboCtl to PyPI
 - Make sure PyPI links & other instructions in the docs work
 
 Later:
