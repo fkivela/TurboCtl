@@ -10,3 +10,8 @@ build:
 
 sphinx:
     configuration: turboctl/doc/sphinx/conf.py
+
+python:
+    install:
+        - requirements: turboctl/doc/sphinx/requirements.txt
+

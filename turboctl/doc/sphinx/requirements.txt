@@ -1,0 +1,2 @@
+# Requirements that Read the Docs needs for building the documentation
+turboctl
