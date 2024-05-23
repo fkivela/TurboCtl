@@ -9,7 +9,7 @@ build:
         python: "3.12"
 
 sphinx:
-    configuration: turboctl/doc/sphinx/conf.py
+    configuration: doc/sphinx/conf.py
 
 python:
     install:
