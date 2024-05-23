@@ -1,15 +1,6 @@
 TODO
 
-Changelog:
-    - Moved docs to Read the Docs
-    - Addded the -d command line argument
-
 Soon:
-- Add TurboCtl to Read the Docs:
-    - Remove built html docs from git
-    - Version bump & changelog
-    - Upload to PyPI
-
 - Make a GitHub release?
 - Make sure PyPI links & other instructions in the docs work
 
