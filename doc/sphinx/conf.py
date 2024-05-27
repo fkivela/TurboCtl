@@ -9,22 +9,15 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+
 from pathlib import Path
 import sys
 
-# Find the TurboCtl directory in the path of the current file. 
-path = Path(__file__).resolve()
-# We look for the last occurence of 'TurboCtl', so that even if the directory
-# structure is .../TurboCtl/TurboCtl/... for some reason, this still works.
-reverse_parts = path.parts[::-1]
-try:
-    index = reverse_parts.index('TurboCtl')
-except ValueError:
-    raise ValueError(f'{path=}')
-new_parts = reverse_parts[:index + -1:-1]
-TurboCtl_path = Path(*new_parts)
-# Add the TurboCtl directory to $PATH so that we can import turboctl.
+# Find the TurboCtl directory and add it to $PATH so that we can import
+# turboctl. 
+# __file__ = .../???/doc/sphinx/conf.py where ???=TurboCtl locally and some other
+# directory on Read the Docs.
+TurboCtl_path = Path(__file__).resolve().parent.parent.parent
 sys.path.append(TurboCtl_path)
 
 # -- Project information -----------------------------------------------------
