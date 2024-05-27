@@ -19,6 +19,7 @@ import sys
 # __file__ = .../???/doc/sphinx/conf.py where ???=TurboCtl locally and some other
 # directory on Read the Docs.
 sys.path.insert(0, os.path.abspath('../../..'))
+print("sys.path:", sys.path)
 #TurboCtl_path = Path(__file__).resolve().parent.parent.parent
 #sys.path.append(TurboCtl_path)
 
