@@ -18,7 +18,10 @@ path = Path(__file__).resolve()
 # We look for the last occurence of 'TurboCtl', so that even if the directory
 # structure is .../TurboCtl/TurboCtl/... for some reason, this still works.
 reverse_parts = path.parts[::-1]
-index = reverse_parts.index('TurboCtl')
+try:
+    index = reverse_parts.index('TurboCtl')
+except ValueError:
+    raise ValueError(f'{path=}')
 new_parts = reverse_parts[:index + -1:-1]
 TurboCtl_path = Path(*new_parts)
 # Add the TurboCtl directory to $PATH so that we can import turboctl.
