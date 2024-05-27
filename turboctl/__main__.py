@@ -2,10 +2,11 @@
 
 import argparse
 import sys
+import webbrowser
 
+from turboctl.global_constants import DOCS_URL
 from turboctl.ui import status_format
 from turboctl.ui.command_line_ui import CommandLineUI
-from turboctl.ui.docs import docs
 from turboctl.ui.queuefile import QueueFile
 from turboctl.virtualpump.virtualpump import VirtualPump
 from test_turboctl.run_tests.run_tests import run_tests
@@ -53,7 +54,7 @@ def main():
     """Execute the script."""
 
     if args.docs:
-        docs()
+        webbrowser.open(DOCS_URL)
         return
 
     if args.test:

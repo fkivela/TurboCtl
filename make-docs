@@ -8,7 +8,10 @@
 TurboCtl_path="$(dirname "$(readlink -f "$0")")"
 export PYTHONPATH="$("$TurboCtl_path"/add-to-path "$TurboCtl_path" PYTHONPATH)"
 
+# Load global constants to get $SPHINX_PATH.
+eval $(./global-constants)
+
 # Compile docs.
 # The parentheses create a new subshell so that we don't need to change the directory of the parent shell.
 python make_readme.py
-(cd doc/sphinx; make html)
+(cd $SPHINX_PATH; make html)

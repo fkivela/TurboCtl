@@ -1,8 +1,5 @@
 # Requirements that Read the Docs needs for building the documentation
 
-# conf.py needs to import turboctl.
-turboctl
-
 # This is the current Sphinx version on Anaconda.
 # The default used by RtD is a higher version that builds ToC trees deeper than is desirable.
 sphinx==5.0.2

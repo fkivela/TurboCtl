@@ -1,13 +1,14 @@
 default: build
 
-readme:
-	python make_readme.py
+files:
+	python make_files.py
 
-docs: readme
+docs: files
 	./make-docs
 
 build: docs
-	rm dist/*
+    # The -f makes this work even if dist/ is empty.
+	rm -f dist/*
 	python -m build
  
 check_upload: build

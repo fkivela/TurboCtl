@@ -7,11 +7,11 @@ from pathlib import Path
 import readline  # pylint: disable=unused-import
 import sys
 import textwrap
+import webbrowser
 
-from turboctl import __version__
+from turboctl.global_constants import DOCS_URL, VERSION
 from turboctl.telegram.parser import PARAMETERS, ERRORS, WARNINGS
 from turboctl.ui.control_interface import ControlInterface
-from turboctl.ui.docs import docs
 from turboctl.ui.table import table
 
 
@@ -150,7 +150,7 @@ class CommandLineUI:
         self.control_interface = ControlInterface(port, auto_update)
         self.debug = False
         self.verbose = False
-        self.intro = (f"Welcome to TurboCtl v. {__version__}! "
+        self.intro = (f"Welcome to TurboCtl v. {VERSION}! "
                       f"Type 'help' for a list of commands.")
         self.prompt = '>> '
         self._stop_flag = False
@@ -317,7 +317,7 @@ class CommandLineUI:
 
     def cmd_docs(self):
         """Open TurboCtl documentation in a web browser."""
-        docs()
+        webbrowser.open(DOCS_URL)
 
     def _helpstring(self, cmdname):
         """Return a help message describing the usage of *cmdname*."""

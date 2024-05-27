@@ -16,10 +16,11 @@ The package also contains these auxiliary modules:
 
 .. toctree::
 
+    global_constants.rst
     hacks.rst
     main.rst
 
-and the following variables:
+and the following variable:
 
 .. automodule:: turboctl
 

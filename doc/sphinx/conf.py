@@ -17,13 +17,19 @@
 # The TurboCtl directory should already be in $PATH.
 
 # -- Project information -----------------------------------------------------
-import turboctl
+from datetime import date
+
 
 project = 'TurboCtl'
 author = 'Feliks Kivelä'
-version = turboctl.__version__
-copyright = turboctl.copyright
-# The copyright variable is automatically written to the HTML footer.
+version = 'placeholder'
+copyright = 'placeholder'
+
+# Reading turboctl.__version__ directly would create a dependency to turboctl
+# which complicates compilation with Read the Docs.
+# turboctl can be added to the dependency list for RtD but that is the version
+# on PyPI which may be different to the one the docs are being written for
+# (which is fetched from GitHub).
 
 # -- General configuration ---------------------------------------------------
 
