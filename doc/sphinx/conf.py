@@ -10,27 +10,27 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
+from pathlib import Path
 import sys
-sys.path.insert(0, os.path.abspath('./../..'))
 
-# The TurboCtl directory should already be in $PATH.
+# Find the TurboCtl directory in the path of the current file. 
+path = Path(__file__).resolve()
+# We look for the last occurence of 'TurboCtl', so that even if the directory
+# structure is .../TurboCtl/TurboCtl/... for some reason, this still works.
+reverse_parts = path.parts[::-1]
+index = reverse_parts.index('TurboCtl')
+new_parts = reverse_parts[:index + -1:-1]
+TurboCtl_path = Path(*new_parts)
+# Add the TurboCtl directory to $PATH so that we can import turboctl.
+sys.path.append(TurboCtl_path)
 
 # -- Project information -----------------------------------------------------
-from datetime import date
-import turboctl
-
+from turboctl import global_constants
 
 project = 'TurboCtl'
-author = 'Feliks Kivelä'
-version = 'placeholder'
-copyright = 'placeholder'
-
-# Reading turboctl.__version__ directly would create a dependency to turboctl
-# which complicates compilation with Read the Docs.
-# turboctl can be added to the dependency list for RtD but that is the version
-# on PyPI which may be different to the one the docs are being written for
-# (which is fetched from GitHub).
+author = global_constants.author
+version = global_constants.version
+project_copyright = global_constants.copyright
 
 # -- General configuration ---------------------------------------------------
 
