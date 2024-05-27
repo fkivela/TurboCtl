@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
+import os
 from pathlib import Path
 import sys
 
@@ -17,8 +18,9 @@ import sys
 # turboctl. 
 # __file__ = .../???/doc/sphinx/conf.py where ???=TurboCtl locally and some other
 # directory on Read the Docs.
-TurboCtl_path = Path(__file__).resolve().parent.parent.parent
-sys.path.append(TurboCtl_path)
+sys.path.insert(0, os.path.abspath('../../..'))
+#TurboCtl_path = Path(__file__).resolve().parent.parent.parent
+#sys.path.append(TurboCtl_path)
 
 # -- Project information -----------------------------------------------------
 from turboctl import global_constants
