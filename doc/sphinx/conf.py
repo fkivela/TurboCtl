@@ -27,9 +27,9 @@ print("sys.path:", sys.path)
 from turboctl import global_constants
 
 project = 'TurboCtl'
-author = global_constants.author
-version = global_constants.version
-project_copyright = global_constants.copyright
+author = global_constants.AUTHOR
+version = global_constants.VERSION
+project_copyright = global_constants.COPYRIGHT
 
 # -- General configuration ---------------------------------------------------
 
