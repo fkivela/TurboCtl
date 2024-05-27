@@ -21,7 +21,7 @@ import sys
 #sys.path.insert(0, os.path.abspath('../..'))
 TurboCtl_path1 = os.path.abspath('../..')
 TurboCtl_path2 = Path(__file__).resolve().parent.parent.parent
-sys.path.append(TurboCtl_path2)
+sys.path.append(str(TurboCtl_path2))
 print(f"{TurboCtl_path1=}")
 print(f"{TurboCtl_path2=}")
 print(f"{(str(TurboCtl_path1)==str(TurboCtl_path2))=}")
