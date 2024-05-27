@@ -19,11 +19,8 @@ import sys
 # __file__ = .../???/doc/sphinx/conf.py where ???=TurboCtl locally and some other
 # directory on Read the Docs.
 #sys.path.insert(0, os.path.abspath('../..'))
-TurboCtl_path1 = os.path.abspath('../..')
-TurboCtl_path2 = Path(__file__).resolve().parent.parent.parent
-sys.path.append(TurboCtl_path1)
-print(f"{TurboCtl_path1=}")
-print(f"{TurboCtl_path2=}")
+TurboCtl_path = Path(__file__).resolve().parent.parent.parent
+sys.path.append(TurboCtl_path)
 
 # -- Project information -----------------------------------------------------
 from turboctl import global_constants
