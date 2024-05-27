@@ -18,6 +18,7 @@
 
 # -- Project information -----------------------------------------------------
 from datetime import date
+import turboctl
 
 
 project = 'TurboCtl'
