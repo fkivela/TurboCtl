@@ -55,7 +55,5 @@ the command
     sudo adduser <username> dialout
 
 
-.. _PyPI: https://pypi.org/project/turboctl/
 .. _Urwid: http://urwid.org/
 .. _Hypothesis: https://hypothesis.readthedocs.io/en/latest/
-.. _GitHub: https://github.com/fkivela/TurboCtl

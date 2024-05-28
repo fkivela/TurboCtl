@@ -4,6 +4,7 @@
 # list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -15,11 +16,12 @@ import sys
 
 # Find the TurboCtl directory and add it to $PATH so that we can import
 # turboctl. 
-# __file__ = .../???/doc/sphinx/conf.py where ???=TurboCtl locally and some
+# __file__ = .../???/doc/sphinx/conf.py, where ???=TurboCtl locally and some
 # other directory on Read the Docs.
 TurboCtl_path = Path(__file__).resolve().parent.parent.parent
 # This doesn't work if we don't convert the path to a string!
 sys.path.append(str(TurboCtl_path))
+
 
 # -- Project information -----------------------------------------------------
 from turboctl import global_constants
@@ -28,6 +30,7 @@ project = 'TurboCtl'
 author = global_constants.AUTHOR
 version = global_constants.VERSION
 project_copyright = global_constants.COPYRIGHT
+
 
 # -- General configuration ---------------------------------------------------
 
@@ -83,6 +86,13 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# This included at the end of every rst source file. 
+rst_epilog = f"""
+    .. _GitHub: {global_constants.GITHUB_URL}
+    .. _PyPI: {global_constants.PYPI_URL}
+    .. _`Read the Docs`: {global_constants.DOCS_URL}
+"""
 
 # -- Options for HTML output -------------------------------------------------
 
