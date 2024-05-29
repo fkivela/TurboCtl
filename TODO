@@ -1,27 +1,21 @@
 TODO
 
 Soon:
-- Add dates to the changelog?
-- Make a GitHub release?
-- Make sure PyPI links & other instructions in the docs work
+- Add TurboCtl to conda-forge
+- Add a message telling to install Urwid when TurboCtl is run without Urwid being installed or the -s argument being used
+- Find out which files exactly are included in the package on PyPI and remove unnecessary ones such as documentation
+- Add "p" as an alias for the "pump" command
+- Update the instructional pictures in the Usage section of the documentation
 
 Later:
-- Add TurboCtl to conda-forge
-- Add an error message when Urwid is not installed
-- Remove unnecessary dev files from the distributed package
-- Add an alias to the pump command
-- Update the usage pics
-- Update tests
-- Fix double colons in Sphinx-generated parameter lists.
-- Reformat alias lists to match the usage page.
-- Make sure the program crashes elegantly when e.g. it cannot connect to the
-  pump.
-- Add commands to set the setpoint (most important), save data, read errors
-  etc.
-- Move singledispatchmethod to datatypes.py.
-- Run pylint/pycodestyle.
-- Make sure there are no TODO tags anywhere is the code.
-- Replace custom scrollbar implementation with the new Urwid one
+- Update the tests
+- Fix double colons in Sphinx-generated parameter lists
+- Reformat the aliases in the in-program help (h commanmd) to match the Usage page (i.e. move the aliases from the end of the command description to the start)
+- Make sure the program crashes elegantly when e.g. it cannot connect to the pump
+- Add commands to set the setpoint (most important), save data, read errors etc.
+- Run pylint/pycodestyle
+- Make sure there are no TODO tags anywhere in the code
+- Replace the custom scrollbar implementation with the new Urwid one
 
 Perhaps at some point:
 - Make sure only one user can control the pump at a time
@@ -29,14 +23,10 @@ Perhaps at some point:
   The command parser could also be moved into a separate class, so that it
   could be tested more easily. Also, parser.py might be simplified by using
   the parsing modules in the standard library.
-- Document the format in parameters.txt better? This might even be turned into
-  e.g. a CSV file.
-- Document individual enum members in codes.py.
+- Document the format in parameters.txt better? This might even be turned into e.g. a CSV file.
+- Document individual enum members in codes.py
 - Rename WrongNumError to NumberError or something?
-- Open the output of the info and help commands with less if a specific
-  argument is given?
-- The docstrings of the read/write_parameter methods say
-  "Raises ValueError if number or index have invalid values". Clarify this.
-- Add instructions for importing the API/control interface (and also add 
-  those to the turboctl namespace)
-- Fix the bug where closing TurboCtl in screen doesn't erase the UI text.
+- Open the output of the info and help commands with less if a specific argument is given?
+- The docstrings of the read/write_parameter methods say "Raises ValueError if number or index have invalid values". Clarify this.
+- Add instructions for importing the API/control interface (and also add those to the turboctl namespace)
+- Fix the bug where closing TurboCtl in screen doesn't erase the UI text
