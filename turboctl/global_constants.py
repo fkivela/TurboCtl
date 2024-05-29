@@ -4,22 +4,8 @@ This module defines a place where string constants such as URLs can be defined
 and changed without having to go through multiple files to manually change the
 values in each of them.
 
-These constants are used by the :ref:`turboctl` Python module, the Sphinx
-documentation, and scripts at the top level of the project, so the module
-is defined at the top level with links to it inside both the ``doc`` and
-:ref:`turboctl` directories.
-The link inside :ref:`turboctl` is a hard link so that this module is included
-in the :ref:`turboctl` package when it is installed from PyPI.
-
-Defining the constants only inside :ref:`turboctl` and then importing the
-package would create a dependency to :ref:`turboctl` which would complicate
-the compilation of documentation with Read the Docs.
-:ref:`turboctl` can be added to the dependency list for RtD, but the version
-being used would be the one on PyPI, which may be different to the one the
-documentation is being written for (which is fetched from GitHub).
-
-Running this module as a script copies the constants to the shell file
-``global_constants.sh``, where they can be easily accessed by shell scripts.
+In addition to the :ref:`turboctl` Python module, these constants are used by
+the Sphinx documentation and scripts at the top level of the project.
 """
 from datetime import date
 
@@ -59,6 +45,11 @@ TurboCtl directory.
 # This has changed a few times and may change in the future so it's a good idea
 # to make it a variable.
 
+REVERSE_SPHINX_PATH = '../..'
+"""The path to the top-level TurboCtl directory, relative to the Sphinx
+documentation directory.
+"""
+
 
 def main():
     """Write the constants defined in this module to a shell file."""
@@ -76,9 +67,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-#pyproject.toml: author, decription?, name?, github, version (already dynamic)
-#.readthedocs.yaml: sphinx path (conf, requirements)
-#sphinx/conf.py: author, name, version, copyright
-#sphinx/requirements.txt: sphinx version
-#docs: readthedocs, pypi, githib links

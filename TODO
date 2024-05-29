@@ -1,9 +1,6 @@
 TODO
 
 Soon:
-- Fix issue: where to define copytright? I can't just move make_readme to doc as it needs to import URL from turboctl. Note: tests whether RtD can even compile the docs without a turboctl dependency.
-    - Replace hard-coded links in the docs
-    - Fix global_constants.py docstring
 - Document the -n option better. It should be about on messages, not any messages
 - Add dates to the changelog?
 - Make a GitHub release?

@@ -4,6 +4,7 @@ This script is used to create the following files
     * pyproject.toml
     * README.rst
     * sphinx/index.rst (which is used to generate README.html)
+    * sphinx/reverse_sphinx_path.py
     * .readthedocs.yaml
 dynamically to avoid having to hard-code global constants.
 """
@@ -128,6 +129,13 @@ readme_sphinx_docs = """.. toctree::
 """
 
 
+# sphinx/reverse_sphinx_path.py
+# This file makes it possible for sphinx/conf.py to import turboctl without
+# having to hard-code the path.
+reverse_sphinx_path = note.format(comment_symbol='#') + f"""
+REVERSE_SPHINX_PATH = {repr(global_constants.REVERSE_SPHINX_PATH)}"""
+
+
 # .readthedocs.yaml
 readthedocs = note.format(comment_symbol='#') + f"""
 # Read the Docs configuration file
@@ -152,23 +160,22 @@ python:
 def main():
     """Write the files."""
 
-    # README.rst
-    with open('README.rst', 'w') as file:
-        # copyright is a built-in attribute in Python, so don't use it as a
-        # variable name!
-        file.write(readme_body.format(documentation=readme_raw_rst_docs))
+    names_and_contents = {
+        'pyproject.toml': pyproject,
 
-    # sphinx/index.rst -> README.html
-    with open(global_constants.SPHINX_PATH + '/index.rst', 'w') as file:
-        file.write(readme_body.format(documentation=readme_sphinx_docs))
+        'README.rst': readme_body.format(documentation=readme_raw_rst_docs),
 
-    # pyproject.toml
-    with open('pyproject.toml', 'w') as file:
-        file.write(pyproject)
+        global_constants.SPHINX_PATH + '/index.rst':
+            readme_body.format(documentation=readme_sphinx_docs),
 
-    # .readthedocs.yaml
-    with open('.readthedocs.yaml', 'w') as file:
-        file.write(readthedocs)
+        global_constants.SPHINX_PATH + '/reverse_sphinx_path.py':
+            reverse_sphinx_path,
+
+        '.readthedocs.yaml': readthedocs}
+
+    for name, contents in names_and_contents.items():
+        with open(name, 'w') as file:
+            file.write(contents)
 
 
 if __name__ == '__main__':

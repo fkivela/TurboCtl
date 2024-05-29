@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 # Compile the TurboCtl documentation.
 
-# Add the TurboCtl directory to $PYTHONPATH.
-# readlink -f resolves . into an absolute path.
-# Quotes are needed around the path variables as they may contain spaces.
-# The export carries the updated value of PYTHONPATH over to the subshell we make below.
-TurboCtl_path="$(dirname "$(readlink -f "$0")")"
-export PYTHONPATH="$("$TurboCtl_path"/add-to-path "$TurboCtl_path" PYTHONPATH)"
+# Load $SPHINX_PATH.
+SPHINX_PATH="$(python -c 'from turboctl.global_constants import SPHINX_PATH; print(SPHINX_PATH)')"
 
-# Load global constants to get $SPHINX_PATH.
-eval $(./global-constants)
-
-# Compile docs.
-# The parentheses create a new subshell so that we don't need to change the directory of the parent shell.
-python make_readme.py
-(cd $SPHINX_PATH; make html)
+# Compile docs in $SPHINX_PATH.
+cd $SPHINX_PATH
+make html

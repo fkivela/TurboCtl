@@ -14,12 +14,18 @@
 from pathlib import Path
 import sys
 
-# Find the TurboCtl directory and add it to $PATH so that we can import
-# turboctl. 
-# __file__ = .../???/doc/sphinx/conf.py, where ???=TurboCtl locally and some
-# other directory on Read the Docs.
-TurboCtl_path = Path(__file__).resolve().parent.parent.parent
+# We need to do the path management here because Read the Docs doesn't support
+# the use of a makefile.
+# Add this directory to the path so that we can import reverse_sphinx_path. 
+sphinx_path = Path('__file__').parent.resolve()
 # This doesn't work if we don't convert the path to a string!
+sys.path.append(str(sphinx_path))
+
+from reverse_sphinx_path import REVERSE_SPHINX_PATH
+
+# With REVERSE_SPHINX_PATH we can add the TurboCtl directory to the path and
+# import turboctl. 
+TurboCtl_path = Path(REVERSE_SPHINX_PATH).resolve()
 sys.path.append(str(TurboCtl_path))
 
 
@@ -89,9 +95,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # This included at the end of every rst source file. 
 rst_epilog = f"""
-    .. _GitHub: {global_constants.GITHUB_URL}
-    .. _PyPI: {global_constants.PYPI_URL}
-    .. _`Read the Docs`: {global_constants.DOCS_URL}
+.. _GitHub: {global_constants.GITHUB_URL}
+.. _PyPI: {global_constants.PYPI_URL}
+.. _`Read the Docs`: {global_constants.DOCS_URL}
 """
 
 # -- Options for HTML output -------------------------------------------------
