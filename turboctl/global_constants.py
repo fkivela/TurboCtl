@@ -35,7 +35,7 @@ protection against email scrapers.
 COPYRIGHT = f'2019-{date.today().year} University of Helsinki Fusor Team'
 """Copyright information with an automatically updating year."""
 
-VERSION = '1.1.1.dev5'
+VERSION = '1.1.1'
 """The current version of the TurboCtl project."""
 
 SPHINX_PATH = 'doc/sphinx'

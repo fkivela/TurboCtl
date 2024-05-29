@@ -37,7 +37,7 @@ The GitHub home page of the TurboCtl project can be found
 Version
 -------
 
-This is version 1.1.1.dev5 of TurboCtl.
+This is version 1.1.1 of TurboCtl.
 
 License
 -------
