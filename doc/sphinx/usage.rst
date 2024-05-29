@@ -67,7 +67,7 @@ Regardless of the command used to run it, TurboCtl accepts the following command
 
     Don't send automatic telegrams to the pump.
                     
-    The pump automatically turns off if it doesn't receive any commands for about 10 seconds.
+    The pump automatically turns off if it doesn't receive a "turn on" command for about 10 seconds.
     Normally TurboCtl sends automatic telegrams to the pump at regular intervals in order to prevent this from happening, and also to keep the status screen in the advanced UI updated.
     This argument prevents these automatic telegrams from being sent.
 

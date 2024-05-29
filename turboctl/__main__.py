@@ -41,8 +41,8 @@ vpump_group.add_argument('-p', '--port',
 # Automatic polling can be disabled with this argument in all modes (even
 # though this doesn't do anything in doc/test mode).
 parser.add_argument('-n', '--no-poll',
-                    help=('do not poll the status of the pump by sending '
-                          'automatic telegrams'), 
+                    help=('do not send automatic telegrams that keep the '
+                          'pump on'), 
                     action='store_true')
 
 args = parser.parse_args()

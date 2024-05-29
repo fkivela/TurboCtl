@@ -1,7 +1,6 @@
 TODO
 
 Soon:
-- Document the -n option better. It should be about on messages, not any messages
 - Add dates to the changelog?
 - Make a GitHub release?
 - Make sure PyPI links & other instructions in the docs work
