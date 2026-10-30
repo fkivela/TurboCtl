@@ -1,5 +1,11 @@
 TODO
 
+Newest additions:
+ - Clean up the notes in this file and move them to the new Markdown TODO template
+ - Some documentation pages show up as blank on readthedocs
+ - Remove .hypothesis from Git
+ - Remove the monkey path now that Urwid has been updated
+
 Soon:
 - Merge with master & push
 - Make a GitHub release?
